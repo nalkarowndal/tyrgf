@@ -1,0 +1,32 @@
+name: Quality checks
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  checks:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - run: npm run check
+      - if: runner.os == 'Linux'
+        run: npx playwright install --with-deps chromium
+      - if: runner.os == 'Linux'
+        run: npm run test:e2e
+      - if: always() && runner.os == 'Linux'
+        uses: actions/upload-artifact@v4
+        with:
+          name: browser-evidence
+          path: |
+            docs/qa/
+            test-results/
+          retention-days: 7

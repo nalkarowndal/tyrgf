@@ -1,0 +1,93 @@
+{
+  "checkedAt": "2026-10-15",
+  "evidence": [
+    {
+      "repo": "NousResearch/hermes-agent",
+      "commit": "HEAD (tree exceeds connector limit)",
+      "source": "tools/registry.py",
+      "manifest": "pyproject.toml",
+      "version": "0.0.0",
+      "license": "MIT License\n\nCopyright (c) 2025 Nous Research\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the So",
+      "engine": "requires-python = \">=3.11,<3.15\"",
+      "inspectedExcerptCharacters": 7000,
+      "sourceUrl": "https://github.com/NousResearch/hermes-agent/blob/HEAD/tools/registry.py"
+    },
+    {
+      "repo": "openclaw/openclaw",
+      "commit": "HEAD (tree exceeds connector limit)",
+      "source": "src/infra/exec-approvals.ts",
+      "manifest": "package.json",
+      "version": "2026.10.3",
+      "license": "MIT License\n\nCopyright (c) 2026 OpenClaw Foundation\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of ",
+      "engine": "\"engines\": {\n    \"node\": \">=24.16.0 <25 || >=26.1.0\"\n  }",
+      "inspectedExcerptCharacters": 4632,
+      "sourceUrl": "https://github.com/openclaw/openclaw/blob/HEAD/src/infra/exec-approvals.ts"
+    },
+    {
+      "repo": "morluto/rea",
+      "commit": "084e540414f96dc5b93cac4ddf36ce71a0f6dd23",
+      "source": "src/application/reverse/ReverseEngineeringService.ts",
+      "manifest": "package.json",
+      "version": "6.5.0",
+      "license": "MIT License\n\nCopyright (c) 2026 morluto\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software",
+      "engine": "\"engines\": {\n    \"node\": \"^22.19.0 || ^24.11.0 || >=26.0.0\"\n  }",
+      "inspectedExcerptCharacters": 7000,
+      "sourceUrl": "https://github.com/morluto/rea/blob/084e540414f96dc5b93cac4ddf36ce71a0f6dd23/src/application/reverse/ReverseEngineeringService.ts"
+    },
+    {
+      "repo": "oraios/serena",
+      "commit": "4f2520efb128dd02e66a2302095bdbbb26ddd5a0",
+      "source": "src/serena/agent.py",
+      "manifest": "pyproject.toml",
+      "version": "2.0.1.dev0",
+      "license": "Serena Licensing Overview\n=========================\n\nThis repository is licensed per component: SolidLSP under the MIT License and\nthe Serena application under GPL-3.0-or-later.\n\nBecause MIT is compatible with the GPL, any distribution that combines both -\nsuch as the `serena-agent` package - is as a whole subject to the terms of\nGPL-3.0-or-later. This does not change the license of the SolidLSP files\nthemselves: they remain MIT-licensed and may be obtained, extracted and used\nseparately under MIT terms.\n\nThe full license texts are in the LICENSES/ directory and are not modified in\nany way:\n\n ",
+      "engine": "requires-python = \">=3.11, <3.15\"",
+      "inspectedExcerptCharacters": 7000,
+      "sourceUrl": "https://github.com/oraios/serena/blob/4f2520efb128dd02e66a2302095bdbbb26ddd5a0/src/serena/agent.py"
+    },
+    {
+      "repo": "yamadashy/repomix",
+      "commit": "55c6de6aebde4c38877fbcaf005c4cc396bf6e2d",
+      "source": "src/core/packager.ts",
+      "manifest": "package.json",
+      "version": "1.18.1",
+      "license": "Copyright 2024 Kazuki Yamada\n\nPermission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the \"Software\"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.\n\nTHE SOFT",
+      "engine": "\"engines\": {\n    \"node\": \">=22.0.0\",\n    \"yarn\": \">=1.22.22\"\n  }",
+      "inspectedExcerptCharacters": 7000,
+      "sourceUrl": "https://github.com/yamadashy/repomix/blob/55c6de6aebde4c38877fbcaf005c4cc396bf6e2d/src/core/packager.ts"
+    },
+    {
+      "repo": "microsoft/playwright-mcp",
+      "commit": "b8b4183e099f136cbec0388a6088d4aa2f6b9685",
+      "source": "index.js",
+      "manifest": "package.json",
+      "version": "0.0.83",
+      "license": "                                 Apache License\r\n                           Version 2.0, January 2004\r\n                        http://www.apache.org/licenses/\r\n\r\n   TERMS AND CONDITIONS FOR USE, REPRODUCTION, AND DISTRIBUTION\r\n\r\n   1. Definitions.\r\n\r\n      \"License\" shall mean the terms and conditions for use, reproduction,\r\n      and distribution as defined by Sections 1 through 9 of this document.\r\n\r\n      \"Licensor\" shall mean the copyright owner or entity authorized by\r\n      the copyright owner that is granting the License.\r\n\r\n      \"Legal Entity\" shall mean the union of the acting entity",
+      "engine": "\"engines\": {\n    \"node\": \">=18\"\n  }",
+      "inspectedExcerptCharacters": 747,
+      "sourceUrl": "https://github.com/microsoft/playwright-mcp/blob/b8b4183e099f136cbec0388a6088d4aa2f6b9685/index.js"
+    },
+    {
+      "repo": "langchain-ai/langgraphjs",
+      "commit": "06f9fdbb76facef0d4f2100e14baa99ef8f0bd2b",
+      "source": "libs/checkpoint-sqlite/src/index.ts",
+      "manifest": "libs/langgraph/package.json",
+      "version": "1.0.47",
+      "license": "The MIT License\n\nCopyright (c) 2024 LangChain\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in\nall copies or substantial portions of the So",
+      "engine": "\"engines\": {\n    \"node\": \">=20\"\n  }",
+      "inspectedExcerptCharacters": 7000,
+      "sourceUrl": "https://github.com/langchain-ai/langgraphjs/blob/06f9fdbb76facef0d4f2100e14baa99ef8f0bd2b/libs/checkpoint-sqlite/src/index.ts"
+    },
+    {
+      "repo": "github/github-mcp-server",
+      "commit": "c59e8c199efbf14467211861de44afaeeb6873e3",
+      "source": "pkg/github/tools.go",
+      "manifest": "go.mod",
+      "version": "manifest version not supplied",
+      "license": "MIT License\n\nCopyright (c) 2025 GitHub\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.",
+      "engine": "go 1.26.8",
+      "inspectedExcerptCharacters": 7000,
+      "sourceUrl": "https://github.com/github/github-mcp-server/blob/c59e8c199efbf14467211861de44afaeeb6873e3/pkg/github/tools.go"
+    }
+  ]
+}
