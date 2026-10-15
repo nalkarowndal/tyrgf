@@ -1,4 +1,5 @@
 import express from 'express';
+import { ToolService } from './tool-service';
 import { randomBytes, timingSafeEqual } from 'node:crypto';
 import { once } from 'node:events';
 import { z } from 'zod';
@@ -34,6 +35,7 @@ const replySchema = z
 export function createApp({ dataDir, port }: { dataDir: string; port: number }) {
   const app = express();
   const store = new Store(dataDir);
+  const toolService = new ToolService(store, dataDir);
   const token = randomBytes(32).toString('hex');
   const keys = new Map<ProviderId, string>();
   const active = new Map<string, AbortController>();
@@ -85,7 +87,7 @@ export function createApp({ dataDir, port }: { dataDir: string; port: number }) 
       token,
       settings: store.settings(),
       keyStatus: Object.fromEntries([...keys].map(([k]) => [k, true])),
-      capabilities: { tools: false },
+      capabilities: { tools: toolService.files.roots.size > 0 || toolService.browserEnabled },
       usage: store.usage(),
     }),
   );
@@ -305,6 +307,7 @@ export function createApp({ dataDir, port }: { dataDir: string; port: number }) 
       if (!res.destroyed) res.end(JSON.stringify({ type: 'done', status }) + '\n');
     }
   });
+  toolService.mount(app);
   app.use('/api', (_req, res) => res.status(404).json({ error: '지원하지 않는 요청입니다.' }));
   app.use(
     (err: unknown, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
@@ -340,6 +343,7 @@ export function createApp({ dataDir, port }: { dataDir: string; port: number }) 
       if (closed) return;
       closed = true;
       for (const controller of active.values()) controller.abort();
+      toolService.close();
       keys.clear();
       store.close();
     },

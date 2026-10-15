@@ -27,7 +27,7 @@ test('first run and durable chat with settings and responsive layouts', async ({
     page.getByText('모의 공급자 동작을 확인했습니다. 실제 API 연결 테스트가 아닙니다.'),
   ).toBeVisible();
   await page.getByRole('button', { name: '다음', exact: true }).click();
-  await expect(page.getByText('파일과 프로그램에 접근하지 않아요')).toBeVisible();
+  await expect(page.getByText('처음에는 모든 도구 권한이 꺼져 있어요')).toBeVisible();
   await page.getByRole('button', { name: '다음', exact: true }).click();
   await page.getByRole('button', { name: '다음', exact: true }).click();
   await page.getByRole('button', { name: 'AURA 시작하기' }).click();

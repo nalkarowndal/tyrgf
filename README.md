@@ -1,6 +1,6 @@
 # AURA Agent
 
-한국어로 편하게 대화하는 로컬 AI 도우미. **M0–M2 초기 구현 버전**입니다. 실제 공급자 어댑터와 명시적 모의 공급자를 제공하며, 자율 에이전트와 Windows 설치 패키지는 준비 중입니다.
+한국어로 편하게 대화하는 로컬 AI 도우미. **M3 도구·승인 기반 구현 버전**입니다. 실제 공급자 어댑터와 명시적 모의 공급자를 제공하며, 자율 에이전트와 Windows 설치 패키지는 준비 중입니다.
 
 ![AURA 대화 화면](docs/qa/desktop-home.png)
 
@@ -24,6 +24,9 @@ npm start
 - 스트리밍, 중단, 대화 저장/검색/이름변경/삭제/편집/재생성/JSON 내보내기
 - 텍스트 파일 첨부, Markdown과 코드 복사, 사용량 추정
 - 외부 전송 기본 차단, 동의 확인, 모델 자동 유료 전환 없음
+- Linux: 허용한 폴더의 텍스트 목록·읽기·생성·수정·삭제·승인 후 복구
+- 변경 전후 미리보기, 10분 유효 1회 승인, 권한 철회, 재시작 후 권한 해제, 실행 기록
+- 공개 HTTPS 페이지의 본문 읽기와 읽기 화면 캡처 (로그인·클릭·폼 입력 제외)
 
 API 키는 서버 메모리에만 저장합니다. 서버를 재시작하면 다시 입력해야 합니다. **무료 계정 여부는 공급자 콘솔에서 직접 확인해야 하며, 앱이 유료 계정의 실제 과금을 차단하지는 못합니다.**
 
@@ -32,8 +35,8 @@ API 키는 서버 메모리에만 저장합니다. 서버를 재시작하면 다
 ## 검증
 
 ```sh
-npm run check
 npx playwright install chromium
+npm run check
 npm run test:e2e
 ```
 
@@ -48,4 +51,4 @@ E2E는 시스템 Chromium이 있으면 사용하고, 없으면 Playwright 브라
 - [시스템 구조](docs/SYSTEM_ARCHITECTURE.md) · [보안 및 한계](docs/SECURITY_DESIGN.md)
 - [테스트와 시각 QA](docs/TEST_QA_PLAN.md) · [구현 기록](docs/IMPLEMENTATION_LOG.md)
 
-현재 파일 시스템 도구, 브라우저 제어, 터미널, MCP, 장기 기억, 스킬 실행은 비활성입니다. 다음 단계에서 실행 승인·경로 제한·격리·재개 검증을 갖춘 후 활성화합니다.
+웹 읽기에는 Chromium이 필요합니다 (`npx playwright install chromium` 또는 `CHROMIUM_PATH`). Windows/macOS 파일 도구, 동적 브라우저 제어, 터미널, MCP, 장기 기억, 스킬 실행은 준비 중입니다. 파일 원본은 숨김 복구 폴더에도 보관하며 자동 정리하지 않습니다. 자세한 범위와 한계는 [도구 설계](docs/TOOL_MCP_DESIGN.md)를 참고하세요.

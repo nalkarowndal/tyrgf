@@ -9,7 +9,7 @@
 | [REA](https://github.com/morluto/rea) | `ReverseEngineeringService.ts` typed command port, 취소/시간 제한, 프로세스 감독 인터페이스. 6.5.0, Node ^22.19 / ^24.11 / >=26. MIT, 외부 분석 도구는 별도 조건 | 소스 없는 승인된 프로그램 분석 때만 선택 검토. M0–M2에서는 설치/실행 없음. |
 | [Serena](https://github.com/oraios/serena) | `src/serena/agent.py` 프로젝트·언어 서버·ToolRegistry, 명시적 활성 도구 목록. 2.0.1.dev0, Python >=3.11,<3.15 | LICENSE는 **Serena application GPL-3.0-or-later, SolidLSP MIT**. 전체를 MIT로 간주하면 안 됨. M6 선택형 독립 MCP 연결만 검토. 배포 시 해당 버전 라이선스 재검토. |
 | [Repomix](https://github.com/yamadashy/repomix) | `src/core/packager.ts` search→collect→process→safety→output/metrics, `confineToBaseDir` 선택 옵션. 1.18.1, Node >=22. MIT | M6 프로젝트 요약 입력 어댑터 후보. 비밀 검색 결과와 경로 경계는 자체 검증 필요. 안전 옵션 기본값을 과신하지 않음. |
-| [Playwright MCP](https://github.com/microsoft/playwright-mcp) | `index.js`는 playwright-core tools.createConnection을 재노출. 0.0.83, Node >=18. Apache-2.0 | 진입점에서 브라우저 구현 전체를 검증한 것은 아님. M3 브라우저는 격리 프로필·대상 제한·입력 승인 필요. QA용 Playwright만 현재 설치. |
+| [Playwright MCP](https://github.com/microsoft/playwright-mcp) | `index.js`는 playwright-core tools.createConnection을 재노출. 0.0.83, Node >=18. Apache-2.0 | 진입점에서 브라우저 구현 전체를 검증한 것은 아님. M3 브라우저는 격리 프로필·대상 제한·입력 승인 필요. M3는 playwright-core 직접 호출로 정적 읽기 화면을 캡처한다. Playwright MCP 서버는 설치하지 않음. |
 | [LangGraph.js](https://github.com/langchain-ai/langgraphjs) | libs/langgraph 1.0.47, Node >=20, MIT. `libs/checkpoint-sqlite/src/index.ts` SqliteSaver, 체크포인트/쓰기 저장 및 순서 복원 | M4 우선 후보. 현재 M2는 채팅 생성이므로 도입 보류. 승인 후 재개는 노드 재실행 가능; 부작용은 idempotency와 영속 결과로 보호. |
 | [GitHub MCP](https://github.com/github/github-mcp-server) | `pkg/github/tools.go` 도구 등록 및 toolset 처리. go.mod Go 1.26.8, MIT. 조회한 manifest에는 앱 릴리스 번호 없음 | M6 선택형 읽기 도구부터 검토. push/write는 별도 사용자 승인. 현재 GitHub 연동을 활성화하지 않음. |
 
@@ -28,3 +28,10 @@
 
 ## 검증하지 못한 사항
 실 API 키와 Ollama 실행 인스턴스가 제공되지 않아 인증된 모델 목록, 무료 계정 여부, 실제 요금, 실제 응답, Windows 설치를 검증하지 못했다. 테스트의 fetch fixture는 프로토콜 계약 검증이며 실제 연결 성공 증거가 아니다. 외부 MCP 설치는 사용자 승인 후 별도 수행한다.
+
+## M3 추가 조사 (2026-10-15)
+- Exa: [OWASP SSRF Prevention](https://cheatsheetseries.owasp.org/cheatsheets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet.html). DNS 검증 후 실제 연결 주소 고정, 리다이렉트 비활성화 원칙 반영.
+- GitHub: [Playwright MCP README](https://github.com/microsoft/playwright-mcp/blob/main/README.md). MCP 자체를 보안 격리 경계로 보지 않고 제한된 직접 런타임을 사용.
+- Context7 `/microsoft/playwright`: newContext offline/javaScriptEnabled/serviceWorkers 및 route.abort, screenshot 공식 문서 확인.
+- Canva AURA 기존 디자인 검색: 결과 없음. 외부 디자인 생성·게시 없이 기존 앱 UI를 확장.
+- 설치 manifest: playwright-core 1.64.1(Apache-2.0), ipaddr.js(주소 분류), parse5(원격 HTML을 실행하지 않는 파싱). 실제 버전은 package-lock.json에 고정.

@@ -78,7 +78,9 @@ export function FirstRunTour({
               (t) => (
                 <div key={t}>
                   <span>{t}</span>
-                  <span className="badge">꺼짐 · 준비 중</span>
+                  <span className="badge">
+                    {t.startsWith('폴더') ? '꺼짐 · 메뉴에서 허용' : '꺼짐 · 준비 중'}
+                  </span>
                 </div>
               ),
             )}

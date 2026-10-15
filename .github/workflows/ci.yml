@@ -17,9 +17,8 @@ jobs:
           node-version: '24'
           cache: npm
       - run: npm ci --ignore-scripts
+      - run: npx playwright install --with-deps chromium
       - run: npm run check
-      - if: runner.os == 'Linux'
-        run: npx playwright install --with-deps chromium
       - if: runner.os == 'Linux'
         run: npm run test:e2e
       - if: always() && runner.os == 'Linux'

@@ -1,7 +1,7 @@
 # 테스트 및 시각 QA
 
 ## 실행 결과 (2026-10-15)
-검증 환경: Linux, Node 24.19.0, 시스템 Chromium. `npm run check` (타입 검사, ESLint, Vitest, Vite 빌드) 통과. Vitest 3개 파일 **32개 테스트 통과**. `npm run test:e2e` **3개 사용자 시나리오 통과**. 운영 의존성 `npm audit --omit=dev` 알려진 취약점 **0건**. Windows CI workflow는 작성했지만 원격 실행하지 않았다.
+검증 환경: Linux, Node 24.19.0, 시스템 Chromium. `npm run check` (타입 검사, ESLint, Vitest, Vite 빌드) 통과. Vitest 7개 파일 **52개 테스트 통과**. `npm run test:e2e` **5개 사용자 시나리오 통과**. 운영 의존성 `npm audit --omit=dev` 알려진 취약점 **0건**. Windows CI workflow는 작성했지만 원격 실행하지 않았다.
 
 ## 기능·보안 검사
 - API 기본값 mock/외부 전송 차단, Host/Origin/토큰 검사, 대소문자 경로 우회 차단.
@@ -31,6 +31,17 @@
 처음 캡처에서 설정 저장 후 온보딩 재등장과 짧은 높이에서 사이드바 overflow를 발견해 수정했다. 모바일 메뉴의 닫힘 전환 중 캡처를 막기 위해 screenshot animations=disabled로 안정된 상태를 다시 확보한다. 모바일 가로 overflow는 자동 검사도 포함한다. 시각 검수는 자동 기능 테스트 통과와 별도로 진행했다.
 
 ## 미검증·후속 조건
-실 API 키 없음: Gemini/Groq 인증 응답·계정 요금제·실 사용 한도는 미검증. Ollama 실 인스턴스 없음: 설치 모델 실제 추론 미검증. fetch fixture를 실 API 연결 증거로 취급하지 않는다. M3 도구 승인, M4 두 도구 복합 작업, M5 기억 삭제, M6 MCP 설치는 구현 전이므로 테스트 통과로 기록하지 않는다. Windows/macOS·다중 브라우저·실제 초보자 사용성 실험·OS credential vault는 후속 검증이다.
+실 API 키 없음: Gemini/Groq 인증 응답·계정 요금제·실 사용 한도는 미검증. Ollama 실 인스턴스 없음: 설치 모델 실제 추론 미검증. fetch fixture를 실 API 연결 증거로 취급하지 않는다. M3 수동 도구 승인·실행·복구는 검증했다. 공개 사이트 라이브 읽기는 환경 DNS EAI_AGAIN으로 실패하여 성공 미검증이다. M4 두 도구 복합 작업, M5 기억 삭제, M6 MCP 설치는 구현 전이므로 테스트 통과로 기록하지 않는다. Windows/macOS·다중 브라우저·실제 초보자 사용성 실험·OS credential vault는 후속 검증이다.
 
-빌드 경고: 현재 단일 프론트엔드 bundle이 약 588KB(압축 약 182KB)로 Vite 권고 기준을 넘는다. Zod 내부 PURE annotation 경고도 발생하지만 빌드 실패는 아니다. 코드 분할은 후속 성능 개선 항목이다.
+빌드 경고: 현재 단일 프론트엔드 bundle이 약 603KB(압축 약 185KB)로 Vite 권고 기준을 넘는다. Zod 내부 PURE annotation 경고도 발생하지만 빌드 실패는 아니다. 코드 분할은 후속 성능 개선 항목이다.
+
+## M3 추가 검증
+- 파일 API: 권한 기본 꺼짐, CSRF, 읽기/쓰기 분리, 승인 전 무변경, 승인 입력 위변조·재실행 거절, 경로 우회/숨김/심볼릭·하드링크/비텍스트 거절, 외부 수정 보존, 루트 교체, 권한 철회, 삭제·복구·변경 후 복구 거절, 만료와 재시작.
+- 독립 리뷰 재현: 최종 확인 후 외부 수정 및 하위 디렉터리 이동을 테스트에서 syscall 사이에 삽입. RED 확인 후 원본 격리·배타적 게시·위치 재검사로 GREEN. 원본 복구 경로의 실제 내용도 확인.
+- 웹 경계: 사설/예약/인코딩 IP·인증정보·포트 차단, 공용/사설 혼합 DNS 차단, 검증 주소로 lookup 고정 및 TLS hostname 유지, 리다이렉트 거절. 이 네트워크 경계 검사는 통제된 resolver/HTTP fixture를 사용한다.
+- 실제 Chromium: HTML fixture의 script/meta refresh/외부 image/iframe을 실행하지 않고 추출 텍스트와 PNG 생성. 제품 URL 요청의 실 인터넷 성공 검증과는 다르다.
+- 도구 서버: 승인 전 호출 없음, URL 불변, 중복 실행 거절, 실행 중 권한 해제→취소, 대기 요청 무효화, 상태 polling의 스크린샷 제외와 상세 조회.
+- E2E 4: 폴더 허용→파일 생성 승인→읽기→삭제 승인→복구 승인→외부 편집 충돌→권한 철회, 모바일 가로 overflow 검사.
+- E2E 5: 웹 권한→내부 주소 거절→공개 URL 미리보기→명시적 거절→권한 해제. 외부 네트워크 요청은 하지 않는다.
+- qa/desktop-file-approval.png, qa/mobile-files.png를 직접 열어 확인. qa/desktop-browser-tools.png도 기록.
+- CI에서 Chromium 설치를 check 앞으로 옮겼다. Linux 전용 파일 테스트는 다른 OS에서 건너뛰고 기본 권한 API는 계속 검사한다. Windows 원격 실행은 아직 하지 않았다.

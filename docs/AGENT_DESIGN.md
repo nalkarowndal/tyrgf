@@ -1,6 +1,6 @@
-# 에이전트 설계 (M3–M4 예정)
+# 에이전트 설계 (M4 예정)
 
-현재 M2는 도구 없는 대화 런타임이다. 구현된 메시지 상태는 streaming → complete/interrupted/error. SQLite 부분 응답 저장과 재시작 복구만 제공하며 자율 에이전트 완료로 보고하지 않는다.
+현재 대화 런타임은 도구를 자동 호출하지 않는다. M3 수동 도구 런타임은 ToolService에 분리되어 있으며 권한·승인·기록을 제공한다. 구현된 메시지 상태는 streaming → complete/interrupted/error. SQLite 부분 응답 저장과 재시작 복구만 제공하며 자율 에이전트 완료로 보고하지 않는다.
 
 목표 실행 상태: received → planning → awaiting_approval → executing → observing → verifying → completed. 실패는 recoverable_error/failed, 사용자는 cancelled/paused. 재개는 마지막 확인된 checkpoint부터 시작한다.
 

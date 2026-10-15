@@ -31,6 +31,7 @@ import {
 import type { Bootstrap, Session } from '../../../packages/shared/src/contracts';
 import { api, setToken } from './api';
 import { Chat } from './Chat';
+import { ToolsPage } from './Tools';
 import { SettingsPage } from './Settings';
 import { FirstRunTour } from './Onboarding';
 import {
@@ -263,7 +264,9 @@ export function App() {
               <NavLink key={m.path} to={`/${m.path}`} title={m.description}>
                 <m.icon size={17} />
                 <span>{m.name}</span>
-                <span className="soon-dot" title="준비 중" />
+                {!['files', 'browser', 'tools'].includes(m.path) && (
+                  <span className="soon-dot" title="준비 중" />
+                )}
               </NavLink>
             ))}
         </nav>
@@ -321,6 +324,9 @@ export function App() {
           <Route path="/chat/:id" element={<ConversationRoute data={data} refresh={refresh} />} />
           <Route path="/settings" element={<SettingsPage data={data} refresh={refresh} />} />
           <Route path="/help" element={<Help />} />
+          <Route path="/files" element={<ToolsPage key="files" mode="files" />} />
+          <Route path="/browser" element={<ToolsPage key="browser" mode="browser" />} />
+          <Route path="/tools" element={<ToolsPage key="tools" mode="tools" />} />
           <Route path="*" element={<ComingSoon />} />
         </Routes>
       </main>
