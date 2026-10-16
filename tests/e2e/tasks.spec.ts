@@ -51,6 +51,24 @@ test('agent executes a multi-tool demo with pause, immutable approval and verifi
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(
       true,
     );
+    await page.getByRole('button', { name: '스킬 초안으로 저장' }).click();
+    await expect(page.getByRole('heading', { name: '스킬 관리', exact: true })).toBeVisible();
+    await expect(page.getByText('검토 대기', { exact: true })).toBeVisible();
+    await page.getByLabel('절차와 필요한 권한을 확인했습니다').check();
+    await page.getByRole('button', { name: '현재 버전 승인' }).click();
+    await expect(page.getByText('승인됨', { exact: true })).toBeVisible();
+    await page.screenshot({
+      path: 'docs/qa/mobile-skills.png',
+      animations: 'disabled',
+      fullPage: true,
+    });
+    await page.getByRole('link', { name: '이 스킬로 새 작업' }).click();
+    await expect(page.getByLabel('재사용할 스킬')).not.toHaveValue('');
+    await page.getByLabel('작업 목표').fill('승인한 절차로 다시 보고서 생성');
+    await page.getByRole('button', { name: '작업 시작', exact: true }).click();
+    await expect(page.getByRole('heading', { name: '실행 전 확인' })).toBeVisible();
+    await page.getByRole('button', { name: '거절하고 작업 취소' }).click();
+    await expect(page.getByText('취소됨', { exact: true })).toBeVisible();
   } finally {
     await page.evaluate(async (root) => {
       const b = await (await fetch('/api/bootstrap')).json();

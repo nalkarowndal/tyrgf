@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams, useNavigate } from 'react-router-dom';
+import type { SavedSkill } from '../../../packages/shared/src/knowledge';
 import { ListTodo, Play, Pause, CheckCircle2, ShieldCheck, Folder, ArrowRight } from 'lucide-react';
 import type { Bootstrap } from '../../../packages/shared/src/contracts';
 import type { AgentTask } from '../../../packages/shared/src/agent';
@@ -81,6 +82,15 @@ function TaskApproval({
   );
 }
 export function TasksPage({ data }: { data: Bootstrap }) {
+  const [params] = useSearchParams();
+  const navigate = useNavigate();
+  const [skillId, setSkillId] = useState(params.get('skill') ?? '');
+  const skills = useQuery({
+    queryKey: ['skills'],
+    queryFn: () => api<SavedSkill[]>('/skills'),
+    refetchInterval: 2000,
+  });
+  const chosenSkill = skills.data?.find((s) => s.id === skillId);
   const tasks = useQuery({
     queryKey: ['tasks'],
     queryFn: () => api<AgentTask[]>('/tasks'),
@@ -175,6 +185,26 @@ export function TasksPage({ data }: { data: Bootstrap }) {
             </FeatureExplanation>
           )}
           <label className="field">
+            재사용할 스킬
+            <select value={skillId} onChange={(e) => setSkillId(e.target.value)}>
+              <option value="">스킬 없이 시작</option>
+              {skills.data?.map((s) => (
+                <option key={s.id} value={s.id} disabled={s.approvedVersion !== s.version}>
+                  {s.name} · v{s.version}
+                  {s.approvedVersion !== s.version ? ' · 승인 필요' : ''}
+                </option>
+              ))}
+            </select>
+          </label>
+          {chosenSkill && (
+            <FeatureExplanation title="이 스킬의 목적">
+              {chosenSkill.purpose} · 현재 버전과 도구 범위 안에서 계획합니다.{' '}
+              <Link className="text-link" to="/skills">
+                절차 검토
+              </Link>
+            </FeatureExplanation>
+          )}
+          <label className="field">
             작업 목표
             <textarea
               rows={3}
@@ -228,6 +258,8 @@ export function TasksPage({ data }: { data: Bootstrap }) {
               disabled={
                 busy ||
                 !goal.trim() ||
+                (!!skillId &&
+                  (!chosenSkill || chosenSkill.approvedVersion !== chosenSkill.version)) ||
                 !root ||
                 (cloud && !allow) ||
                 tasks.data?.some((t) => t.status === 'running')
@@ -239,6 +271,9 @@ export function TasksPage({ data }: { data: Bootstrap }) {
                     rootId: root!.id,
                     allowModelData: allow,
                     maxSteps,
+                    ...(chosenSkill
+                      ? { skillId: chosenSkill.id, skillVersion: chosenSkill.version }
+                      : {}),
                   });
                   setSelected(created.id);
                   setGoal('');
@@ -365,6 +400,18 @@ export function TasksPage({ data }: { data: Bootstrap }) {
                   <h2>검증한 작업 결과</h2>
                 </div>
                 <p className="agent-answer">{task.answer}</p>
+                <button
+                  className="secondary"
+                  disabled={busy}
+                  onClick={() =>
+                    perform(async () => {
+                      await api('/skills/from-task', { taskId: task.id });
+                      navigate('/skills');
+                    })
+                  }
+                >
+                  스킬 초안으로 저장
+                </button>
                 <FeatureExplanation title="검증 근거">{task.verification}</FeatureExplanation>
               </section>
             )}

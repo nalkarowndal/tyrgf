@@ -403,6 +403,12 @@ export function Chat({ data, refresh }: { data: Bootstrap; refresh: () => Promis
             )}
           </div>
           <div className="composer-area">
+            <p className="fine-print">
+              승인한 기억을 참고합니다. 클라우드 AI에는 기억도 전송됩니다.{' '}
+              <Link to="/memory" className="text-link">
+                기억 관리
+              </Link>
+            </p>
             {(error || history.error) && (
               <ErrorRecoveryPanel
                 message={error || (history.error as Error).message}

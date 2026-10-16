@@ -1,6 +1,6 @@
 # AURA Agent 시스템 설계
 
-2026-10-16. 사용자가 제공한 마스터 프롬프트를 제품 기준으로 삼는다. 현재 M0–M3와 M4 영속 작업 에이전트를 구현했다. 이후 단계는 독립된 검증 게이트를 갖는다.
+2026-10-16. 사용자가 제공한 마스터 프롬프트를 제품 기준으로 삼는다. 현재 M0–M3와 M4 영속 작업 에이전트, M5 기억·스킬을 구현했다. 이후 단계는 독립된 검증 게이트를 갖는다.
 
 ## 구조와 선택
 React + TypeScript + Vite 화면 → 같은 출처의 Express API → SQLite 및 ProviderAdapter.
@@ -28,4 +28,6 @@ Node 24 내장 node:sqlite를 사용해 네이티브 SQLite 모듈 설치 부담
 ## 제한
 일반 대화에는 도구 호출이 없다. 작업 관리에서는 AgentService가 모델의 구조화된 다음 동작을 검증해 ToolService로 실행한다. /api/tasks는 목록·생성·조회·재개·중단·승인·거절을 제공한다.
 무료 계정은 사용자 확인이며 과금 방지를 API로 증명할 수 없다. 클라우드 통신은 계정 확인 및 외부 전송 동의 없이는 금지한다. 유료 모델/다른 공급자로 자동 전환하지 않는다.
-Linux 파일 변경과 공개 웹 읽기는 도구 권한과 1회 승인을 요구한다. 명령 실행·MCP·동적 웹 제어는 비활성. tool_runs 테이블은 승인 입력/상태/전후/복구 위치를 보관하며 agent_tasks/agent_checkpoints를 추가한 schema user_version=3.
+Linux 파일 변경과 공개 웹 읽기는 도구 권한과 1회 승인을 요구한다. 명령 실행·MCP·동적 웹 제어는 비활성. tool_runs 테이블은 승인 입력/상태/전후/복구 위치를 보관하며 agent_tasks/agent_checkpoints를 추가한 schema user_version=4.
+
+M5 KnowledgeStore는 요청별 승인 기억과 대화 범위 경계를 제공한다. SummaryService는 명시적 원문 요약의 동시성·출처를 검증한다. SkillsStore는 완료 절차와 승인 버전을 저장하고 AgentService가 매 실행 시 확인한다. 기억의 컨텍스트는 대화 전용, 스킬은 작업 계획 전용이다.

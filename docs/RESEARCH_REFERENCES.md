@@ -42,3 +42,10 @@
 - GitHub: [checkpoint base.ts](https://github.com/langchain-ai/langgraphjs/blob/main/libs/checkpoint/src/base.ts), 설치한 MemorySaver의 put/putWrites/getTuple 구현을 읽고 라이브러리 직렬화·pending writes 순서를 보존.
 - 설치 버전 @langchain/langgraph 1.5.0, MIT. 위 초기 조사 표의 버전과 설치 시점이 다르며 실제 의존성은 package-lock.json 참조. 내장 node:sqlite와 per-task MemorySaver 스냅샷으로 네이티브 DB 모듈 추가를 피함. Node/LangGraph 업그레이드 시 저장 형식 호환성 검사 필요.
 - Canva 기존 AURA 디자인 검색은 이전 단계에서 결과가 없었으며 이번 작업은 기존 UI를 확장했다. 새 외부 디자인·게시물은 만들지 않음.
+
+## M5 추가 조사 (2026-10-16)
+- Exa 공식 문서 검색 3개 결과: [LangGraph memory](https://docs.langchain.com/oss/javascript/langgraph/add-memory). 단기 대화 컨텍스트와 세션 간 사용자 기억, 삭제와 요약을 별개 수명으로 처리한다.
+- Context7 `/websites/langchain_oss_javascript_langgraph`: [stores](https://docs.langchain.com/oss/javascript/langgraph/stores), [persistence](https://docs.langchain.com/oss/javascript/langgraph/persistence). 체크포인터와 장기 store의 역할 분리 참고. 본 앱은 사용자 승인·삭제 의미를 기존 SQLite에 구현한다.
+- GitHub [Hermes memory_tool.py](https://github.com/NousResearch/hermes-agent/blob/main/tools/memory_tool.py): 세션 시작 frozen snapshot 설계 확인. AURA는 삭제 즉시 후속 요청에 반영해야 하므로 매 요청 현재 저장소를 조회한다. 코드를 복제하지 않았다.
+- Canva AURA 검색 결과 0개. 기존 로컬 UI의 카드·검토 패턴으로 확장했다.
+- 환경 상태: 제한 네트워크 enforced, api.groq.com 미포함. 제공된 키를 외부 도구·저장소·문서로 전송하지 않고 실연결 검증은 보류했다.

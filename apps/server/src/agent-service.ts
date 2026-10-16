@@ -14,6 +14,7 @@ import { PublicError, validateProvider, type ProviderConfig } from './providers'
 import type { Store } from './store';
 import type { ToolService } from './tool-service';
 import { planNext } from './agent-planner';
+import type { SkillsStore } from './skills-store';
 import { AgentCheckpoints } from './agent-checkpoints';
 const empty = z.object({}).strict();
 export class AgentService {
@@ -23,6 +24,7 @@ export class AgentService {
     private store: Store,
     private tools: ToolService,
     private config: () => ProviderConfig,
+    private skills: SkillsStore,
   ) {
     store.db.exec(
       `CREATE TABLE IF NOT EXISTS agent_tasks(id TEXT PRIMARY KEY,payload TEXT NOT NULL);CREATE TABLE IF NOT EXISTS agent_checkpoints(taskId TEXT PRIMARY KEY REFERENCES agent_tasks(id),snapshot BLOB NOT NULL);PRAGMA user_version=3;`,
@@ -58,6 +60,7 @@ export class AgentService {
     return task;
   }
   private connection(task: AgentTask) {
+    if (task.skillId) this.skills.require(task.skillId, task.skillVersion!);
     const config = this.config();
     if (config.provider !== task.provider || config.model !== task.model)
       throw new PublicError(
@@ -92,12 +95,15 @@ export class AgentService {
     if (registry[c.provider].cloud && !b.allowModelData)
       throw new PublicError('목표와 읽은 도구 결과를 외부 AI에 전송하는 데 동의해 주세요.', 403);
     validateProvider(c);
+    if (b.skillId) this.skills.require(b.skillId, b.skillVersion!);
     this.available();
     if (!b.rootId) throw new PublicError('먼저 작업 폴더를 선택해 주세요.', 403);
     const root = this.tools.files.root(b.rootId);
     const task: AgentTask = {
       id: randomUUID(),
       goal: b.goal,
+      skillId: b.skillId,
+      skillVersion: b.skillVersion,
       provider: c.provider,
       model: c.model,
       simulated: c.provider === 'mock',
@@ -339,12 +345,25 @@ export class AgentService {
       task.message = '목표와 이전 결과로 다음 단계를 계획합니다.';
       task.modelCalls++;
       this.save(task);
-      const action = await planNext(task, this.connection(task), signal, this.store);
+      const skill = task.skillId
+        ? this.skills.require(task.skillId, task.skillVersion!)
+        : undefined;
+      const action = await planNext(task, this.connection(task), signal, this.store, skill);
       signal.throwIfAborted();
       task.pendingAction = action;
       this.save(task);
     }
     const action = task.pendingAction;
+    if (
+      task.skillId &&
+      action.tool !== 'finish' &&
+      !this.skills.require(task.skillId, task.skillVersion!).tools.includes(action.tool)
+    ) {
+      task.status = 'failed';
+      task.message = '스킬에 승인된 도구 범위를 벗어나 중단했습니다.';
+      this.save(task);
+      return;
+    }
     signal.throwIfAborted();
     if (action.tool === 'finish') {
       task.phase = 'verifying';

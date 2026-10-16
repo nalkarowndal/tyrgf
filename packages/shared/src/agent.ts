@@ -53,6 +53,8 @@ export interface AgentStep {
 export interface AgentTask {
   id: string;
   goal: string;
+  skillId?: string;
+  skillVersion?: number;
   provider: ProviderId;
   model: string;
   simulated: boolean;
@@ -87,7 +89,10 @@ export const createTaskSchema = z
   .object({
     goal: z.string().trim().min(1).max(2000),
     rootId: z.string().optional(),
+    skillId: z.string().uuid().optional(),
+    skillVersion: z.number().int().positive().optional(),
     allowModelData: z.boolean().default(false),
     maxSteps: z.number().int().min(2).max(8).default(8),
   })
-  .strict();
+  .strict()
+  .refine((b) => Boolean(b.skillId) === Boolean(b.skillVersion), '스킬과 버전을 함께 지정하세요.');

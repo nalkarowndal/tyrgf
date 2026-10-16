@@ -33,6 +33,7 @@ import { api, setToken } from './api';
 import { Chat } from './Chat';
 import { ToolsPage } from './Tools';
 import { TasksPage } from './Tasks';
+import { MemoryPage, SkillsPage } from './Knowledge';
 import { SettingsPage } from './Settings';
 import { FirstRunTour } from './Onboarding';
 import {
@@ -265,7 +266,7 @@ export function App() {
               <NavLink key={m.path} to={`/${m.path}`} title={m.description}>
                 <m.icon size={17} />
                 <span>{m.name}</span>
-                {!['tasks', 'files', 'browser', 'tools'].includes(m.path) && (
+                {!['tasks', 'files', 'browser', 'tools', 'memory', 'skills'].includes(m.path) && (
                   <span className="soon-dot" title="준비 중" />
                 )}
               </NavLink>
@@ -326,6 +327,8 @@ export function App() {
           <Route path="/settings" element={<SettingsPage data={data} refresh={refresh} />} />
           <Route path="/help" element={<Help />} />
           <Route path="/tasks" element={<TasksPage data={data} />} />
+          <Route path="/memory" element={<MemoryPage />} />
+          <Route path="/skills" element={<SkillsPage />} />
           <Route path="/files" element={<ToolsPage key="files" mode="files" />} />
           <Route path="/browser" element={<ToolsPage key="browser" mode="browser" />} />
           <Route path="/tools" element={<ToolsPage key="tools" mode="tools" />} />

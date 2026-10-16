@@ -2035,3 +2035,37 @@ textarea {
     gap: 8px;
   }
 }
+
+.knowledge-list {
+  display: grid;
+  gap: 16px;
+  margin-top: 20px;
+}
+.memory-entry {
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 20px;
+  min-width: 0;
+}
+.knowledge-content {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  line-height: 1.8;
+}
+.knowledge-search {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.knowledge-search input {
+  min-width: 0;
+  flex: 1;
+}
+.skill-steps {
+  padding-left: 24px;
+  line-height: 1.9;
+}
+.skill-steps li {
+  padding: 6px;
+  overflow-wrap: anywhere;
+}
