@@ -1,4 +1,5 @@
 import express from 'express';
+import { McpService } from './mcp-service';
 import { KnowledgeStore } from './knowledge-store';
 import { SkillsStore } from './skills-store';
 import { SummaryService } from './summary-service';
@@ -44,10 +45,12 @@ export function createApp({ dataDir, port }: { dataDir: string; port: number }) 
   const keys = new Map<ProviderId, string>();
   const active = new Map<string, AbortController>();
   let closed = false;
+  let closing: Promise<void> | undefined;
   const hosts = new Set([`127.0.0.1:${port}`, `localhost:${port}`]);
   const origins = new Set([...hosts].map((h) => `http://${h}`));
   app.disable('x-powered-by');
   app.use((req, res, next) => {
+    if (closed) return res.status(503).json({ error: '앱이 종료 중입니다.' });
     res.set({
       'Cache-Control': 'no-store',
       'X-Content-Type-Options': 'nosniff',
@@ -84,6 +87,7 @@ export function createApp({ dataDir, port }: { dataDir: string; port: number }) 
     summaries?.close();
   });
   const summaries = new SummaryService(knowledge, config);
+  const mcp = new McpService(store, toolService, dataDir);
   function session(id: string) {
     const found = store.session(id);
     if (!found) throw new PublicError('대화를 찾을 수 없습니다. 새 대화를 시작해 주세요.', 404);
@@ -345,6 +349,7 @@ export function createApp({ dataDir, port }: { dataDir: string; port: number }) 
   skills.mount(app);
   agentService.mount(app);
   toolService.mount(app);
+  mcp.mount(app);
   app.use('/api', (_req, res) => res.status(404).json({ error: '지원하지 않는 요청입니다.' }));
   app.use(
     (err: unknown, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
@@ -377,14 +382,16 @@ export function createApp({ dataDir, port }: { dataDir: string; port: number }) 
     app,
     store,
     close() {
-      if (closed) return;
+      if (closed) return closing ?? Promise.resolve();
       closed = true;
       for (const controller of active.values()) controller.abort();
       summaries.close();
       agentService.close();
+      closing = mcp.close();
       toolService.close();
       keys.clear();
       store.close();
+      return closing;
     },
   };
 }

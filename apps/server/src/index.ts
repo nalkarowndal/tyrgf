@@ -32,10 +32,18 @@ if (process.argv.includes('--dev')) {
 const server = app.listen(port, '127.0.0.1', () =>
   console.log(`AURA Agent: http://127.0.0.1:${port}`),
 );
+let shuttingDown = false;
 function shutdown() {
+  if (shuttingDown) return;
+  shuttingDown = true;
   server.close();
-  close();
-  setTimeout(() => process.exit(0), 100).unref();
+  // MCP SDK closes stdin, waits 2s, sends SIGTERM, then SIGKILL after another 2s.
+  // Let that cleanup finish, including disconnects already in progress.
+  const deadline = setTimeout(() => process.exit(1), 10000);
+  void close().finally(() => {
+    clearTimeout(deadline);
+    process.exit(0);
+  });
 }
 process.on('SIGINT', shutdown);
 process.on('SIGTERM', shutdown);

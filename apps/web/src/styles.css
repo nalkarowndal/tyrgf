@@ -2069,3 +2069,63 @@ textarea {
   padding: 6px;
   overflow-wrap: anywhere;
 }
+
+/* MCP connection and explicit execution review */
+.mcp-page .settings-content {
+  max-width: 1040px;
+}
+.mcp-heading {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+.mcp-heading h2 {
+  margin: 0;
+}
+.mcp-server h3 {
+  margin: 24px 0 12px;
+}
+.mcp-tools {
+  display: grid;
+  gap: 8px;
+  margin: 12px 0;
+}
+.mcp-tools small {
+  display: block;
+  font-weight: normal;
+  color: var(--muted);
+  overflow-wrap: anywhere;
+}
+.mcp-tools strong {
+  overflow-wrap: anywhere;
+}
+.mcp-code {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  max-height: 350px;
+  overflow: auto;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px;
+  font-size: 12px;
+}
+.mcp-page textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--text);
+  font: 13px monospace;
+  resize: vertical;
+}
+.mcp-receipt {
+  padding: 18px 0;
+  border-top: 1px solid var(--border);
+}
+.mcp-server details {
+  margin-top: 18px;
+}

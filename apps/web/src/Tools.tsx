@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import {
@@ -483,9 +484,9 @@ export function ToolsPage({ mode }: { mode: 'files' | 'browser' | 'tools' }) {
                 </div>
               ))}
             </div>
-            <FeatureExplanation title="외부 MCP 연결은 준비 중입니다">
-              GitHub·Serena·Repomix 등 외부 서버 설치와 연결, 명령 실행은 아직 지원하지 않습니다.
-              개발에 사용한 플러그인 연결은 이 앱의 권한과 별개입니다.
+            <FeatureExplanation title="외부 도구는 연결 관리에서 확인하세요">
+              <Link to="/mcp">MCP 서버 연결과 도구 권한 관리</Link>에서 설치 조건을 확인하고 직접
+              실행할 수 있습니다. 개발에 사용한 플러그인 연결은 이 앱의 권한과 별개입니다.
             </FeatureExplanation>
           </section>
         )}

@@ -49,3 +49,12 @@
 - GitHub [Hermes memory_tool.py](https://github.com/NousResearch/hermes-agent/blob/main/tools/memory_tool.py): 세션 시작 frozen snapshot 설계 확인. AURA는 삭제 즉시 후속 요청에 반영해야 하므로 매 요청 현재 저장소를 조회한다. 코드를 복제하지 않았다.
 - Canva AURA 검색 결과 0개. 기존 로컬 UI의 카드·검토 패턴으로 확장했다.
 - 환경 상태: 제한 네트워크 enforced, api.groq.com 미포함. 제공된 키를 외부 도구·저장소·문서로 전송하지 않고 실연결 검증은 보류했다.
+
+
+## M6 추가 조사 (2026-10-17)
+- Context7 `/modelcontextprotocol/typescript-sdk/__branch__v1.x`: Client/StdioClientTransport, connect/listTools/callTool/close, getDefaultEnvironment, maxBufferSize, JSON Schema validator 확인. 설치된 SDK **1.32.1 MIT**를 package-lock.json에 고정했다.
+- GitHub [github-mcp-server README](https://github.com/github/github-mcp-server/blob/main/README.md): 로컬 `stdio`, `--read-only`, 개별 `--tools`와 `GITHUB_PERSONAL_ACCESS_TOKEN` 확인. 도구 전체 그룹 대신 검토한 개별 조회 목록을 사용한다.
+- GitHub [Serena CLI](https://github.com/oraios/serena/blob/main/src/serena/cli.py): `start-mcp-server --context ide --project`와 기본 stdio 확인.
+- GitHub [Repomix MCP](https://github.com/yamadashy/repomix/blob/main/src/mcp/mcpServer.ts): 파일/디렉터리 조회 등록과 패킹 도구 구분.
+- Exa [MCP tools specification](https://modelcontextprotocol.io/specification/draft/server/tools): annotations를 신뢰 경계로 사용하지 않고 사용자가 호출을 확인·거절할 수 있도록 설계.
+- Canva AURA 기존 디자인 검색 결과 없음. 기존 화면을 확장했으며 외부 디자인 게시 없음. 외부 MCP 서버는 설치하지 않았다.

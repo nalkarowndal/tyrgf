@@ -31,6 +31,7 @@ import {
 import type { Bootstrap, Session } from '../../../packages/shared/src/contracts';
 import { api, setToken } from './api';
 import { Chat } from './Chat';
+import { McpPage } from './Mcp';
 import { ToolsPage } from './Tools';
 import { TasksPage } from './Tasks';
 import { MemoryPage, SkillsPage } from './Knowledge';
@@ -77,7 +78,7 @@ const menus = [
   },
   {
     name: '외부 도구 연결',
-    path: 'tools',
+    path: 'mcp',
     icon: Plug,
     description: 'MCP 도구를 검토하고 연결합니다.',
   },
@@ -266,9 +267,9 @@ export function App() {
               <NavLink key={m.path} to={`/${m.path}`} title={m.description}>
                 <m.icon size={17} />
                 <span>{m.name}</span>
-                {!['tasks', 'files', 'browser', 'tools', 'memory', 'skills'].includes(m.path) && (
-                  <span className="soon-dot" title="준비 중" />
-                )}
+                {!['tasks', 'files', 'browser', 'tools', 'mcp', 'memory', 'skills'].includes(
+                  m.path,
+                ) && <span className="soon-dot" title="준비 중" />}
               </NavLink>
             ))}
         </nav>
@@ -331,6 +332,7 @@ export function App() {
           <Route path="/skills" element={<SkillsPage />} />
           <Route path="/files" element={<ToolsPage key="files" mode="files" />} />
           <Route path="/browser" element={<ToolsPage key="browser" mode="browser" />} />
+          <Route path="/mcp" element={<McpPage />} />
           <Route path="/tools" element={<ToolsPage key="tools" mode="tools" />} />
           <Route path="*" element={<ComingSoon />} />
         </Routes>

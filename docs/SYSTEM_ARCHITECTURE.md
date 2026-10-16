@@ -31,3 +31,7 @@ Node 24 내장 node:sqlite를 사용해 네이티브 SQLite 모듈 설치 부담
 Linux 파일 변경과 공개 웹 읽기는 도구 권한과 1회 승인을 요구한다. 명령 실행·MCP·동적 웹 제어는 비활성. tool_runs 테이블은 승인 입력/상태/전후/복구 위치를 보관하며 agent_tasks/agent_checkpoints를 추가한 schema user_version=4.
 
 M5 KnowledgeStore는 요청별 승인 기억과 대화 범위 경계를 제공한다. SummaryService는 명시적 원문 요약의 동시성·출처를 검증한다. SkillsStore는 완료 절차와 승인 버전을 저장하고 AgentService가 매 실행 시 확인한다. 기억의 컨텍스트는 대화 전용, 스킬은 작업 계획 전용이다.
+
+
+## M6 MCP
+McpPage → `/api/mcp` → McpService(프로필/승인 SQLite, 권한/연결 메모리) → MCP SDK Client/StdioClientTransport → 독립 서버 프로세스. 내장 mcp-project는 SafeFiles를 재사용한다. ToolService의 폴더 철회 hook은 MCP 연결과 승인도 무효화한다. GitHub/Serena/Repomix는 catalog의 고정 시작 인수와 조회 도구 목록을 따른다. 서버 도구 발견 시 기본 권한 없음, 호출 직전 스키마 해시 재검사, 텍스트 결과만 렌더링한다. DB user_version=5이며 시작 시 이전 실행/승인은 중단/만료 처리한다. 현재 AgentAction과 Skill 도구 목록에는 MCP를 추가하지 않았다.

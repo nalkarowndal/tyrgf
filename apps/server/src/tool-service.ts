@@ -15,6 +15,7 @@ import { readBrowser, validatePublicUrl } from './web-reader';
 const empty = z.object({}).strict();
 export class ToolService {
   readonly files: SafeFiles;
+  onRootRevoked: (rootId: string) => void = () => {};
   browserEnabled = false;
   private active = new Map<string, AbortController>();
   private closed = false;
@@ -243,6 +244,7 @@ export class ToolService {
     app.post('/api/tools/roots/revoke', (req, res) => {
       const { rootId } = z.object({ rootId: z.string() }).strict().parse(req.body);
       this.files.roots.delete(rootId);
+      this.onRootRevoked(rootId);
       this.invalidate((r) => r.rootId === rootId);
       res.json({ ok: true });
     });

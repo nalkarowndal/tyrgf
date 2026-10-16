@@ -1,6 +1,6 @@
 # AURA Agent
 
-한국어로 편하게 대화하는 로컬 AI 도우미. **M5 기억·스킬 구현 버전**입니다. 실제 공급자 어댑터, 명시적 모의 공급자, 승인 기반 복합 작업을 제공합니다. Windows 설치 패키지는 준비 중입니다.
+한국어로 편하게 대화하는 로컬 AI 도우미. **M6 MCP 연결·승인 호출 구현 버전**입니다. 실제 공급자 어댑터, 명시적 모의 공급자, 승인 기반 복합 작업을 제공합니다. Windows 설치 패키지는 준비 중입니다.
 
 ![AURA 대화 화면](docs/qa/desktop-home.png)
 
@@ -31,6 +31,8 @@ npm start
 - API 키 없이 실제 파일 목록·읽기·보고서 저장을 체험하는 명시적 모의 복합 작업
 - 기억 관리: 초안·승인·검색·수정·삭제·내보내기, 출처를 추적하는 대화 요약
 - 스킬 관리: 완료 작업의 절차 저장, 버전 검토·승인 후 새 작업에서 재사용
+- MCP: 내장 프로젝트 읽기 서버의 실제 연결, 도구 발견·권한·입력 승인·호출·결과 기록
+- 미리 설치한 GitHub/Serena/Repomix CLI 연결 관리 (실제 외부 서비스 연결은 미검증)
 
 API 키는 서버 메모리에만 저장합니다. 서버를 재시작하면 다시 입력해야 합니다. **무료 계정 여부는 공급자 콘솔에서 직접 확인해야 하며, 앱이 유료 계정의 실제 과금을 차단하지는 못합니다.**
 
@@ -55,4 +57,4 @@ E2E는 시스템 Chromium이 있으면 사용하고, 없으면 Playwright 브라
 - [시스템 구조](docs/SYSTEM_ARCHITECTURE.md) · [보안 및 한계](docs/SECURITY_DESIGN.md)
 - [테스트와 시각 QA](docs/TEST_QA_PLAN.md) · [구현 기록](docs/IMPLEMENTATION_LOG.md)
 
-웹 읽기에는 Chromium이 필요합니다 (`npx playwright install chromium` 또는 `CHROMIUM_PATH`). Windows/macOS 파일 도구, 동적 브라우저 제어, 터미널, MCP, 자동 백그라운드 요약은 준비 중입니다. 파일 원본은 숨김 복구 폴더에도 보관하며 자동 정리하지 않습니다. 자세한 범위와 한계는 [도구 설계](docs/TOOL_MCP_DESIGN.md)를 참고하세요.
+웹 읽기에는 Chromium이 필요합니다 (`npx playwright install chromium` 또는 `CHROMIUM_PATH`). Windows/macOS 파일 도구, 동적 브라우저 제어, 터미널, MCP 자동 계획 연동, 자동 백그라운드 요약은 준비 중입니다. 파일 원본은 숨김 복구 폴더에도 보관하며 자동 정리하지 않습니다. 자세한 범위와 한계는 [도구 설계](docs/TOOL_MCP_DESIGN.md)를 참고하세요.
