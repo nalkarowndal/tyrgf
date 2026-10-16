@@ -489,14 +489,9 @@ export function Chat({ data, refresh }: { data: Bootstrap; refresh: () => Promis
                     <span className="status-dot" />
                     대화
                   </span>
-                  <button
-                    type="button"
-                    className="agent-disabled"
-                    disabled
-                    title="도구 실행은 준비 중입니다"
-                  >
-                    에이전트 · 준비 중
-                  </button>
+                  <Link to="/tasks" className="agent-disabled">
+                    에이전트 작업 →
+                  </Link>
                 </div>
                 <div className="composer-right">
                   <Link to="/settings" className="model-link">
@@ -535,10 +530,13 @@ export function Chat({ data, refresh }: { data: Bootstrap; refresh: () => Promis
             <h3>작업 진행</h3>
             <span className="badge">대화 모드</span>
             <p>
-              {busy ? 'AI가 답변을 작성하고 있습니다.' : '현재 실행 중인 자동화 작업이 없습니다.'}
+              {busy
+                ? 'AI가 답변을 작성하고 있습니다.'
+                : '에이전트 작업은 작업 관리에서 확인할 수 있습니다.'}
             </p>
-            <ActionPreview title="에이전트 작업은 준비 중">
-              파일 수정과 브라우저 조작을 실행하기 전 계획과 승인 요청을 이곳에서 확인하게 됩니다.
+            <ActionPreview title="여러 도구를 쓰는 작업이 필요하다면">
+              작업 관리에서 목표와 폴더를 선택하세요. 단계별 도구 결과와 실행 전 승인 요청을 확인할
+              수 있습니다.
             </ActionPreview>
           </aside>
         )}

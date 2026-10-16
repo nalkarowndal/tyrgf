@@ -1,7 +1,7 @@
 # 테스트 및 시각 QA
 
-## 실행 결과 (2026-10-15)
-검증 환경: Linux, Node 24.19.0, 시스템 Chromium. `npm run check` (타입 검사, ESLint, Vitest, Vite 빌드) 통과. Vitest 7개 파일 **52개 테스트 통과**. `npm run test:e2e` **5개 사용자 시나리오 통과**. 운영 의존성 `npm audit --omit=dev` 알려진 취약점 **0건**. Windows CI workflow는 작성했지만 원격 실행하지 않았다.
+## 실행 결과 (2026-10-16)
+검증 환경: Linux, Node 24.19.0, 시스템 Chromium. `npm run check` (타입 검사, ESLint, Vitest, Vite 빌드) 통과. Vitest 11개 파일 **69개 테스트 통과**. `npm run test:e2e` **6개 사용자 시나리오 통과**. 운영 의존성 `npm audit --omit=dev` 알려진 취약점 **0건**. Windows CI workflow는 작성했지만 원격 실행하지 않았다.
 
 ## 기능·보안 검사
 - API 기본값 mock/외부 전송 차단, Host/Origin/토큰 검사, 대소문자 경로 우회 차단.
@@ -31,9 +31,9 @@
 처음 캡처에서 설정 저장 후 온보딩 재등장과 짧은 높이에서 사이드바 overflow를 발견해 수정했다. 모바일 메뉴의 닫힘 전환 중 캡처를 막기 위해 screenshot animations=disabled로 안정된 상태를 다시 확보한다. 모바일 가로 overflow는 자동 검사도 포함한다. 시각 검수는 자동 기능 테스트 통과와 별도로 진행했다.
 
 ## 미검증·후속 조건
-실 API 키 없음: Gemini/Groq 인증 응답·계정 요금제·실 사용 한도는 미검증. Ollama 실 인스턴스 없음: 설치 모델 실제 추론 미검증. fetch fixture를 실 API 연결 증거로 취급하지 않는다. M3 수동 도구 승인·실행·복구는 검증했다. 공개 사이트 라이브 읽기는 환경 DNS EAI_AGAIN으로 실패하여 성공 미검증이다. M4 두 도구 복합 작업, M5 기억 삭제, M6 MCP 설치는 구현 전이므로 테스트 통과로 기록하지 않는다. Windows/macOS·다중 브라우저·실제 초보자 사용성 실험·OS credential vault는 후속 검증이다.
+실 API 키 없음: Gemini/Groq 인증 응답·계정 요금제·실 사용 한도는 미검증. Ollama 실 인스턴스 없음: 설치 모델 실제 추론 미검증. fetch fixture를 실 API 연결 증거로 취급하지 않는다. M3 수동 도구 승인·실행·복구는 검증했다. 공개 사이트 라이브 읽기는 환경 DNS EAI_AGAIN으로 실패하여 성공 미검증이다. M4 복합 파일 도구 실행은 명시적 모의 계획으로 검증했으며 실제 모델 계획 품질은 미검증이다. M5 기억 삭제, M6 MCP 설치는 구현 전이므로 테스트 통과로 기록하지 않는다. Windows/macOS·다중 브라우저·실제 초보자 사용성 실험·OS credential vault는 후속 검증이다.
 
-빌드 경고: 현재 단일 프론트엔드 bundle이 약 603KB(압축 약 185KB)로 Vite 권고 기준을 넘는다. Zod 내부 PURE annotation 경고도 발생하지만 빌드 실패는 아니다. 코드 분할은 후속 성능 개선 항목이다.
+빌드 경고: 현재 단일 프론트엔드 bundle이 약 613KB(압축 약 188KB)로 Vite 권고 기준을 넘는다. Zod 내부 PURE annotation 경고도 발생하지만 빌드 실패는 아니다. 코드 분할은 후속 성능 개선 항목이다.
 
 ## M3 추가 검증
 - 파일 API: 권한 기본 꺼짐, CSRF, 읽기/쓰기 분리, 승인 전 무변경, 승인 입력 위변조·재실행 거절, 경로 우회/숨김/심볼릭·하드링크/비텍스트 거절, 외부 수정 보존, 루트 교체, 권한 철회, 삭제·복구·변경 후 복구 거절, 만료와 재시작.
@@ -45,3 +45,12 @@
 - E2E 5: 웹 권한→내부 주소 거절→공개 URL 미리보기→명시적 거절→권한 해제. 외부 네트워크 요청은 하지 않는다.
 - qa/desktop-file-approval.png, qa/mobile-files.png를 직접 열어 확인. qa/desktop-browser-tools.png도 기록.
 - CI에서 Chromium 설치를 check 앞으로 옮겼다. Linux 전용 파일 테스트는 다른 OS에서 건너뛰고 기본 권한 API는 계속 검사한다. Windows 원격 실행은 아직 하지 않았다.
+
+## M4 추가 검증
+- 작업 API: 최소 2개 도구 복합 작업, 현재 run ID 승인, 성공 결과 fingerprint, 외부 결과 변경·원본 삭제 시 완료 금지, 승인 거절의 최종성, 도구 예산, 작업별 클라우드 동의, CSRF.
+- SQLite 재시작: 승인 영수증 저장 후 재개 시 쓰기 중복 없음, 대기 미리보기 만료 후 새 승인, 원래 폴더/모델 외 재개 거부. 체크포인트 저장 확인.
+- 계획·제어: 지원하지 않는 도구/승인 필드/JSON 거절, 실제 공급자 스트림의 계획 해석과 사용량, 일시중지 후 늦은 응답 폐기, 너무 이른 완료의 재계획, 차단된 상대 경로를 실패 관찰로 전달.
+- 리뷰 회귀: 실패 쓰기 영수증은 자동 재계획 금지, pause로 복구 예산 초기화 불가, 결과 확인 상태의 pause/resume 금지. streamReply를 대체하지 않고 fetch fixture로 공급자에게 보내는 실제 system 정책과 대화용 정책 분리를 검사한다.
+- E2E 6: 폴더 권한 → 고정 모의 복합 작업 → 저장 미리보기 → 일시중지 → 새로고침·재개 → 명시적 승인 → 실제 보고서 내용·검증 결과 → 새로고침 영속성 → 모바일 가로 overflow 확인.
+- qa/desktop-agent-approval.png: 전체 승인 카드. qa/mobile-agent-result.png: 모바일 검증 결과.
+- 남은 Minor는 AGENT_DESIGN.md의 원시 하위 폴더 목록 영수증 명칭 문제. 테스트 통과가 실제 AI 추론이나 답변의 의미적 정확성을 증명하지는 않는다.

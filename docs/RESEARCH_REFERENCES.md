@@ -35,3 +35,10 @@
 - Context7 `/microsoft/playwright`: newContext offline/javaScriptEnabled/serviceWorkers 및 route.abort, screenshot 공식 문서 확인.
 - Canva AURA 기존 디자인 검색: 결과 없음. 외부 디자인 생성·게시 없이 기존 앱 UI를 확장.
 - 설치 manifest: playwright-core 1.64.1(Apache-2.0), ipaddr.js(주소 분류), parse5(원격 HTML을 실행하지 않는 파싱). 실제 버전은 package-lock.json에 고정.
+
+## M4 추가 조사 (2026-10-16)
+- Context7 `/websites/langchain_oss_javascript_langgraph`: [persistence](https://docs.langchain.com/oss/javascript/langgraph/persistence), [interrupts](https://docs.langchain.com/oss/javascript/langgraph/interrupts). 재개 시 노드 재실행과 checkpointer/thread_id, 부작용 중복 방지 필요성을 확인.
+- Exa: [durable execution](https://docs.langchain.com/oss/javascript/langgraph/durable-execution), [graph API](https://docs.langchain.com/oss/javascript/langgraph/graph-api). 영속 상태와 결정적 재진입, 영수증 기반 부작용 분리 반영.
+- GitHub: [checkpoint base.ts](https://github.com/langchain-ai/langgraphjs/blob/main/libs/checkpoint/src/base.ts), 설치한 MemorySaver의 put/putWrites/getTuple 구현을 읽고 라이브러리 직렬화·pending writes 순서를 보존.
+- 설치 버전 @langchain/langgraph 1.5.0, MIT. 위 초기 조사 표의 버전과 설치 시점이 다르며 실제 의존성은 package-lock.json 참조. 내장 node:sqlite와 per-task MemorySaver 스냅샷으로 네이티브 DB 모듈 추가를 피함. Node/LangGraph 업그레이드 시 저장 형식 호환성 검사 필요.
+- Canva 기존 AURA 디자인 검색은 이전 단계에서 결과가 없었으며 이번 작업은 기존 UI를 확장했다. 새 외부 디자인·게시물은 만들지 않음.

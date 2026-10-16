@@ -214,7 +214,10 @@ export function ToolsPage({ mode }: { mode: 'files' | 'browser' | 'tools' }) {
                 ? '웹페이지를 읽고, 결과를 확인하세요'
                 : '무엇을 할 수 있는지 한눈에'}
           </h2>
-          <p>도구는 직접 선택해 실행합니다. AI의 자동 계획·도구 선택은 다음 단계에서 제공해요.</p>
+          <p>
+            이 화면에서는 도구를 직접 실행합니다. 여러 도구를 이어 쓰려면 작업 관리에서 목표를
+            입력하세요.
+          </p>
         </div>
         {(error || query.error) && (
           <ErrorRecoveryPanel

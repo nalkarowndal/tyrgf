@@ -1,6 +1,6 @@
 # 도구·MCP 설계
 
-M3는 수동 파일 도구와 공개 웹 읽기를 제공한다. AI가 도구를 자동 선택하는 에이전트는 M4, 외부 MCP는 M6이다. 개발에 사용한 GitHub/Exa/Context7/Canva connector는 제품 내부 연결과 별개다.
+M3는 수동 파일 도구와 공개 웹 읽기를 제공한다. M4 작업 관리가 제한된 다음 동작 선택과 동일한 승인 체계를 사용한다. 외부 MCP는 M6 예정이다. 개발에 사용한 GitHub/Exa/Context7/Canva connector는 제품 내부 연결과 별개다.
 
 ## 레지스트리와 승인
 packages/shared/src/tools.ts에 도구 ID, 한국어 설명, 입력 파라미터, 출력 형식, 권한, 위험, 실행 환경, 지원 상태를 등록한다. Zod discriminated union으로 변경 입력을 검증하고 ToolService가 미리보기·실행·검증·기록을 관리한다. file.read, file.write, file.delete, browser.read를 지원한다.

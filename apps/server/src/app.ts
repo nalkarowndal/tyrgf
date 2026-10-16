@@ -1,4 +1,5 @@
 import express from 'express';
+import { AgentService } from './agent-service';
 import { ToolService } from './tool-service';
 import { randomBytes, timingSafeEqual } from 'node:crypto';
 import { once } from 'node:events';
@@ -73,6 +74,7 @@ export function createApp({ dataDir, port }: { dataDir: string; port: number }) 
     const s = store.settings();
     return { ...s, key: keys.get(s.provider) };
   };
+  const agentService = new AgentService(store, toolService, config);
   function session(id: string) {
     const found = store.session(id);
     if (!found) throw new PublicError('대화를 찾을 수 없습니다. 새 대화를 시작해 주세요.', 404);
@@ -307,6 +309,7 @@ export function createApp({ dataDir, port }: { dataDir: string; port: number }) 
       if (!res.destroyed) res.end(JSON.stringify({ type: 'done', status }) + '\n');
     }
   });
+  agentService.mount(app);
   toolService.mount(app);
   app.use('/api', (_req, res) => res.status(404).json({ error: '지원하지 않는 요청입니다.' }));
   app.use(
@@ -343,6 +346,7 @@ export function createApp({ dataDir, port }: { dataDir: string; port: number }) 
       if (closed) return;
       closed = true;
       for (const controller of active.values()) controller.abort();
+      agentService.close();
       toolService.close();
       keys.clear();
       store.close();

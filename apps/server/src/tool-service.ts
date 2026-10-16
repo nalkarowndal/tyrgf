@@ -61,7 +61,7 @@ export class ToolService {
       expiresAt: r.expiresAt,
     }));
   }
-  private get(id: string) {
+  get(id: string) {
     const r = this.store.db
       .prepare('SELECT payload,status,expiresAt FROM tool_runs WHERE id=?')
       .get(id) as { payload: string; status: ToolRun['status']; expiresAt: string } | undefined;
@@ -204,6 +204,26 @@ export class ToolService {
         }
         this.active.get(run.id)?.abort();
       }
+  }
+  deny(id: string) {
+    const run = this.pending(id);
+    run.status = 'denied';
+    run.message = '실행하지 않았습니다.';
+    return this.save(run);
+  }
+  stop(id: string) {
+    this.active.get(id)?.abort();
+  }
+  read(rootId: string, path: string, asFile = false) {
+    const root = this.files.root(rootId),
+      run = this.record(path ? 'file.read' : 'file.list', join(root.path, path));
+    const snapshot = asFile ? this.files.snapshot(rootId, path) : undefined;
+    if (asFile && snapshot?.content === null) throw new PublicError('파일이 없습니다.', 404);
+    const result = snapshot ? { content: snapshot.content! } : this.files.read(rootId, path);
+    run.status = 'succeeded';
+    run.message = '허용한 범위에서 읽었습니다.';
+    this.save(run);
+    return { run, result, fingerprint: snapshot?.fingerprint };
   }
   mount(app: Express) {
     app.get('/api/tools', (_req, res) => res.json(this.state()));
