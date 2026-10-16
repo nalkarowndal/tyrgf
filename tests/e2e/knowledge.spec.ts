@@ -20,9 +20,27 @@ test('reviews and manages memories and creates a provenance-tracked summary draf
   const download = page.waitForEvent('download');
   await page.getByRole('button', { name: '전체 내보내기' }).click();
   expect((await download).suggestedFilename()).toContain('memories');
-  await page.screenshot({ path: 'docs/qa/desktop-memory.png', animations: 'disabled' });
+  await page
+    .locator('.memory-entry')
+    .screenshot({ path: 'docs/qa/desktop-memory.png', animations: 'disabled' });
   await page.getByLabel('기억 검색').fill('');
   await page.getByLabel('요약할 대화').selectOption({ index: 1 });
+  await page.getByRole('button', { name: '요약 초안 만들기' }).click();
+  await expect(page.getByText('요약할 완료 대화가 없습니다.', { exact: true })).toBeVisible();
+  const fresh = await page.evaluate(async () => {
+    const b = await (await fetch('/api/bootstrap')).json();
+    const post = (p: string, body: object) =>
+      fetch('/api' + p, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'X-Aura-Token': b.token },
+        body: JSON.stringify(body),
+      });
+    const session = await (await post('/sessions', {})).json();
+    await (await post('/sessions/' + session.id + '/reply', { text: '요약 검증 원문' })).text();
+    return session.id;
+  });
+  await page.reload();
+  await page.getByLabel('요약할 대화').selectOption(fresh);
   await page.getByRole('button', { name: '요약 초안 만들기' }).click();
   await expect(page.getByText('모의 발췌', { exact: false }).first()).toBeVisible();
   await page.getByRole('button', { name: '기억 전체 삭제', exact: true }).click();

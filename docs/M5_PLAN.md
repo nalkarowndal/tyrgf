@@ -26,18 +26,20 @@
 ### Task 1: 기억 CRUD 및 요청별 컨텍스트
 Files: packages/shared/src/knowledge.ts; apps/server/src/knowledge-store.ts; app.ts; tests/knowledge.test.ts.
 Interfaces: KnowledgeStore.memories/query, saveMemory/updateMemory/approveMemory/deleteMemory, context(sessionId) -> {text,count,omitted}, history(sessionId), epoch.
-- [ ] API404 RED: 초안 미적용/승인 버전/검색/수정·삭제 후 재사용 없음/전체 삭제와 export/재시작.
-- [ ] 실제 provider fetch fixture로 새 대화의 전송 본문과 같은 대화 삭제 후 과거 제외 검증.
-- [ ] 구현, focused tests GREEN, commit.
+- [x] API404 RED: 초안 미적용/승인 버전/검색/수정·삭제 후 재사용 없음/전체 삭제와 export/재시작.
+- [x] 실제 provider fetch fixture로 새 대화의 전송 본문과 같은 대화 삭제 후 과거 제외 검증.
+- [x] 구현, focused tests GREEN, commit.
 
 ### Task 2: 요약과 스킬 재사용
 Files: summary-service.ts; knowledge-store.ts; agent-service.ts; agent-planner.ts; agent.ts; tests/knowledge.test.ts; tests/skills.test.ts.
 Interfaces: POST /api/memories/summarize {sessionId}; POST /api/skills/from-task {taskId}; POST /api/skills/:id/{update,approve,delete}; GET /api/skills. createTaskSchema skillId/skillVersion optional pair.
-- [ ] RED: 요약 초안/원문 변경 무효화/실패 시 원문 유지; 스킬 완료 작업만 저장/승인 전 실행 거절/수정 후 승인 해제/대기 중 삭제 후 도구 실행 거부/허용 도구 범위.
-- [ ] 구현, GREEN, 전체 테스트, commit.
+- [x] RED: 요약 초안/원문 변경 무효화/실패 시 원문 유지; 스킬 완료 작업만 저장/승인 전 실행 거절/수정 후 승인 해제/대기 중 삭제 후 도구 실행 거부/허용 도구 범위.
+- [x] 구현, GREEN, 전체 테스트, commit.
 
 ### Task 3: 관리 UI 및 검증
 Files: apps/web/src/Knowledge.tsx; App.tsx; Chat.tsx; Tasks.tsx; styles.css; tests/e2e/knowledge.spec.ts; docs.
-- [ ] E2E RED: 기억 작성·승인·검색·수정·내보내기·삭제; 요약 초안 승인; 완료 작업에서 스킬 저장·검토·재사용·승인 철회.
-- [ ] 기존 UI 패턴에 관리 화면, 기억 전송 안내, 스킬 선택과 검토 추가.
-- [ ] npm run check / E2E, 화면 검수, 독립 리뷰 1회 및 중요 수정, 문서·로컬 커밋.
+- [x] E2E RED: 기억 작성·승인·검색·수정·내보내기·삭제; 요약 초안 승인; 완료 작업에서 스킬 저장·검토·재사용·승인 철회.
+- [x] 기존 UI 패턴에 관리 화면, 기억 전송 안내, 스킬 선택과 검토 추가.
+- [x] npm run check / E2E, 화면 검수, 독립 리뷰 1회 및 중요 수정, 문서·로컬 커밋.
+
+최종 결과: 83개 테스트, 7개 E2E, 독립 검토 Important 2건 회귀 수정. 세부 결정과 비용은 MEMORY_DESIGN.md 및 IMPLEMENTATION_LOG.md. 실 Groq 연결은 네트워크 정책으로 미검증.

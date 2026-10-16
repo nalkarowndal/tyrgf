@@ -98,3 +98,28 @@ it.runIf(process.platform === 'linux')(
     expect((await get('/skills')).body[0].lastResult.status).toBe('failed');
   },
 );
+it.runIf(process.platform === 'linux').each(['delete', 'edit'])(
+  'blocks the shared tool approval endpoint after skill %s',
+  async (mode) => {
+    const done = await completed();
+    const s = (await post('/skills/from-task', { taskId: done.id })).body;
+    await post('/skills/' + s.id + '/approve', { version: 1 });
+    rmSync(join(root, 'aura-report.md'));
+    const task = await settle(
+      (await post('/tasks', { rootId, goal: '재사용', skillId: s.id, skillVersion: 1 })).body.id,
+    );
+    expect(task.status).toBe('awaiting_approval');
+    if (mode === 'delete') await post('/skills/' + s.id + '/delete', { version: 1 });
+    else
+      await post('/skills/' + s.id + '/update', {
+        version: 1,
+        name: s.name,
+        purpose: '새로운 목적',
+        steps: s.steps,
+        tools: s.tools,
+        verification: s.verification,
+      });
+    expect((await post('/tools/runs/' + task.pendingRun + '/approve')).status).toBe(409);
+    expect(existsSync(join(root, 'aura-report.md'))).toBe(false);
+  },
+);

@@ -18,6 +18,10 @@ export class ToolService {
   browserEnabled = false;
   private active = new Map<string, AbortController>();
   private closed = false;
+  private approvalGuard: (runId: string) => void = () => {};
+  setApprovalGuard(guard: (runId: string) => void) {
+    this.approvalGuard = guard;
+  }
   constructor(
     private store: Store,
     dataDir: string,
@@ -146,6 +150,7 @@ export class ToolService {
   }
   async approve(id: string) {
     const run = this.pending(id);
+    this.approvalGuard(id);
     if (this.active.size)
       throw new PublicError('실행 중인 도구가 끝난 뒤 다시 시도해 주세요.', 409);
     const controller = new AbortController();

@@ -199,3 +199,54 @@ it('allows a user-corrected summary to be approved as an explicit user memory', 
   expect(changed.body.source.sessionId).toBe(s.id);
   expect((await post('/memories/' + m.id + '/approve', { version: 2 })).status).toBe(200);
 });
+it.each(['edit', 'regenerate'])(
+  'excludes summaries invalidated by the current %s request before calling the provider',
+  async (mode) => {
+    const s = server.store.createSession();
+    const userId = server.store.addMessage(
+      s.id,
+      'user',
+      mode === 'edit' ? 'old_private_fact' : 'current question',
+      server.store.settings(),
+    );
+    if (mode === 'regenerate') {
+      const a = server.store.addMessage(
+        s.id,
+        'assistant',
+        'old_private_fact',
+        server.store.settings(),
+      );
+      server.store.updateMessage(a, 'old_private_fact', 'complete');
+    }
+    const m = (await post('/memories/summarize', { sessionId: s.id })).body;
+    await post('/memories/' + m.id + '/approve', { version: 1 });
+    const bodies: unknown[] = [];
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async (_url, init) => {
+        bodies.push(JSON.parse(init.body));
+        return new Response(
+          'data: ' +
+            JSON.stringify({
+              choices: [{ delta: { content: 'new answer' }, finish_reason: 'stop' }],
+            }) +
+            '\n\ndata: [DONE]\n\n',
+        );
+      }),
+    );
+    await post('/keys', { provider: 'groq', key: 'fixture-key' });
+    await post('/settings', {
+      provider: 'groq',
+      model: 'openai/gpt-oss-20b',
+      externalConsent: true,
+      freeConfirmed: true,
+    });
+    const result = await post(
+      '/sessions/' + s.id + '/reply',
+      mode === 'edit' ? { editId: userId, text: 'replacement fact' } : { regenerate: true },
+    );
+    expect(result.status).toBe(200);
+    expect(JSON.stringify(bodies.at(-1))).not.toContain('old_private_fact');
+    expect((await get('/memories/context')).body.count).toBe(0);
+  },
+);

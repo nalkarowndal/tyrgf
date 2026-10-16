@@ -137,12 +137,19 @@ export class KnowledgeStore {
       this.invalidate();
     });
   }
-  context(budget = 6000) {
+  context(budget = 6000, truncation?: { sessionId: string; fromSeq: number }) {
     let text = '',
       count = 0,
       omitted = 0;
     for (const m of this.memories()) {
       if (!m.active || !this.valid(m)) continue;
+      if (
+        truncation &&
+        m.source.kind === 'summary' &&
+        m.source.sessionId === truncation.sessionId &&
+        m.source.throughSeq! >= truncation.fromSeq
+      )
+        continue;
       const item =
         JSON.stringify({ title: m.title, category: m.category, content: m.content }) + '\n';
       if (text.length + item.length > budget) {

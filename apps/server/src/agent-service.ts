@@ -29,6 +29,19 @@ export class AgentService {
     store.db.exec(
       `CREATE TABLE IF NOT EXISTS agent_tasks(id TEXT PRIMARY KEY,payload TEXT NOT NULL);CREATE TABLE IF NOT EXISTS agent_checkpoints(taskId TEXT PRIMARY KEY REFERENCES agent_tasks(id),snapshot BLOB NOT NULL);PRAGMA user_version=3;`,
     );
+    // Every approval entry point, including the general tool history, must
+    // respect the task and the skill version that produced the pending action.
+    tools.setApprovalGuard((runId) => {
+      const row = store.db
+        .prepare("SELECT payload FROM agent_tasks WHERE json_extract(payload,'$.pendingRun')=?")
+        .get(runId) as { payload: string } | undefined;
+      if (!row) return;
+      const task = JSON.parse(row.payload) as AgentTask;
+      if (!['running', 'awaiting_approval'].includes(task.status))
+        throw new PublicError('이 도구의 작업이 중단되었습니다. 작업 상태를 먼저 확인하세요.', 409);
+      this.connection(task);
+      this.scope(task);
+    });
     for (const task of this.list(true))
       if (['running', 'awaiting_approval', 'recoverable_error'].includes(task.status)) {
         task.status = 'paused';
