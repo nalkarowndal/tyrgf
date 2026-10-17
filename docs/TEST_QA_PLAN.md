@@ -1,7 +1,7 @@
 # 테스트 및 시각 QA
 
 ## 실행 결과 (2026-10-17)
-검증 환경: Linux, Node 24.19.0, 시스템 Chromium. `npm run check` (타입 검사, ESLint, Vitest, Vite 빌드) 통과. Vitest 17개 파일 **110개 테스트 통과**. `npm run test:e2e` **15개 사용자 시나리오 통과**. 상세 결과는 M8_QA_REPORT.md 참조. 운영 의존성 `npm audit --omit=dev` 알려진 취약점 **0건**. Windows CI workflow는 작성했지만 원격 실행하지 않았다.
+검증 환경: Linux, Node 24.19.0, 시스템 Chromium. `npm run check` (타입 검사, ESLint, Vitest, Vite 빌드) 통과. Vitest 18개 파일 **116개 테스트 통과**. `npm run test:e2e` **16개 사용자 시나리오 통과**. 상세 결과는 M8_QA_REPORT.md 및 M9_RELEASE_REPORT.md 참조. 운영 의존성 `npm audit --omit=dev` 알려진 취약점 **0건**. Windows CI workflow는 작성했지만 원격 실행하지 않았다.
 
 ## 기능·보안 검사
 - API 기본값 mock/외부 전송 차단, Host/Origin/토큰 검사, 대소문자 경로 우회 차단.
@@ -93,3 +93,12 @@ Groq 키는 제공되었지만 개발 환경 네트워크 허용 목록에 api.g
 - 실제 재시작 후 대화/승인 기억 보존, 키/토큰/폴더/웹/MCP 승인 초기화와 무승인 파일 미생성. 실제 브라우저에서 CSP 강제, 저장된 악성 Markdown 렌더링, 320px 채팅 오류 복구와 중복 대화 방지.
 - 채팅 스트림 네트워크/비 JSON 오류, 분할 UTF-8, 개행 없는 마지막 이벤트, 불완전/잘못된 이벤트, 의도적 취소 회귀. 독립 리뷰의 배열 type 문제도 재현 후 수정했다.
 - CI 운영 의존성 audit 및 HTML/JSON 결과와 실패 trace 업로드. 원격 CI/Windows 실행 증거는 아직 없다.
+
+
+## M9 배포 후보 검증
+- 암호화 왕복, 키/권한 제외, 복원 후 모의 공급자·기억/스킬 재검토, 잘못된 암호·변조·스키마·참조 오류에서 기존 DB 보존.
+- 백업 파일 덮어쓰기 거절, 복원 전 암호화 안전 사본, 동시 실행 잠금, 미래 DB 스키마 변경 거절.
+- 실제 번들을 한글·공백 경로로 복사하여 소스/npm 없이 채팅·내장 MCP·앱 종료·CLI 백업/복원 실행.
+- 파일 manifest의 정확한 목록과 SHA256 검사. 재빌드 시 오래된 asset 제거와 manifest 자체 제외 회귀.
+- 설정의 백업 범위 안내와 앱 종료 취소/확인 브라우저 시나리오. 데스크톱 다크 및 모바일 화면 직접 검수.
+- Windows EXE 컴파일과 ZIP 생성은 실제 Windows 실행 검증과 구분한다. 설치/복원/자동 시작/업데이트/제거/Edge 검수는 대기 중이다.

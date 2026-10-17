@@ -118,3 +118,18 @@ M5 독립 최종 검토: Important 2건, Critical/신규 Minor 없음. 스킬 �
 - M8_QA_REPORT.md에 발견 결함, 재현·수정, 증거와 제한을 정리했다. 실제 공급자 인증/외부 MCP/Windows/실 사용자 실험의 미검증은 유지한다. 새 의존성·외부 설치·GitHub push/PR/서비스 게시 없음.
 
 최종 검증: 타입·ESLint·Vitest17파일110개·배포 빌드, 전체 E2E15/15(재시도/건너뜀 없음) 통과. 운영 의존성 audit0. 새 대화 초기화 실패도 전체 실행에서 GREEN 확인. 데스크톱/모바일·라이트/다크와 320px 오류 복구 캡처 직접 검수. 최종 결과는 M8_QA_REPORT.md에 기록했다. M8은 이 Linux 구현 범위에서 통과했으며 M9 Windows 배포·설치·백업/복원과 실 환경 검증은 후속이다.
+
+
+## M9 — 설치 패키지와 암호화 백업 후보 (2026-10-17)
+- 사용자 ‘다음 단계’ 지시에 따라 M9_DESIGN/M9_PLAN을 작성하고 기존 브라우저 UI와 React/Express/SQLite 구조를 유지했다. 실행 순서는 native 구현, 한 차례 독립 최종 검토, 수정/최종 검증이다. Exa의 NSIS 설치 문서, GitHub Node 24 SQLite 원문, Context7 Node crypto 문서로 런타임·암호화 선택을 확인했다.
+- AES-256-GCM/scrypt 오프라인 논리 백업, 엄격한 크기·버전·참조 검증, 임시 DB 교체와 암호화 안전 사본을 구현했다. 복원 후 모의 공급자·외부 전송 꺼짐·기억/스킬 재검토로 초기화한다. 키/권한/실제 파일/작업·실행 기록/사용량/MCP는 제외하고 UI·안내서에 명시했다. 암호는 stdin으로 전달한다.
+- 앱/백업/복원 데이터 경로별 localhost 독점 잠금, 정상 종료 API와 화면 확인, 미래 SQLite 스키마 초기화 거절을 추가했다. 백업 모듈 없음과 미래 스키마 변경을 RED로 확인한 뒤 GREEN으로 수정했다. 잠금 테스트의 최초 sandbox EPERM은 로컬 소켓 허용 후 실제 동작으로 재검증했다.
+- esbuild로 서버/백업 CLI/내장 MCP를 번들하고 공식 Node 24.19.0 Windows ZIP과 node.exe의 SHA256을 검증했다. Node LICENSE·의존성 고지·파일별 manifest를 포함했다. Node/NSIS는 /tmp 작업 도구로 준비했으며 시스템 패키지를 설치하지 않았다.
+- NSIS 3.11 per-user 설치 파일과 portable ZIP을 생성했다. 사용자 데이터와 설치 위치를 분리하고 자동 시작은 선택/기본 꺼짐, 업데이트는 백업 후 수동 설치, 제거는 데이터 보존으로 구성했다. PowerShell 비밀번호 입력은 SecureString으로 받고 UTF-8/BOM과 한글·공백 경로를 처리한다. 실제 Windows 실행은 하지 않았다.
+- 별도 한글·공백 경로의 번들을 소스/npm 없이 실행했다. 실제 모의 대화, 내장 stdio MCP 파일 읽기, 앱 종료, 동시 백업 거절, CLI 백업/복원을 통과했다. 처음 smoke에서 상태 API가 404 뒤에 등록된 문제를 재현해 라우트 순서를 수정했다.
+- 설정에 백업 포함/제외 범위·자동 시작/업데이트·종료 안내와 종료 확인을 추가했다. 신규 브라우저 시나리오 RED→GREEN, 전체16개 통과. 데스크톱 다크·모바일 설정 캡처를 열어 본문과 버튼 표시를 확인했다.
+- 독립 최종 검토는 백업·권한·잠금·설치 데이터 보존의 Critical/Important 없음, 반복 빌드 manifest 자기 해시/이전 asset 잔존 Minor1건을 보고했다. 배포 무결성 약속에 영향을 주므로 책임 구현자는 Important로 재분류해 수정했다. 기존 산출물에 새 검증기를 적용하여 RED를 확인하고 새 임시 폴더 빌드/성공 후 교체·manifest 자체 제외로 수정했다. Linux 반복 빌드에 가짜 이전 asset을 넣어 제거와 모든 해시 GREEN을 확인했다. 출력에 사용자 .data가 있으면 거절하며 내용 보존도 검사했다. CI에 manifest 검증을 추가했다. 재리뷰 없이 한 번의 수정 패스로 마무리했다.
+- 최종 npm run check: 타입/ESLint/18파일116테스트/빌드 통과. E2E16/16, 번들 smoke, Linux/Windows manifest SHA256 검사 통과. 운영 의존성 audit0. 기존 Vite 500KB 번들 및 Zod 주석 경고는 출시 차단 결함으로 분류하지 않았다.
+- Windows 실제 설치/실행/복원/자동 시작/업데이트/제거/Edge, 코드 서명, 실제 공급자 인증, 외부 MCP 설치/인증, 실제 초보자 실험은 미검증이다. Linux에서 EXE를 만들었다는 사실은 Windows 통과 증거가 아니다. Windows 수동 CI 후보 생성 workflow를 추가했지만 원격 실행하지 않았다. 로컬 커밋만 수행하며 GitHub push/PR/Release·서비스 게시는 하지 않았다.
+
+산출물과 최종 출시 대기 항목은 M9_RELEASE_REPORT.md에 기록한다. M9 구현과 후보 패키지 생성은 끝났지만 Windows 실환경 완료 조건은 남아 있다.

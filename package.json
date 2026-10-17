@@ -14,7 +14,10 @@
     "test": "vitest run",
     "test:e2e": "playwright test",
     "lint": "eslint .",
-    "check": "npm run typecheck && npm run lint && npm test && npm run build"
+    "check": "npm run typecheck && npm run lint && npm test && npm run build",
+    "package:linux": "npm run build && node scripts/package.mjs linux-x64",
+    "package:windows": "npm run build && node scripts/package.mjs win-x64",
+    "test:package": "npm run package:linux && node scripts/verify-package.mjs dist/release/linux-x64 && node scripts/smoke-package.mjs"
   },
   "dependencies": {
     "@langchain/langgraph": "^1.5.0",
@@ -45,6 +48,7 @@
     "@types/react-dom": "^19.1.0",
     "@types/supertest": "^6.0.0",
     "@vitejs/plugin-react": "^5.0.0",
+    "esbuild": "0.28.2",
     "eslint": "^9.36.0",
     "jsdom": "26.1.0",
     "prettier": "3.9.10",

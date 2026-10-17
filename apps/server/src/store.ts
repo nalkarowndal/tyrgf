@@ -16,6 +16,10 @@ export class Store {
     mkdirSync(dir, { recursive: true, mode: 0o700 });
     const file = join(dir, 'aura.sqlite');
     this.db = new DatabaseSync(file);
+    if (Number(this.db.prepare('PRAGMA user_version').get()!.user_version) > 5) {
+      this.db.close();
+      throw new Error('새 버전에서 만든 데이터입니다. 최신 AURA로 실행하세요.');
+    }
     chmodSync(file, 0o600);
     this.db.exec(`PRAGMA journal_mode=WAL; PRAGMA foreign_keys=ON; PRAGMA secure_delete=ON;
    CREATE TABLE IF NOT EXISTS settings(id INTEGER PRIMARY KEY CHECK(id=1), value TEXT NOT NULL);

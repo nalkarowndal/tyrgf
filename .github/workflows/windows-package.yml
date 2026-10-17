@@ -1,0 +1,45 @@
+name: Windows package candidate
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  package:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.19.0'
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm test -- tests/backup.test.ts tests/api.test.ts
+      - run: npm audit --omit=dev --audit-level=high
+      - name: Bundle pinned Windows runtime
+        shell: pwsh
+        run: |
+          $env:AURA_WINDOWS_NODE = (Get-Command node).Source
+          npm run package:windows
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+      - run: node scripts/verify-package.mjs dist/release/win-x64
+      - name: Compile installer and portable archive
+        shell: pwsh
+        run: |
+          choco install nsis --version=3.11 --no-progress -y
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          $package = (Resolve-Path dist/release/win-x64).Path
+          $output = Join-Path (Resolve-Path dist/release).Path 'AURA-Setup.exe'
+          & "${env:ProgramFiles(x86)}\NSIS\makensis.exe" "/DPACKAGE=$package" "/DOUTPUT=$output" scripts/windows/installer.nsi
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          Compress-Archive -Path dist/release/win-x64/* -DestinationPath dist/release/AURA-Windows-x64.zip
+          Get-FileHash dist/release/AURA-Setup.exe,dist/release/AURA-Windows-x64.zip -Algorithm SHA256 | Format-List | Out-File dist/release/SHA256.txt -Encoding utf8
+      - uses: actions/upload-artifact@v4
+        with:
+          name: AURA-Windows-unsigned-candidate
+          path: |
+            dist/release/AURA-Setup.exe
+            dist/release/AURA-Windows-x64.zip
+            dist/release/SHA256.txt
+          retention-days: 14

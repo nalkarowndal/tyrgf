@@ -37,7 +37,17 @@ const replySchema = z
     (v) => Boolean(v.text) !== Boolean(v.regenerate) && !(v.regenerate && v.editId),
     '메시지를 입력해 주세요.',
   );
-export function createApp({ dataDir, port }: { dataDir: string; port: number }) {
+export function createApp({
+  dataDir,
+  port,
+  onExit,
+  launchId,
+}: {
+  dataDir: string;
+  port: number;
+  onExit?: () => void;
+  launchId?: string;
+}) {
   const app = express();
   const store = new Store(dataDir);
   const toolService = new ToolService(store, dataDir);
@@ -350,6 +360,13 @@ export function createApp({ dataDir, port }: { dataDir: string; port: number }) 
   agentService.mount(app);
   toolService.mount(app);
   mcp.mount(app);
+  app.get('/api/app/status', (_req, res) => res.json({ app: 'AURA', launchId }));
+  app.post('/api/app/exit', (_req, res) => {
+    if (!onExit)
+      return res.status(503).json({ error: '이 실행 방식에서는 앱 창에서 종료해 주세요.' });
+    res.json({ closing: true });
+    setTimeout(onExit, 50);
+  });
   app.use('/api', (_req, res) => res.status(404).json({ error: '지원하지 않는 요청입니다.' }));
   app.use(
     (err: unknown, _req: express.Request, res: express.Response, _next: express.NextFunction) => {

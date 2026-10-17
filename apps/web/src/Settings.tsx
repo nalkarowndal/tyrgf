@@ -18,6 +18,7 @@ import {
   FeatureExplanation,
   TechnicalDetailsDisclosure,
   help,
+  Modal,
 } from './components';
 export function SettingsPage({
   data,
@@ -32,6 +33,17 @@ export function SettingsPage({
     [tour, setTour] = useState(false),
     [saving, setSaving] = useState(false),
     [formRevision, setFormRevision] = useState(0);
+  const [exitOpen, setExitOpen] = useState(false);
+  async function exitApp() {
+    try {
+      await api('/app/exit', {});
+      setExitOpen(false);
+      setNotice('앱을 종료했습니다. 이 브라우저 창을 닫아도 됩니다.');
+    } catch (e) {
+      setError((e as Error).message);
+      setExitOpen(false);
+    }
+  }
   const replaySaved = useRef(false);
   const replayOpen = useRef(false);
   function closeTour() {
@@ -97,6 +109,28 @@ export function SettingsPage({
             {notice}
           </div>
         )}
+        <section className="settings-card">
+          <h2>설치 · 백업 · 종료</h2>
+          <p>
+            Windows 설치본은 시작 메뉴의 ‘암호화 백업’과 ‘데이터 복원’을 사용하세요. 먼저 앱을
+            종료해야 합니다.
+          </p>
+          <p>
+            백업에는 대화·기억·스킬·화면 설정이 포함됩니다. 백업에는 API 키와 실행 권한이 포함되지
+            않습니다. 실제 파일·진행 작업·실행 기록·사용량·MCP 설정도 제외됩니다.
+          </p>
+          <p>
+            복원은 현재 데이터를 교체하며 암호화 안전 사본을 남깁니다. 기억·스킬을 다시 검토하고
+            키와 권한을 다시 설정하세요. 백업 암호를 잃으면 복구할 수 없습니다.
+          </p>
+          <p className="fine-print">
+            로그인 자동 시작은 설치 시 선택하며 기본 꺼짐입니다. 업데이트는 백업·앱 종료 후 수동
+            설치합니다. 브라우저만 닫으면 서버는 계속 실행됩니다.
+          </p>
+          <button className="secondary" onClick={() => setExitOpen(true)}>
+            앱 종료
+          </button>
+        </section>
         <section className="settings-card">
           <div className="section-heading">
             <KeyRound size={20} />
@@ -259,6 +293,21 @@ export function SettingsPage({
           }}
           onClose={closeTour}
         />
+      )}
+      {exitOpen && (
+        <Modal title="AURA를 종료할까요?" onClose={() => setExitOpen(false)}>
+          <p>
+            진행 중인 응답과 작업을 중단하고 메모리의 API 키를 지웁니다. 저장된 대화는 유지됩니다.
+          </p>
+          <div className="button-row">
+            <button className="secondary" onClick={() => setExitOpen(false)}>
+              계속 사용
+            </button>
+            <button className="primary" onClick={exitApp}>
+              확인하고 종료
+            </button>
+          </div>
+        </Modal>
       )}
     </div>
   );

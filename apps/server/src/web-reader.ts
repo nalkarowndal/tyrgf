@@ -198,6 +198,7 @@ export async function renderSnapshot(
   signal.throwIfAborted();
   // Remote HTML never enters Chromium. Only escaped extracted text is rendered.
   const browser = await chromium.launch({
+    ...(process.platform === 'win32' && !process.env.CHROMIUM_PATH ? { channel: 'msedge' } : {}),
     headless: true,
     timeout: 8000,
     executablePath:

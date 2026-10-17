@@ -1,10 +1,12 @@
 # AURA Agent
 
-한국어로 편하게 대화하는 로컬 AI 도우미. **M8 통합 QA 버전**입니다. 실제 공급자 어댑터, 명시적 모의 공급자, 승인 기반 복합 작업을 제공합니다. Windows 설치 패키지는 준비 중입니다.
+한국어로 편하게 대화하는 로컬 AI 도우미. **M9 Windows 배포 후보 버전**입니다. 실제 공급자 어댑터, 명시적 모의 공급자, 승인 기반 복합 작업을 제공합니다. 런타임 포함 Windows 설치 파일과 암호화 백업/복원을 제공합니다. 실제 Windows 실행과 코드 서명은 아직 검증하지 않았습니다.
 
 ![AURA 대화 화면](docs/qa/desktop-home.png)
 
 ## 실행
+
+Windows 후보 패키지의 설치·백업·복원은 [배포 안내](docs/DEPLOYMENT_GUIDE.md)를 참고하세요. 개발환경 없는 Windows에서의 최종 검수는 [M9 결과](docs/M9_RELEASE_REPORT.md)에 남아 있습니다.
 
 Node.js **24 이상**에서:
 
@@ -52,6 +54,7 @@ E2E는 시스템 Chromium이 있으면 사용하고, 없으면 Playwright 브라
 
 ## 문서
 
+- [설치·백업·복원 안내](docs/DEPLOYMENT_GUIDE.md) · [M9 배포 후보 검증](docs/M9_RELEASE_REPORT.md)
 - [사용 설명서](docs/USER_GUIDE.md)
 - [처음 설정](docs/ONBOARDING_GUIDE.md)
 - [구현 단계와 후속 조건](docs/CODEX_PHASES.md)

@@ -1,7 +1,7 @@
 import { stripVTControlCharacters } from 'node:util';
 import { createRequire } from 'node:module';
 import { createHash } from 'node:crypto';
-import { accessSync, constants, readFileSync, realpathSync, statSync } from 'node:fs';
+import { accessSync, constants, readFileSync, realpathSync, statSync, existsSync } from 'node:fs';
 import { basename, isAbsolute } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
@@ -31,10 +31,15 @@ export function runtime(profile: McpProfile, dataDir: string, token: string) {
   let args: string[];
   if (profile.kind === 'aura') {
     command = process.execPath;
+    const compiled = fileURLToPath(new URL('./mcp-project.mjs', import.meta.url));
     args = [
-      '--import',
-      createRequire(import.meta.url).resolve('tsx'),
-      fileURLToPath(new URL('./mcp-project.ts', import.meta.url)),
+      ...(existsSync(compiled)
+        ? [compiled]
+        : [
+            '--import',
+            createRequire(import.meta.url).resolve('tsx'),
+            fileURLToPath(new URL('./mcp-project.ts', import.meta.url)),
+          ]),
       dataDir,
       profile.rootPath!,
       profile.rootIdentity!,
