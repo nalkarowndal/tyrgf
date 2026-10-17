@@ -133,3 +133,15 @@ M5 독립 최종 검토: Important 2건, Critical/신규 Minor 없음. 스킬 �
 - Windows 실제 설치/실행/복원/자동 시작/업데이트/제거/Edge, 코드 서명, 실제 공급자 인증, 외부 MCP 설치/인증, 실제 초보자 실험은 미검증이다. Linux에서 EXE를 만들었다는 사실은 Windows 통과 증거가 아니다. Windows 수동 CI 후보 생성 workflow를 추가했지만 원격 실행하지 않았다. 로컬 커밋만 수행하며 GitHub push/PR/Release·서비스 게시는 하지 않았다.
 
 산출물과 최종 출시 대기 항목은 M9_RELEASE_REPORT.md에 기록한다. M9 구현과 후보 패키지 생성은 끝났지만 Windows 실환경 완료 조건은 남아 있다.
+
+
+## M9 후속 — 실제 Windows 검수 자동화 (2026-10-18 KST)
+- 다음 단계 요청을 Windows 출시 전 검수로 이어갔다. Linux 작업 공간에서 Windows 실행을 주장하지 않고 공통 배포 검수 도구를 구현했다. 사용자가 GitHub Actions Windows 러너를 선택하여 전용 `codex/windows-validation` 브랜치 실행을 승인했다. 원격 저장소는 초기 상태였으며 공유 main 변경이나 Release 게시 대신 새 브랜치의 push 이벤트를 사용한다.
+- 기존 Linux 전용 smoke를 OS별 런타임 선택, manifest 선검증, 격리된 한글/공백 경로와 별도 데이터, 제한 시간, 실패/성공 JSON 보고서로 확장했다. 환경 변수는 OS 실행에 필요한 항목만 전달한다. Windows 강제 종료는 이 검사에서 시작한 PID의 프로세스 트리만 대상으로 한다.
+- 실제 대화 저장/재시작/동시 실행 거절/실행 중 백업 거절, 한글 암호 백업/복원, 잘못된 암호에서 DB 바이트 보존, 복원 뒤 실제 대화/설정/외부 동의/키 초기화, 정상 종료를 검사한다. 내장 파일 MCP는 Linux에서 실제 호출하고 Windows에서는 명시적 미지원으로 보고한다.
+- 변조와 다른 OS 패키지의 실행 전 거절 및 실패 보고서 회귀2개 RED→GREEN. 로컬 타입/ESLint/19파일118테스트/빌드 통과, Linux 실제 번들8항목 통과. 제품 UI 변경이 없어 기존 E2E16개를 불필요하게 반복하지 않았다.
+- 패키지에 checks 스크립트와 windows/Verify.cmd를 포함했다. Windows workflow에서 실제 런타임 검수가 성공한 후에만 후보 EXE/ZIP을 업로드한다. 실패 evidence와 후보 artifact를 분리했다. 설치 마법사·PowerShell 입력 UI·자동 시작·업데이트/제거·Edge·서명은 자동 검수와 구분한다.
+- 공식 Node child_process 문서(GitHub/Context7)에서 Windows kill의 강제 종료 및 cmd 직접 실행 제한을 확인하고 NSIS 공식 silent/MessageBox 문서를 Exa로 확인했다. 설치 확인을 자동 승인하는 변경은 하지 않았다.
+
+- 독립 검토 Important3건을 한 번의 수정 패스로 처리했다. (1) 복원 성공을 가장하는 no-op 주입이 기존 검수를 통과함을 확인한 뒤 백업 후 데이터/테마를 변경하도록 수정하여 실패를 검출했다. (2) Verify.cmd가 Node를 먼저 실행하던 문제를 Windows PowerShell 전체 파일 해시 선검증과 독립 Node 고정 해시로 보완했다. 누락 스크립트 RED 후 PowerShell7/Linux에서 변조/추가 파일/런타임 교체 검사를 통과했으며 PowerShell5.1/Windows 검사를 CI에 추가했다. (3) 중복 실행 프로세스를 비동기로 추적하고 타임아웃 시 소유 트리를 정리한다. 고의 잠금 우회 회귀로 timeout 실패와 남은 서버 없음까지 Linux에서 확인했다. Windows 의미 차이는 실제 CI에서 재검증한다.
+- PowerShell7 도구는 공식 GitHub 배포 tar SHA256을 확인한 뒤 /tmp에만 풀었다. 처음 실행은 읽기 전용 기본 캐시 폴더 오류여서 XDG 캐시/설정/데이터를 /tmp로 지정했다. 시스템 설치나 환경 네트워크 정책 변경은 하지 않았다.

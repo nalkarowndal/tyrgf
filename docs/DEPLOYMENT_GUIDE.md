@@ -34,4 +34,10 @@ Windows용 공식 Node 24.19.0 x64 ZIP과 SHASUMS256.txt를 nodejs.org에서 내
 
 NSIS 3.11에서 `scripts/windows/installer.nsi`를 PACKAGE=dist/release/win-x64 전체 경로, OUTPUT=AURA-Setup.exe 전체 경로로 컴파일합니다. Windows에서는 `/D`, Linux에서는 `-D`로 define을 전달합니다. 해당 디렉터리 내용으로 portable ZIP을 만듭니다. 설치/portable SHA256을 함께 배포하고, 출시 전 Windows 표준 사용자 환경에서 설치→실행→복원→업데이트→제거 및 Edge 실행을 확인해야 합니다.
 
-`.github/workflows/windows-package.yml`은 수동 실행 시 설치 후보와 ZIP을 CI artifact로만 만듭니다. Release 게시·자동 설치는 하지 않습니다. 이 개발 세션에서는 원격 workflow를 실행하지 않았습니다. 코드서명 인증서/Windows 검증이 없으므로 공개 출시 완료로 표시하지 않습니다.
+`.github/workflows/windows-package.yml`은 수동 실행 시 설치 후보와 ZIP을 CI artifact로만 만듭니다. Release 게시·자동 설치는 하지 않습니다. 최신 Windows 실행 결과는 저장소 Actions와 M9_WINDOWS_VALIDATION_REPORT.md를 참고하세요. 코드서명 인증서/Windows 검증이 없으므로 공개 출시 완료로 표시하지 않습니다.
+
+
+## 배포 후보 자동 검수
+`windows/Verify.cmd`를 실행하면 별도 임시 폴더와 검수용 데이터로 PowerShell의 파일 해시 선검증·실행·대화 저장·재시작·중복 실행 차단·한글 암호 백업/복원·종료를 검사합니다. 기존 사용자 데이터나 API 키는 사용하지 않습니다. 결과 JSON 경로를 콘솔에 표시하며 `platform: win32`, `status: passed`가 Windows 런타임 검수 성공입니다. 실제 설치 마법사·브라우저 자동 열기·PowerShell 암호 입력 UI·로그인 자동 시작·업데이트/제거·Edge·코드 서명은 이 자동 검수 범위에 포함되지 않습니다.
+
+개발자/CI는 `node scripts/smoke-package.mjs dist/release/win-x64 test-results/windows-package.json`을 실행할 수 있습니다. Windows 후보 workflow는 실제 Windows 런타임 검수를 통과한 경우에만 EXE/ZIP 후보 artifact를 업로드합니다. 실패 시에도 생성된 검수 결과는 별도 evidence artifact에 남깁니다.

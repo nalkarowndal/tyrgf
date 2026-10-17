@@ -44,6 +44,9 @@ try {
     recursive: true,
   });
   cpSync('scripts/launcher.mjs', join(out, 'launcher.mjs'));
+  mkdirSync(join(out, 'checks'));
+  for (const script of ['smoke-package.mjs', 'verify-package.mjs'])
+    cpSync(join('scripts', script), join(out, 'checks', script));
   cpSync('scripts/windows', join(out, 'windows'), { recursive: true });
   cpSync('docs/DEPLOYMENT_GUIDE.md', join(out, '사용 안내.md'));
   const runtime = target === 'win-x64' ? process.env.AURA_WINDOWS_NODE : process.execPath;

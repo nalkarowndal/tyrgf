@@ -1,11 +1,14 @@
 name: Windows package candidate
 on:
+  push:
+    branches: ['codex/windows-validation']
   workflow_dispatch:
 permissions:
   contents: read
 jobs:
   package:
     runs-on: windows-latest
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -24,6 +27,22 @@ jobs:
           npm run package:windows
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
       - run: node scripts/verify-package.mjs dist/release/win-x64
+      - name: Prove recovery and timeout checks detect regressions
+        run: node scripts/test-package-failures.mjs dist/release/win-x64
+      - name: Test Windows PowerShell integrity preflight
+        shell: powershell
+        run: ./scripts/test-windows-preflight.ps1 -PackageRoot (Resolve-Path dist/release/win-x64).Path
+      - name: Verify actual Windows runtime and recovery
+        shell: powershell
+        run: ./scripts/windows/Verify-Package.ps1 -PackageRoot (Resolve-Path dist/release/win-x64).Path -ReportPath test-results/windows-package.json
+      - name: Upload runtime verification evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: AURA-Windows-runtime-evidence
+          path: test-results/windows-package.json
+          if-no-files-found: warn
+          retention-days: 14
       - name: Compile installer and portable archive
         shell: pwsh
         run: |
@@ -34,7 +53,7 @@ jobs:
           & "${env:ProgramFiles(x86)}\NSIS\makensis.exe" "/DPACKAGE=$package" "/DOUTPUT=$output" scripts/windows/installer.nsi
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           Compress-Archive -Path dist/release/win-x64/* -DestinationPath dist/release/AURA-Windows-x64.zip
-          Get-FileHash dist/release/AURA-Setup.exe,dist/release/AURA-Windows-x64.zip -Algorithm SHA256 | Format-List | Out-File dist/release/SHA256.txt -Encoding utf8
+          Get-FileHash dist/release/AURA-Setup.exe,dist/release/AURA-Windows-x64.zip -Algorithm SHA256 | ForEach-Object { $_.Hash.ToLower() + '  ' + (Split-Path $_.Path -Leaf) } | Set-Content dist/release/SHA256.txt -Encoding utf8
       - uses: actions/upload-artifact@v4
         with:
           name: AURA-Windows-unsigned-candidate

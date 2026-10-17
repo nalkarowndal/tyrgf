@@ -54,6 +54,7 @@ E2E는 시스템 Chromium이 있으면 사용하고, 없으면 Playwright 브라
 
 ## 문서
 
+- [Windows 자동 검수와 실제 실행 결과](docs/M9_WINDOWS_VALIDATION_REPORT.md)
 - [설치·백업·복원 안내](docs/DEPLOYMENT_GUIDE.md) · [M9 배포 후보 검증](docs/M9_RELEASE_REPORT.md)
 - [사용 설명서](docs/USER_GUIDE.md)
 - [처음 설정](docs/ONBOARDING_GUIDE.md)
