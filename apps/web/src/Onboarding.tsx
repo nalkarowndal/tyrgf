@@ -8,9 +8,11 @@ import { ProviderForm } from './ProviderForm';
 export function FirstRunTour({
   data,
   refresh,
+  onClose,
 }: {
   data: Bootstrap;
   refresh: () => Promise<unknown>;
+  onClose?: () => void;
 }) {
   const [step, setStep] = useState(1),
     [tested, setTested] = useState(false),
@@ -21,6 +23,7 @@ export function FirstRunTour({
     try {
       await api('/settings', { onboarded: true });
       await refresh();
+      onClose?.();
     } catch (e) {
       setError((e as Error).message);
     } finally {
@@ -28,7 +31,7 @@ export function FirstRunTour({
     }
   }
   return (
-    <Modal title="처음 설정">
+    <Modal title="처음 설정" onClose={onClose}>
       <div className="step-progress" aria-label={`5단계 중 ${step}단계`}>
         {[1, 2, 3, 4, 5].map((i) => (
           <span key={i} className={i <= step ? 'active' : ''} />
@@ -73,17 +76,24 @@ export function FirstRunTour({
       {step === 3 && (
         <GuidedStep step={3} title="내가 허용한 일만 하도록">
           <PermissionExplanation />
+          {onClose && (
+            <p className="fine-print">
+              설정을 다시 보아도 기존 권한은 유지됩니다. 파일·웹·외부 도구 화면에서 현재 권한을
+              확인하거나 해제하세요.
+            </p>
+          )}
           <div className="permission-list">
-            {['웹 검색', '브라우저 조작', '폴더 읽기', '폴더 수정', '명령 실행', 'GitHub 접근'].map(
-              (t) => (
-                <div key={t}>
-                  <span>{t}</span>
-                  <span className="badge">
-                    {t.startsWith('폴더') ? '꺼짐 · 메뉴에서 허용' : '꺼짐 · 준비 중'}
-                  </span>
-                </div>
-              ),
-            )}
+            {[
+              ['폴더 읽기·수정', '파일 작업에서 확인'],
+              ['공개 웹페이지 읽기', '웹 읽기 권한과 주소 승인 필요'],
+              ['추가 도구·GitHub', '개별 연결과 도구 승인 필요'],
+              ['동적 브라우저 조작·명령 실행', '준비 중'],
+            ].map(([name, note]) => (
+              <div key={name}>
+                <span>{name}</span>
+                <span className="badge">{note}</span>
+              </div>
+            ))}
           </div>
         </GuidedStep>
       )}
@@ -111,11 +121,11 @@ export function FirstRunTour({
             </p>
             <p>
               <span>도구 접근</span>
-              <strong>모두 꺼짐</strong>
+              <strong>{onClose ? '기존 권한 유지' : '각 도구 화면에서 확인'}</strong>
             </p>
             <p>
               <span>대화 저장</span>
-              <strong>이 컴퓨터 · SQLite</strong>
+              <strong>이 컴퓨터</strong>
             </p>
           </div>
           <p className="muted">모든 설정은 왼쪽 아래 ‘설정’에서 언제든 바꿀 수 있어요.</p>

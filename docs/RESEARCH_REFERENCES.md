@@ -58,3 +58,10 @@
 - GitHub [Repomix MCP](https://github.com/yamadashy/repomix/blob/main/src/mcp/mcpServer.ts): 파일/디렉터리 조회 등록과 패킹 도구 구분.
 - Exa [MCP tools specification](https://modelcontextprotocol.io/specification/draft/server/tools): annotations를 신뢰 경계로 사용하지 않고 사용자가 호출을 확인·거절할 수 있도록 설계.
 - Canva AURA 기존 디자인 검색 결과 없음. 기존 화면을 확장했으며 외부 디자인 게시 없음. 외부 MCP 서버는 설치하지 않았다.
+
+
+## M7 추가 조사 (2026-10-17)
+- Exa: [W3C WAI 폼 알림](https://www.w3.org/WAI/tutorials/forms/notifications/) — 간결한 오류·수정 행동·관련 입력 위치 안내.
+- GitHub: [W3C ARIA modal dialog pattern](https://github.com/w3c/aria-practices/blob/main/content/patterns/dialog-modal/dialog-modal-pattern.html) — 배경 inert, Tab 순환, Esc와 호출 위치 포커스 복원.
+- Context7 `/websites/react_dev`: useId를 통한 입력 설명 연결, effect cleanup/DOM focus 참조 패턴.
+- Canva 기존 AURA 디자인 검색 결과 없음. 제품의 기존 시각 체계를 확장했고 외부 디자인 게시·의존성 추가 없음.

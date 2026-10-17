@@ -16,7 +16,7 @@
   --card: #fff;
   --border: #e9eaf1;
   --text: #292c3d;
-  --muted: #747889;
+  --muted: #686d80;
   --accent: #7161df;
   --accent-soft: #f0edfc;
   --shadow: 0 8px 30px #25244308;
@@ -227,6 +227,7 @@ textarea {
   background: var(--bg);
 }
 .sidebar {
+  overflow-y: auto;
   width: 244px;
   flex-shrink: 0;
   background: var(--surface);
@@ -286,7 +287,7 @@ textarea {
   width: 100%;
   min-height: 24px;
 }
-.main-nav > a,
+.main-nav a,
 .sidebar-bottom > a {
   display: flex;
   align-items: center;
@@ -298,11 +299,11 @@ textarea {
   color: var(--muted);
   margin-bottom: 3px;
 }
-.main-nav > a:hover,
+.main-nav a:hover,
 .sidebar-bottom > a:hover {
   background: var(--border);
 }
-.main-nav > a.active,
+.main-nav a.active,
 .sidebar-bottom > a.active {
   background: var(--accent-soft);
   color: var(--accent);
@@ -1140,6 +1141,8 @@ textarea {
 .permission-list > div {
   display: flex;
   justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
   font-size: 12px;
   padding: 13px 6px;
   border-bottom: 1px solid var(--border);
@@ -1394,7 +1397,7 @@ textarea {
   .suggestions {
     margin-top: 24px;
   }
-  .main-nav > a {
+  .main-nav a {
     min-height: 32px;
   }
   .nav-section-label {
@@ -2128,4 +2131,113 @@ textarea {
 }
 .mcp-server details {
   margin-top: 18px;
+}
+
+/* M7: progressive navigation, readable instructions and keyboard help. */
+.extra-menus {
+  margin-top: 4px;
+}
+.extra-menus > summary {
+  cursor: pointer;
+  padding: 12px 14px;
+  color: var(--muted);
+  font-size: 13px;
+  border-radius: 8px;
+}
+.extra-menus[open] > summary {
+  color: var(--text);
+}
+.help-tip [role='tooltip'] {
+  display: block;
+  z-index: 20;
+  max-width: min(280px, 75vw);
+}
+.explanation-body {
+  margin-top: 6px;
+  line-height: 1.7;
+}
+.recovery-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 12px;
+}
+.guide-page .settings-content {
+  max-width: 1120px;
+}
+.guide-start-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 18px;
+}
+.guide-start-links a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  border-radius: 10px;
+  padding: 12px;
+}
+.guide-current {
+  padding: 12px;
+  background: var(--surface);
+  border-radius: 8px;
+}
+.guide-search > span {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.guide-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+.guide-card {
+  margin: 0;
+}
+.guide-card ol {
+  list-style: decimal;
+  padding-left: 22px;
+  line-height: 1.8;
+  margin: 16px 0;
+}
+.guide-card li + li {
+  margin-top: 8px;
+}
+.guide-page details {
+  margin-top: 20px;
+}
+.guide-page summary {
+  cursor: pointer;
+  line-height: 1.6;
+}
+.guide-page details h3 {
+  margin: 16px 0 6px;
+  font-size: 14px;
+}
+.guide-page details p {
+  line-height: 1.75;
+}
+#main {
+  scroll-padding: 24px;
+}
+@media (max-width: 900px) {
+  .guide-grid {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 768px) {
+  .sidebar-scrim {
+    cursor: default;
+  }
+}
+.guide-page h2,
+.guide-page p,
+.guide-page li {
+  word-break: keep-all;
+  overflow-wrap: anywhere;
 }

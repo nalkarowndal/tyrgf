@@ -1,7 +1,7 @@
 # 테스트 및 시각 QA
 
-## 실행 결과 (2026-10-16)
-검증 환경: Linux, Node 24.19.0, 시스템 Chromium. `npm run check` (타입 검사, ESLint, Vitest, Vite 빌드) 통과. Vitest 15개 파일 **93개 테스트 통과**. `npm run test:e2e` **8개 사용자 시나리오 통과**. 운영 의존성 `npm audit --omit=dev` 알려진 취약점 **0건**. Windows CI workflow는 작성했지만 원격 실행하지 않았다.
+## 실행 결과 (2026-10-17)
+검증 환경: Linux, Node 24.19.0, 시스템 Chromium. `npm run check` (타입 검사, ESLint, Vitest, Vite 빌드) 통과. Vitest 16개 파일 **100개 테스트 통과**. `npm run test:e2e` **10개 사용자 시나리오 통과**. 운영 의존성 `npm audit --omit=dev` 알려진 취약점 **0건**. Windows CI workflow는 작성했지만 원격 실행하지 않았다.
 
 ## 기능·보안 검사
 - API 기본값 mock/외부 전송 차단, Host/Origin/토큰 검사, 대소문자 경로 우회 차단.
@@ -76,3 +76,12 @@ Groq 키는 제공되었지만 개발 환경 네트워크 허용 목록에 api.g
 - 기존 Zod 주석 제거 및 500KB 초과 번들 경고가 남아 있다. 운영 의존성 audit 취약점 0건.
 
 - 독립 검토 Important 1건: 앱의 100ms 강제 종료가 MCP 자식 종료보다 먼저 실행되던 문제를 회귀 테스트 RED→GREEN으로 수정했다. 실제 앱 프로세스와 stdin EOF/SIGTERM을 무시하는 자식으로, 해제 중인 연결까지 종료/수거한 뒤 부모가 끝나는 것을 확인했다.
+
+
+## M7 추가 검증
+- 도움말 버튼 키보드 상태, 중첩 문단 제거, 네트워크/비 JSON 응답의 한국어 오류, 변경 요청 자동 재시도 없음: 회귀4개 RED→GREEN.
+- 초기 설정 다시 보기의 기존 권한 안내, 뒤쪽 공급자 폼 갱신, 창을 먼저 닫은 뒤 저장이 완료되는 경우: 회귀3개 RED→GREEN.
+- 전체 E2E10개 통과. 새 시나리오는 안내 검색/복구, 초보자·고급 메뉴 전환, 설정 다시 보기/Esc/호출 포커스, 모바일 Tab 순환·닫기, 읽기 조회 실패 후 명시적 복구, 연결 오류에서 입력 보존·입력란 포커스를 검증한다. 기존 MCP E2E는 JSON 대신 파일 경로 입력으로 실제 결과까지 확인한다.
+- 시각 검수: desktop-guide.png, tablet-guide-dark.png, mobile-guide-dark.png, mobile-connection-recovery.png. 추가 메뉴 정렬과 한국어 단어 줄바꿈 결함을 수정하고 캡처를 재확인했다. 390px 가로 넘침 없음. 관련 기존 화면 캡처도 갱신했다.
+- 최신 로컬 /help HTTP200, 화면 표시, pageerror0 확인. 운영 의존성 audit0, 새 의존성 없음. 타입·lint·100개 테스트·배포 빌드 통과. 최종 설정 저장 수명주기 수정 뒤 관련 UX E2E2/2 재통과.
+- 실제 초보자 실험과 실 API 인증, 스크린리더/다른 OS는 미검증. M7_UX_REVIEW.md의 검수표를 자동 테스트 통과와 구분한다.

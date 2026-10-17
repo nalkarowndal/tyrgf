@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { CheckCircle2, ExternalLink, KeyRound, RefreshCw } from 'lucide-react';
 import { registry, type ProviderId, type Settings } from '../../../packages/shared/src/contracts';
 import { api } from './api';
@@ -20,6 +20,7 @@ export function ProviderForm({
     [busy, setBusy] = useState(false),
     [error, setError] = useState(''),
     [notice, setNotice] = useState('');
+  const formRef = useRef<HTMLDivElement>(null);
   const info = registry[s.provider];
   function change(patch: Partial<Settings>) {
     setS((prev) => ({ ...prev, ...patch }));
@@ -78,7 +79,8 @@ export function ProviderForm({
     }
   }
   return (
-    <div className="provider-form">
+    <div ref={formRef} className="provider-form" aria-busy={busy}>
+      <p className="fine-print">① AI 선택 → ② 모델·연결 정보 입력 → ③ 연결 테스트 결과 확인</p>
       <div className="provider-grid">
         {(Object.keys(registry) as ProviderId[]).map((id) => (
           <button
@@ -185,7 +187,31 @@ export function ProviderForm({
         {help.free.detail}
         <p>{help.privacy.detail}</p>
       </TechnicalDetailsDisclosure>
-      {error && <ErrorRecoveryPanel message={error} />}
+      {error && (
+        <ErrorRecoveryPanel
+          message={error}
+          action={
+            <>
+              <button
+                type="button"
+                className="secondary"
+                onClick={() =>
+                  formRef.current
+                    ?.querySelector<HTMLElement>(
+                      info.cloud ? 'input[type=password]' : 'select, input',
+                    )
+                    ?.focus()
+                }
+              >
+                연결 정보 다시 확인
+              </button>
+              <a href={info.docs} target="_blank" rel="noreferrer">
+                공급자 도움말
+              </a>
+            </>
+          }
+        />
+      )}
       {notice && (
         <div role="status" className="success-panel">
           <CheckCircle2 size={17} />

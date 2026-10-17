@@ -10,6 +10,7 @@ import {
   type McpState,
 } from '../../../packages/shared/src/mcp';
 import type { ToolState } from '../../../packages/shared/src/tools';
+import { McpInput, mcpToolLabel } from './McpInput';
 import { api } from './api';
 import { ErrorRecoveryPanel, FeatureExplanation, Modal } from './components';
 const statusLabels: Record<McpRun['status'], string> = {
@@ -88,7 +89,7 @@ function ServerCard({
             {server.tools.map((t) => (
               <label key={t.name} className="check-field">
                 <input
-                  aria-label={`${t.name} 허용`}
+                  aria-label={`${mcpToolLabel(server.kind, t.name)} 허용`}
                   type="checkbox"
                   disabled={!t.eligible || busy}
                   checked={selected.includes(t.name)}
@@ -101,7 +102,8 @@ function ServerCard({
                   }
                 />
                 <span>
-                  <strong>{t.name}</strong> {!t.eligible && <em>지원 범위 밖</em>}
+                  <strong>{mcpToolLabel(server.kind, t.name)}</strong>{' '}
+                  {!t.eligible && <em>지원 범위 밖</em>}
                   <small>{t.description}</small>
                 </span>
               </label>
@@ -120,15 +122,33 @@ function ServerCard({
           >
             도구 권한 저장
           </button>
+          <p role="status" className="fine-print">
+            현재 허용한 도구 {server.allowedTools.length}개. 권한을 저장한 도구만 아래에서 선택할 수
+            있습니다.
+          </p>
           <h3>2. 입력 확인 후 실행</h3>
           <label className="field">
             실행할 도구
-            <select value={tool} onChange={(e) => setTool(e.target.value)}>
+            <select
+              value={tool}
+              onChange={(e) => {
+                setTool(e.target.value);
+                if (server.kind === 'aura')
+                  setInput(
+                    JSON.stringify({
+                      path: '',
+                      ...(e.target.value === 'project_search' ? { query: '' } : {}),
+                    }),
+                  );
+              }}
+            >
               <option value="">허용한 도구를 선택하세요</option>
               {server.tools
                 .filter((t) => server.allowedTools.includes(t.name))
                 .map((t) => (
-                  <option key={t.name}>{t.name}</option>
+                  <option key={t.name} value={t.name}>
+                    {mcpToolLabel(server.kind, t.name)}
+                  </option>
                 ))}
             </select>
           </label>
@@ -138,15 +158,23 @@ function ServerCard({
               <pre className="mcp-code">{JSON.stringify(current.inputSchema, null, 2)}</pre>
             </details>
           )}
-          <label className="field">
-            도구 입력 JSON
-            <textarea
-              rows={5}
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              spellCheck={false}
-            />
-          </label>
+          {server.kind === 'aura' ? (
+            tool ? (
+              <McpInput tool={tool} value={input} onChange={setInput} />
+            ) : (
+              <p className="fine-print">허용한 도구를 선택하면 입력할 항목이 표시됩니다.</p>
+            )
+          ) : (
+            <label className="field">
+              도구 입력 JSON
+              <textarea
+                rows={5}
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                spellCheck={false}
+              />
+            </label>
+          )}
           {error && <ErrorRecoveryPanel message={error} />}
           <button
             className="primary"

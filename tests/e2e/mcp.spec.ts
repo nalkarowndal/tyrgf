@@ -26,10 +26,11 @@ test('connects real MCP, selects permission, approves read, and disconnects on m
     await page.getByLabel('프로그램 실행을 확인했습니다').check();
     await page.getByRole('button', { name: '확인하고 연결 테스트' }).click();
     await expect(card.getByText('연결됨', { exact: true })).toBeVisible();
-    await card.getByLabel('project_read 허용').check();
+    await card.getByLabel('텍스트 파일 읽기 허용').check();
     await card.getByRole('button', { name: '도구 권한 저장' }).click();
     await card.getByLabel('실행할 도구').selectOption('project_read');
-    await card.getByLabel('도구 입력 JSON').fill('{"path":"hello.txt"}');
+    await expect(card.getByLabel('도구 입력 JSON')).toHaveCount(0);
+    await card.getByLabel('읽을 파일 경로').fill('hello.txt');
     await card.getByRole('button', { name: '실행 미리보기' }).click();
     await expect(page.getByRole('dialog')).toContainText('hello.txt');
     await page.getByRole('button', { name: '이 입력으로 한 번 실행' }).click();

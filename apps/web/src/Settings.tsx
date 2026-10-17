@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import {
   Settings2,
   ShieldCheck,
@@ -10,6 +10,7 @@ import {
 import type { Bootstrap } from '../../../packages/shared/src/contracts';
 import { registry } from '../../../packages/shared/src/contracts';
 import { api } from './api';
+import { FirstRunTour } from './Onboarding';
 import { ProviderForm } from './ProviderForm';
 import {
   PermissionExplanation,
@@ -27,8 +28,20 @@ export function SettingsPage({
 }) {
   const [s, setS] = useState(data.settings),
     [error, setError] = useState(''),
-    [notice, setNotice] = useState('');
+    [notice, setNotice] = useState(''),
+    [tour, setTour] = useState(false),
+    [saving, setSaving] = useState(false),
+    [formRevision, setFormRevision] = useState(0);
+  const replaySaved = useRef(false);
+  const replayOpen = useRef(false);
+  function closeTour() {
+    replayOpen.current = false;
+    setTour(false);
+    if (replaySaved.current) setFormRevision((v) => v + 1);
+  }
   async function save() {
+    setSaving(true);
+    setNotice('');
     try {
       await api('/settings', {
         theme: s.theme,
@@ -41,6 +54,8 @@ export function SettingsPage({
       setError('');
     } catch (e) {
       setError((e as Error).message);
+    } finally {
+      setSaving(false);
     }
   }
   async function removeKey(provider: string) {
@@ -65,6 +80,16 @@ export function SettingsPage({
         <div className="section-intro">
           <h2>편안하게, 안전하게 사용하세요</h2>
           <p>AI 연결부터 화면까지, 필요한 설정을 한곳에서 관리해요.</p>
+          <button
+            className="secondary"
+            onClick={() => {
+              replaySaved.current = false;
+              replayOpen.current = true;
+              setTour(true);
+            }}
+          >
+            처음 설정 다시 보기
+          </button>
         </div>
         {error && <ErrorRecoveryPanel message={error} />}
         {notice && (
@@ -80,7 +105,12 @@ export function SettingsPage({
               <p>대화할 AI와 모델을 선택합니다.</p>
             </div>
           </div>
-          <ProviderForm initial={data.settings} keyStatus={data.keyStatus} onSaved={refresh} />
+          <ProviderForm
+            key={formRevision}
+            initial={data.settings}
+            keyStatus={data.keyStatus}
+            onSaved={refresh}
+          />
         </section>
         <section className="settings-card">
           <div className="section-heading">
@@ -156,7 +186,7 @@ export function SettingsPage({
               </label>
             ))}
           </TechnicalDetailsDisclosure>
-          <button className="primary" onClick={save}>
+          <button className="primary" disabled={saving} onClick={save}>
             일반 설정 저장
           </button>
         </section>
@@ -218,6 +248,18 @@ export function SettingsPage({
           <p className="fine-print">{help.free.detail}</p>
         </section>
       </div>
+      {tour && (
+        <FirstRunTour
+          data={data}
+          refresh={async () => {
+            const result = await refresh();
+            replaySaved.current = true;
+            if (!replayOpen.current) setFormRevision((v) => v + 1);
+            return result;
+          }}
+          onClose={closeTour}
+        />
+      )}
     </div>
   );
 }

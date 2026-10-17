@@ -73,7 +73,22 @@ export function MemoryPage() {
           작업 관리의 도구 권한을 바꾸지 않습니다.
         </FeatureExplanation>
         {(op.error || memories.error) && (
-          <ErrorRecoveryPanel message={op.error || (memories.error as Error).message} />
+          <ErrorRecoveryPanel
+            message={op.error || (memories.error as Error).message}
+            action={
+              memories.error ? (
+                <button
+                  className="secondary"
+                  disabled={memories.isFetching}
+                  onClick={() => void memories.refetch()}
+                >
+                  다시 불러오기
+                </button>
+              ) : (
+                <a href="/help">기억 관리 도움말</a>
+              )
+            }
+          />
         )}
         <section className="settings-card">
           <h2>{edit ? '기억 수정' : '새 기억'}</h2>
@@ -432,7 +447,20 @@ export function SkillsPage() {
           대신하지 않습니다.
         </FeatureExplanation>
         {(op.error || skills.error) && (
-          <ErrorRecoveryPanel message={op.error || (skills.error as Error).message} />
+          <ErrorRecoveryPanel
+            message={op.error || (skills.error as Error).message}
+            action={
+              skills.error ? (
+                <button
+                  className="secondary"
+                  disabled={skills.isFetching}
+                  onClick={() => void skills.refetch()}
+                >
+                  다시 불러오기
+                </button>
+              ) : undefined
+            }
+          />
         )}
         {!skill ? (
           <section className="settings-card">

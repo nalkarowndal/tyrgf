@@ -187,7 +187,18 @@ export function ToolsPage({ mode }: { mode: 'files' | 'browser' | 'tools' }) {
       <div className="settings-page">
         <div className="settings-content">
           {query.error ? (
-            <ErrorRecoveryPanel message={(query.error as Error).message} />
+            <ErrorRecoveryPanel
+              message={(query.error as Error).message}
+              action={
+                <button
+                  className="secondary"
+                  disabled={query.isFetching}
+                  onClick={() => void query.refetch()}
+                >
+                  다시 불러오기
+                </button>
+              }
+            />
           ) : (
             <p>도구 상태를 불러오고 있어요…</p>
           )}
@@ -224,6 +235,7 @@ export function ToolsPage({ mode }: { mode: 'files' | 'browser' | 'tools' }) {
           <ErrorRecoveryPanel
             message={error || (query.error as Error).message}
             onDismiss={() => setError('')}
+            action={<Link to="/help">권한·오류 해결 안내</Link>}
           />
         )}
         {notice && (

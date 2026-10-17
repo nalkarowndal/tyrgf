@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
   Link,
   NavLink,
@@ -30,6 +30,7 @@ import {
 } from 'lucide-react';
 import type { Bootstrap, Session } from '../../../packages/shared/src/contracts';
 import { api, setToken } from './api';
+import { HelpPage } from './Help';
 import { Chat } from './Chat';
 import { McpPage } from './Mcp';
 import { ToolsPage } from './Tools';
@@ -37,13 +38,7 @@ import { TasksPage } from './Tasks';
 import { MemoryPage, SkillsPage } from './Knowledge';
 import { SettingsPage } from './Settings';
 import { FirstRunTour } from './Onboarding';
-import {
-  EmptyStateGuide,
-  ErrorRecoveryPanel,
-  Logo,
-  TechnicalDetailsDisclosure,
-  help,
-} from './components';
+import { EmptyStateGuide, ErrorRecoveryPanel, Logo, help } from './components';
 const menus = [
   {
     name: '작업 관리',
@@ -105,38 +100,6 @@ function ComingSoon() {
     </div>
   );
 }
-function Help() {
-  return (
-    <div className="settings-page">
-      <header className="page-header">
-        <h1>도움말</h1>
-      </header>
-      <div className="settings-content">
-        <section className="settings-card">
-          <h2>처음이라도 괜찮아요</h2>
-          <p>
-            왼쪽의 ‘새 대화’를 누르고 궁금한 내용을 입력하세요. Enter로 보내고, 줄을 바꾸려면 Shift
-            + Enter를 누르세요.
-          </p>
-          {Object.values(help).map((h) => (
-            <TechnicalDetailsDisclosure key={h.title} title={h.title}>
-              {h.detail}
-            </TechnicalDetailsDisclosure>
-          ))}
-          <TechnicalDetailsDisclosure title="연결이 안 되면 어떻게 하나요?">
-            설정에서 연결 테스트를 다시 실행하세요. API 키는 서버를 다시 시작할 때 재입력해야
-            합니다. Ollama는 내 컴퓨터에서 실행 중이어야 하고 선택한 모델이 설치되어 있어야 합니다.
-            한도 오류는 공급자 콘솔에서 확인할 수 있습니다.
-          </TechnicalDetailsDisclosure>
-          <TechnicalDetailsDisclosure title="체험 모드에서 번역이 되지 않아요">
-            모의 AI는 화면 기능을 확인하는 정해진 안내만 응답합니다. 실제 번역·요약은 AI 연결 설정이
-            필요합니다.
-          </TechnicalDetailsDisclosure>
-        </section>
-      </div>
-    </div>
-  );
-}
 function ConversationRoute(props: { data: Bootstrap; refresh: () => Promise<unknown> }) {
   const { id } = useParams();
   return <Chat key={id ?? 'new'} {...props} />;
@@ -152,9 +115,55 @@ export function App() {
     retry: false,
   });
   const [search, setSearch] = useState(''),
-    [mobileOpen, setMobileOpen] = useState(false);
+    [mobileOpen, setMobileOpen] = useState(false),
+    [mobile, setMobile] = useState(() => window.matchMedia('(max-width: 768px)').matches);
+  const sidebarRef = useRef<HTMLElement>(null);
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
   const location = useLocation(),
     navigate = useNavigate();
+  useEffect(() => {
+    const media = window.matchMedia('(max-width: 768px)');
+    const update = () => {
+      setMobile(media.matches);
+      if (!media.matches) setMobileOpen(false);
+    };
+    media.addEventListener('change', update);
+    return () => media.removeEventListener('change', update);
+  }, []);
+  useEffect(() => {
+    if (!mobileOpen) return;
+    const panel = sidebarRef.current;
+    panel?.querySelector<HTMLButtonElement>('.mobile-close')?.focus();
+    const key = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        setMobileOpen(false);
+      }
+      if (e.key !== 'Tab') return;
+      const nodes = [
+        ...(panel?.querySelectorAll<HTMLElement>('a, button, input, summary') ?? []),
+      ].filter((el) => el.getClientRects().length && !el.hasAttribute('disabled'));
+      const first = nodes[0],
+        last = nodes.at(-1);
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last?.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first?.focus();
+      }
+    };
+    panel?.addEventListener('keydown', key);
+    return () => {
+      panel?.removeEventListener('keydown', key);
+      menuButtonRef.current?.focus();
+    };
+  }, [mobileOpen]);
+  useEffect(() => {
+    if (!boot.data?.settings.onboarded) return;
+    const frame = requestAnimationFrame(() => document.getElementById('main')?.focus());
+    return () => cancelAnimationFrame(frame);
+  }, [location.pathname, boot.data?.settings.onboarded]);
   const sessions = useQuery({
     queryKey: ['sessions', search],
     queryFn: () => api<Session[]>(`/sessions?q=${encodeURIComponent(search)}`),
@@ -203,12 +212,19 @@ export function App() {
       <a className="skip-link" href="#main">
         본문으로 건너뛰기
       </a>
-      <div className="mobile-top">
+      <div className="mobile-top" inert={mobileOpen}>
         <Link to="/" className="brand">
           <Logo small />
           AURA
         </Link>
-        <button className="icon-button" aria-label="메뉴 열기" onClick={() => setMobileOpen(true)}>
+        <button
+          ref={menuButtonRef}
+          className="icon-button"
+          aria-label="메뉴 열기"
+          aria-expanded={mobileOpen}
+          aria-controls="sidebar"
+          onClick={() => setMobileOpen(true)}
+        >
           <Menu size={22} />
         </button>
       </div>
@@ -219,7 +235,15 @@ export function App() {
           onClick={() => setMobileOpen(false)}
         />
       )}
-      <aside className={`sidebar ${mobileOpen ? 'open' : ''}`}>
+      <aside
+        id="sidebar"
+        ref={sidebarRef}
+        inert={mobile && !mobileOpen}
+        role={mobileOpen ? 'dialog' : undefined}
+        aria-modal={mobileOpen ? true : undefined}
+        aria-label={mobileOpen ? '주 메뉴' : undefined}
+        className={`sidebar ${mobileOpen ? 'open' : ''}`}
+      >
         <Link to="/" className="brand">
           <Logo small />
           <span>
@@ -261,17 +285,41 @@ export function App() {
           <div className="nav-section-label">
             나의 도구 <span>차근차근 확장해요</span>
           </div>
+          <NavLink to="/help">
+            <HelpCircle size={18} />
+            <span>처음 사용 가이드</span>
+          </NavLink>
           {menus
-            .filter((m) => !data.settings.hiddenMenus.includes(m.name))
+            .filter(
+              (m) =>
+                !data.settings.hiddenMenus.includes(m.name) &&
+                (data.settings.advanced || ['tasks', 'files', 'memory'].includes(m.path)),
+            )
             .map((m) => (
               <NavLink key={m.path} to={`/${m.path}`} title={m.description}>
                 <m.icon size={17} />
                 <span>{m.name}</span>
-                {!['tasks', 'files', 'browser', 'tools', 'mcp', 'memory', 'skills'].includes(
-                  m.path,
-                ) && <span className="soon-dot" title="준비 중" />}
+                {m.path === 'coding' && <span className="soon-dot" title="준비 중" />}
               </NavLink>
             ))}
+          {!data.settings.advanced && (
+            <details className="extra-menus">
+              <summary>더 많은 도구</summary>
+              {menus
+                .filter(
+                  (m) =>
+                    !data.settings.hiddenMenus.includes(m.name) &&
+                    !['tasks', 'files', 'memory'].includes(m.path),
+                )
+                .map((m) => (
+                  <NavLink key={m.path} to={`/${m.path}`} title={m.description}>
+                    <m.icon size={17} />
+                    <span>{m.name}</span>
+                    {m.path === 'coding' && <span className="soon-dot" title="준비 중" />}
+                  </NavLink>
+                ))}
+            </details>
+          )}
         </nav>
         <div className="recent-conversations">
           <div className="nav-section-label">
@@ -321,12 +369,12 @@ export function App() {
           </div>
         </div>
       </aside>
-      <main id="main" className="main-view">
+      <main id="main" tabIndex={-1} inert={mobileOpen} className="main-view">
         <Routes>
           <Route path="/" element={<ConversationRoute data={data} refresh={refresh} />} />
           <Route path="/chat/:id" element={<ConversationRoute data={data} refresh={refresh} />} />
           <Route path="/settings" element={<SettingsPage data={data} refresh={refresh} />} />
-          <Route path="/help" element={<Help />} />
+          <Route path="/help" element={<HelpPage data={data} />} />
           <Route path="/tasks" element={<TasksPage data={data} />} />
           <Route path="/memory" element={<MemoryPage />} />
           <Route path="/skills" element={<SkillsPage />} />

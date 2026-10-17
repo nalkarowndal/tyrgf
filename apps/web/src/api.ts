@@ -4,15 +4,33 @@ export function setToken(value: string) {
   token = value;
 }
 export async function api<T>(path: string, body?: unknown): Promise<T> {
-  const response = await fetch(`/api${path}`, {
-    method: body === undefined ? 'GET' : 'POST',
-    headers:
-      body === undefined ? {} : { 'Content-Type': 'application/json', 'X-Aura-Token': token },
-    body: body === undefined ? undefined : JSON.stringify(body),
-  });
-  const data = await response.json();
+  let response: Response;
+  try {
+    response = await fetch(`/api${path}`, {
+      method: body === undefined ? 'GET' : 'POST',
+      headers:
+        body === undefined ? {} : { 'Content-Type': 'application/json', 'X-Aura-Token': token },
+      body: body === undefined ? undefined : JSON.stringify(body),
+    });
+  } catch {
+    throw new Error(
+      '앱 서버에 연결하지 못했습니다. 앱이 실행 중인지 확인한 뒤 다시 시도하세요. 실행 요청이었다면 기록을 먼저 확인하세요.',
+    );
+  }
+  let data;
+  try {
+    data = await response.json();
+  } catch {
+    throw new Error(
+      '앱 서버의 응답을 읽지 못했습니다. 연결 상태와 실행 기록을 확인한 뒤 다시 시도하세요.',
+    );
+  }
   if (!response.ok)
-    throw new Error(data.error ?? '요청을 처리하지 못했습니다. 다시 시도해 주세요.');
+    throw new Error(
+      typeof data?.error === 'string'
+        ? data.error
+        : '요청을 처리하지 못했습니다. 다시 시도해 주세요.',
+    );
   return data as T;
 }
 export async function reply(

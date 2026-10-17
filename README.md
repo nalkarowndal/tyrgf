@@ -1,6 +1,6 @@
 # AURA Agent
 
-한국어로 편하게 대화하는 로컬 AI 도우미. **M6 MCP 연결·승인 호출 구현 버전**입니다. 실제 공급자 어댑터, 명시적 모의 공급자, 승인 기반 복합 작업을 제공합니다. Windows 설치 패키지는 준비 중입니다.
+한국어로 편하게 대화하는 로컬 AI 도우미. **M7 초보자 UX 개선 버전**입니다. 실제 공급자 어댑터, 명시적 모의 공급자, 승인 기반 복합 작업을 제공합니다. Windows 설치 패키지는 준비 중입니다.
 
 ![AURA 대화 화면](docs/qa/desktop-home.png)
 
@@ -18,7 +18,9 @@ npm start
 
 ## 지금 사용할 수 있는 기능
 
-- 5단계 한국어 초기 설정, 라이트/다크/시스템 테마, 반응형 화면
+- 5단계 한국어 초기 설정·다시 보기, 라이트/다크/시스템 테마, 반응형 화면
+- 처음 사용 가이드·기능 검색·권한/오류 해결 안내, 초보자 추가 메뉴 접기, 모바일 키보드 탐색
+- 내장 MCP의 쉬운 파일/검색 입력과 연결 오류 후 입력 복구
 - Gemini / Groq / 로컬 Ollama 어댑터, 실제 연결 테스트, 모델 목록 확인
 - 오프라인 체험용 **모의 AI**: 실제 AI 응답과 명확히 구분
 - 스트리밍, 중단, 대화 저장/검색/이름변경/삭제/편집/재생성/JSON 내보내기
@@ -55,6 +57,7 @@ E2E는 시스템 Chromium이 있으면 사용하고, 없으면 Playwright 브라
 - [구현 단계와 후속 조건](docs/CODEX_PHASES.md)
 - [조사 근거·라이선스](docs/RESEARCH_REFERENCES.md)
 - [시스템 구조](docs/SYSTEM_ARCHITECTURE.md) · [보안 및 한계](docs/SECURITY_DESIGN.md)
+- [M7 사용성 검수와 남은 사용자 실험](docs/M7_UX_REVIEW.md)
 - [테스트와 시각 QA](docs/TEST_QA_PLAN.md) · [구현 기록](docs/IMPLEMENTATION_LOG.md)
 
 웹 읽기에는 Chromium이 필요합니다 (`npx playwright install chromium` 또는 `CHROMIUM_PATH`). Windows/macOS 파일 도구, 동적 브라우저 제어, 터미널, MCP 자동 계획 연동, 자동 백그라운드 요약은 준비 중입니다. 파일 원본은 숨김 복구 폴더에도 보관하며 자동 정리하지 않습니다. 자세한 범위와 한계는 [도구 설계](docs/TOOL_MCP_DESIGN.md)를 참고하세요.
