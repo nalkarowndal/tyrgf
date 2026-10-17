@@ -147,3 +147,5 @@ M5 독립 최종 검토: Important 2건, Critical/신규 Minor 없음. 스킬 �
 - PowerShell7 도구는 공식 GitHub 배포 tar SHA256을 확인한 뒤 /tmp에만 풀었다. 처음 실행은 읽기 전용 기본 캐시 폴더 오류여서 XDG 캐시/설정/데이터를 /tmp로 지정했다. 시스템 설치나 환경 네트워크 정책 변경은 하지 않았다.
 
 - 첫 원격 품질 검사에서 Linux web-reader 스냅샷1개가 8초 시작 제한으로 실패했다(117/118). 로그는 CI가 설치한 Playwright 브라우저 대신 /usr/bin/chromium을 선택했음을 보여준다. CI에서 설치 브라우저의 실제 실행 경로를 CHROMIUM_PATH로 명시하고 matrix fail-fast를 꺼 Windows 독립 검수를 보장했다. 제품 실행 제한이나 검사 자체를 완화하지 않았다.
+
+- Windows 일반 CI가 별도 Chromium 설치에 오래 머물렀다. 완료 전 로그 API는 아직 로그 없음(404)을 반환하여 다운로드 실패로 단정하지 않았다. 공식 runner-images Windows2025 목록에서 설치된 Microsoft Edge를 확인했고, 제품 Windows 기본값과 같은 Edge로 web-reader 테스트를 실행하도록 Windows의 추가 Chromium 설치를 제거했다. Linux는 Playwright가 설치한 브라우저를 명시한다. CI 전체 작업 제한은 15분으로 설정했다.
