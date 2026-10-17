@@ -31,12 +31,15 @@ import { Logo, ErrorRecoveryPanel, Modal, ActionPreview } from './components';
 type Conversation = Session & { messages: ChatMessage[] };
 export function Chat({ data, refresh }: { data: Bootstrap; refresh: () => Promise<unknown> }) {
   const { id } = useParams();
+  // Keep a newly created conversation through a failed first send, without a route
+  // remount discarding its draft/error or a retry creating another empty session.
+  const [conversationId, setConversationId] = useState(id);
   const navigate = useNavigate(),
     client = useQueryClient();
   const history = useQuery({
-    queryKey: ['conversation', id],
-    queryFn: () => api<Conversation>(`/sessions/${id}`),
-    enabled: !!id,
+    queryKey: ['conversation', conversationId],
+    queryFn: () => api<Conversation>(`/sessions/${conversationId}`),
+    enabled: !!conversationId,
   });
   const [messages, setMessages] = useState<ChatMessage[]>([]),
     [input, setInput] = useState(''),
@@ -74,7 +77,8 @@ export function Chat({ data, refresh }: { data: Bootstrap; refresh: () => Promis
     setNotice('');
     const abort = new AbortController();
     controller.current = abort;
-    let sessionId = id;
+    let sessionId = conversationId;
+    let failed = false;
     const text = [
       input.trim(),
       attachment
@@ -87,6 +91,7 @@ export function Chat({ data, refresh }: { data: Bootstrap; refresh: () => Promis
       if (!sessionId) {
         const session = await api<Session>('/sessions', {});
         sessionId = session.id;
+        setConversationId(session.id);
       }
       if (!mounted.current) return;
       runningId.current = sessionId;
@@ -139,11 +144,15 @@ export function Chat({ data, refresh }: { data: Bootstrap; refresh: () => Promis
             setEditId(undefined);
           }
           if (event.type === 'notice') setNotice(event.message);
-          if (event.type === 'error') setError(event.message);
+          if (event.type === 'error') {
+            failed = true;
+            setError(event.message);
+          }
         },
         abort.signal,
       );
     } catch (e) {
+      failed = true;
       if (!abort.signal.aborted) setError((e as Error).message);
     } finally {
       if (sessionId) {
@@ -160,7 +169,8 @@ export function Chat({ data, refresh }: { data: Bootstrap; refresh: () => Promis
       setBusy(false);
       controller.current = null;
       runningId.current = undefined;
-      if (sessionId && !id && mounted.current) navigate(`/chat/${sessionId}`, { replace: true });
+      if (sessionId && !id && !failed && mounted.current)
+        navigate(`/chat/${sessionId}`, { replace: true });
     }
   }
   async function stop() {

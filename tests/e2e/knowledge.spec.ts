@@ -1,7 +1,16 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from './fixtures';
 test('reviews and manages memories and creates a provenance-tracked summary draft', async ({
   page,
+  request,
 }) => {
+  const { token } = await (await request.get('/api/bootstrap')).json();
+  const headers = { 'X-Aura-Token': token };
+  const original = await (await request.post('/api/sessions', { headers, data: {} })).json();
+  const reply = await request.post(`/api/sessions/${original.id}/reply`, {
+    headers,
+    data: { text: '기억 변경 전의 독립 원문' },
+  });
+  expect(reply.ok()).toBe(true);
   await page.goto('/memory');
   await expect(page.getByRole('heading', { name: '기억 관리', exact: true })).toBeVisible();
   await page.getByLabel('기억 제목').fill('답변 선호');
@@ -24,7 +33,7 @@ test('reviews and manages memories and creates a provenance-tracked summary draf
     .locator('.memory-entry')
     .screenshot({ path: 'docs/qa/desktop-memory.png', animations: 'disabled' });
   await page.getByLabel('기억 검색').fill('');
-  await page.getByLabel('요약할 대화').selectOption({ index: 1 });
+  await page.getByLabel('요약할 대화').selectOption(original.id);
   await page.getByRole('button', { name: '요약 초안 만들기' }).click();
   await expect(page.getByText('요약할 완료 대화가 없습니다.', { exact: true })).toBeVisible();
   const fresh = await page.evaluate(async () => {

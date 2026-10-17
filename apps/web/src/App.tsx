@@ -102,7 +102,8 @@ function ComingSoon() {
 }
 function ConversationRoute(props: { data: Bootstrap; refresh: () => Promise<unknown> }) {
   const { id } = useParams();
-  return <Chat key={id ?? 'new'} {...props} />;
+  const location = useLocation();
+  return <Chat key={id ?? location.key} {...props} />;
 }
 export function App() {
   const boot = useQuery({

@@ -1,7 +1,7 @@
 # 테스트 및 시각 QA
 
 ## 실행 결과 (2026-10-17)
-검증 환경: Linux, Node 24.19.0, 시스템 Chromium. `npm run check` (타입 검사, ESLint, Vitest, Vite 빌드) 통과. Vitest 16개 파일 **100개 테스트 통과**. `npm run test:e2e` **10개 사용자 시나리오 통과**. 운영 의존성 `npm audit --omit=dev` 알려진 취약점 **0건**. Windows CI workflow는 작성했지만 원격 실행하지 않았다.
+검증 환경: Linux, Node 24.19.0, 시스템 Chromium. `npm run check` (타입 검사, ESLint, Vitest, Vite 빌드) 통과. Vitest 17개 파일 **110개 테스트 통과**. `npm run test:e2e` **15개 사용자 시나리오 통과**. 상세 결과는 M8_QA_REPORT.md 참조. 운영 의존성 `npm audit --omit=dev` 알려진 취약점 **0건**. Windows CI workflow는 작성했지만 원격 실행하지 않았다.
 
 ## 기능·보안 검사
 - API 기본값 mock/외부 전송 차단, Host/Origin/토큰 검사, 대소문자 경로 우회 차단.
@@ -33,7 +33,7 @@
 ## 미검증·후속 조건
 Groq 키는 제공되었지만 개발 환경 네트워크 허용 목록에 api.groq.com이 없어 키를 전송하지 않았다. Gemini/Groq 인증 응답·계정 요금제·실 사용 한도는 미검증. Ollama 실 인스턴스 없음: 설치 모델 실제 추론 미검증. fetch fixture를 실 API 연결 증거로 취급하지 않는다. M3 수동 도구 승인·실행·복구는 검증했다. 공개 사이트 라이브 읽기는 환경 DNS EAI_AGAIN으로 실패하여 성공 미검증이다. M4 복합 파일 도구 실행은 명시적 모의 계획으로 검증했으며 실제 모델 계획 품질은 미검증이다. M5 기억 삭제와 파생 컨텍스트 제외, 스킬 재사용은 검증했다. M6 내장 MCP 실제 stdio 연결·호출과 프로토콜 fixture를 검증했다. GitHub/Serena/Repomix 외부 설치·인증 연결은 미검증이며 REA는 안내만 제공한다. Windows/macOS·다중 브라우저·실제 초보자 사용성 실험·OS credential vault는 후속 검증이다.
 
-빌드 경고: 현재 단일 프론트엔드 bundle이 약 628KB(압축 약 192KB)로 Vite 권고 기준을 넘는다. Zod 내부 PURE annotation 경고도 발생하지만 빌드 실패는 아니다. 코드 분할은 후속 성능 개선 항목이다.
+빌드 경고: 현재 단일 프론트엔드 bundle이 약 655KB(압축 약 200KB)로 Vite 권고 기준을 넘는다. Zod 내부 PURE annotation 경고도 발생하지만 빌드 실패는 아니다. 코드 분할은 후속 성능 개선 항목이다.
 
 ## M3 추가 검증
 - 파일 API: 권한 기본 꺼짐, CSRF, 읽기/쓰기 분리, 승인 전 무변경, 승인 입력 위변조·재실행 거절, 경로 우회/숨김/심볼릭·하드링크/비텍스트 거절, 외부 수정 보존, 루트 교체, 권한 철회, 삭제·복구·변경 후 복구 거절, 만료와 재시작.
@@ -85,3 +85,11 @@ Groq 키는 제공되었지만 개발 환경 네트워크 허용 목록에 api.g
 - 시각 검수: desktop-guide.png, tablet-guide-dark.png, mobile-guide-dark.png, mobile-connection-recovery.png. 추가 메뉴 정렬과 한국어 단어 줄바꿈 결함을 수정하고 캡처를 재확인했다. 390px 가로 넘침 없음. 관련 기존 화면 캡처도 갱신했다.
 - 최신 로컬 /help HTTP200, 화면 표시, pageerror0 확인. 운영 의존성 audit0, 새 의존성 없음. 타입·lint·100개 테스트·배포 빌드 통과. 최종 설정 저장 수명주기 수정 뒤 관련 UX E2E2/2 재통과.
 - 실제 초보자 실험과 실 API 인증, 스크린리더/다른 OS는 미검증. M7_UX_REVIEW.md의 검수표를 자동 테스트 통과와 구분한다.
+
+
+## M8 통합 QA
+- 전체 범위, 발견 결함과 수정, 재실행 절차, 근거 문서는 [M8_QA_REPORT.md](M8_QA_REPORT.md)에 기록한다.
+- 테스트마다 실제 앱 프로세스·동적 포트·임시 DB를 생성하고 종료 시 정리한다. 기억 테스트를 앞선 채팅 테스트 없이 단독 실행해 순서 의존 제거를 확인했다.
+- 실제 재시작 후 대화/승인 기억 보존, 키/토큰/폴더/웹/MCP 승인 초기화와 무승인 파일 미생성. 실제 브라우저에서 CSP 강제, 저장된 악성 Markdown 렌더링, 320px 채팅 오류 복구와 중복 대화 방지.
+- 채팅 스트림 네트워크/비 JSON 오류, 분할 UTF-8, 개행 없는 마지막 이벤트, 불완전/잘못된 이벤트, 의도적 취소 회귀. 독립 리뷰의 배열 type 문제도 재현 후 수정했다.
+- CI 운영 의존성 audit 및 HTML/JSON 결과와 실패 trace 업로드. 원격 CI/Windows 실행 증거는 아직 없다.

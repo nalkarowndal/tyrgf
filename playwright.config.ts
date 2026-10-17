@@ -1,14 +1,16 @@
 import { defineConfig } from '@playwright/test';
-import { mkdtempSync, existsSync } from 'node:fs';
-import { tmpdir } from 'node:os';
-import { join } from 'node:path';
-const dataDir = mkdtempSync(join(tmpdir(), 'aura-e2e-'));
+import { existsSync } from 'node:fs';
 export default defineConfig({
   testDir: 'tests/e2e',
   timeout: 30000,
   workers: 1,
+  globalSetup: './tests/e2e/global-setup.ts',
+  reporter: [
+    ['list'],
+    ['html', { open: 'never' }],
+    ['json', { outputFile: 'test-results/results.json' }],
+  ],
   use: {
-    baseURL: 'http://127.0.0.1:4318',
     headless: true,
     launchOptions: {
       executablePath:
@@ -17,12 +19,5 @@ export default defineConfig({
       args: ['--no-sandbox'],
     },
     trace: 'retain-on-failure',
-  },
-  webServer: {
-    command: 'npm run build && npm start',
-    url: 'http://127.0.0.1:4318',
-    env: { AURA_PORT: '4318', AURA_DATA_DIR: dataDir },
-    reuseExistingServer: false,
-    timeout: 60000,
   },
 });

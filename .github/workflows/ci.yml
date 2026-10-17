@@ -19,6 +19,7 @@ jobs:
       - run: npm ci --ignore-scripts
       - run: npx playwright install --with-deps chromium
       - run: npm run check
+      - run: npm audit --omit=dev --audit-level=high
       - if: runner.os == 'Linux'
         run: npm run test:e2e
       - if: always() && runner.os == 'Linux'
@@ -28,4 +29,5 @@ jobs:
           path: |
             docs/qa/
             test-results/
+            playwright-report/
           retention-days: 7
