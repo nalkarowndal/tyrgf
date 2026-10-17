@@ -145,3 +145,5 @@ M5 독립 최종 검토: Important 2건, Critical/신규 Minor 없음. 스킬 �
 
 - 독립 검토 Important3건을 한 번의 수정 패스로 처리했다. (1) 복원 성공을 가장하는 no-op 주입이 기존 검수를 통과함을 확인한 뒤 백업 후 데이터/테마를 변경하도록 수정하여 실패를 검출했다. (2) Verify.cmd가 Node를 먼저 실행하던 문제를 Windows PowerShell 전체 파일 해시 선검증과 독립 Node 고정 해시로 보완했다. 누락 스크립트 RED 후 PowerShell7/Linux에서 변조/추가 파일/런타임 교체 검사를 통과했으며 PowerShell5.1/Windows 검사를 CI에 추가했다. (3) 중복 실행 프로세스를 비동기로 추적하고 타임아웃 시 소유 트리를 정리한다. 고의 잠금 우회 회귀로 timeout 실패와 남은 서버 없음까지 Linux에서 확인했다. Windows 의미 차이는 실제 CI에서 재검증한다.
 - PowerShell7 도구는 공식 GitHub 배포 tar SHA256을 확인한 뒤 /tmp에만 풀었다. 처음 실행은 읽기 전용 기본 캐시 폴더 오류여서 XDG 캐시/설정/데이터를 /tmp로 지정했다. 시스템 설치나 환경 네트워크 정책 변경은 하지 않았다.
+
+- 첫 원격 품질 검사에서 Linux web-reader 스냅샷1개가 8초 시작 제한으로 실패했다(117/118). 로그는 CI가 설치한 Playwright 브라우저 대신 /usr/bin/chromium을 선택했음을 보여준다. CI에서 설치 브라우저의 실제 실행 경로를 CHROMIUM_PATH로 명시하고 matrix fail-fast를 꺼 Windows 독립 검수를 보장했다. 제품 실행 제한이나 검사 자체를 완화하지 않았다.
