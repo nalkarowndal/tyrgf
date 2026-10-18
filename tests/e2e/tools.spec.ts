@@ -18,7 +18,22 @@ test('folder permission, preview, one-time approval, restore and revocation', as
     await expect(page.getByRole('heading', { name: '파일 작업', exact: true })).toBeVisible();
     await page.getByLabel('허용할 폴더의 전체 경로').fill(root);
     await page.getByLabel('파일 생성·수정·삭제도 허용').check();
+    let releasePermission!: () => void;
+    const permissionGate = new Promise<void>((resolve) => {
+      releasePermission = resolve;
+    });
+    await page.route('**/api/tools/roots', async (route) => {
+      await permissionGate;
+      await route.continue();
+    });
     await page.getByRole('button', { name: '이 폴더 허용' }).click();
+    try {
+      await expect(page.getByLabel('폴더 안의 경로')).toBeDisabled();
+      await expect(page.getByLabel('파일 내용')).toBeDisabled();
+    } finally {
+      releasePermission();
+    }
+    await expect(page.getByRole('status')).toContainText('폴더 권한을 허용했습니다');
     await page.getByLabel('폴더 안의 경로').fill('meeting.txt');
     await page.getByLabel('파일 내용').fill('회의 메모\n승인한 내용만 저장합니다.');
     await page.getByRole('button', { name: '저장 미리보기' }).click();

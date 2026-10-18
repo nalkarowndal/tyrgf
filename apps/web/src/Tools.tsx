@@ -259,6 +259,7 @@ export function ToolsPage({ mode }: { mode: 'files' | 'browser' | 'tools' }) {
               <label className="field">
                 허용할 폴더의 전체 경로
                 <input
+                  disabled={busy}
                   value={folder || state.suggestedPath}
                   onChange={(e) => setFolder(e.target.value)}
                   spellCheck={false}
@@ -271,6 +272,7 @@ export function ToolsPage({ mode }: { mode: 'files' | 'browser' | 'tools' }) {
               <label className="check-field">
                 <input
                   type="checkbox"
+                  disabled={busy}
                   checked={write}
                   onChange={(e) => setWrite(e.target.checked)}
                 />
@@ -337,6 +339,7 @@ export function ToolsPage({ mode }: { mode: 'files' | 'browser' | 'tools' }) {
                 <label className="field">
                   허용한 폴더
                   <select
+                    disabled={busy}
                     value={selectedRoot?.id ?? ''}
                     onChange={(e) => {
                       setRootId(e.target.value);
@@ -358,6 +361,7 @@ export function ToolsPage({ mode }: { mode: 'files' | 'browser' | 'tools' }) {
                 <label className="field">
                   폴더 안의 경로
                   <input
+                    disabled={busy}
                     value={path}
                     onChange={(e) => setPath(e.target.value)}
                     placeholder="예: meeting.txt · 비우면 폴더 목록"
@@ -405,6 +409,7 @@ export function ToolsPage({ mode }: { mode: 'files' | 'browser' | 'tools' }) {
               <label className="field tool-editor">
                 파일 내용
                 <textarea
+                  disabled={busy}
                   rows={8}
                   value={content}
                   onChange={(e) => setContent(e.target.value)}

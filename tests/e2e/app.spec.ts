@@ -142,7 +142,12 @@ test('editing and streaming state stay within their conversation', async ({ page
   const gate = new Promise<void>((r) => {
     release = r;
   });
+  let markIntercepted!: () => void;
+  const intercepted = new Promise<void>((resolve) => {
+    markIntercepted = resolve;
+  });
   await page.route('**/api/sessions/' + ids.a + '/reply', async (route) => {
+    markIntercepted();
     await gate;
     try {
       await route.continue();
@@ -153,11 +158,23 @@ test('editing and streaming state stay within their conversation', async ({ page
   await page.getByRole('textbox', { name: '메시지' }).fill('대화 A의 진행 중 질문');
   await page.getByRole('button', { name: '메시지 보내기' }).click();
   await expect(page.getByRole('button', { name: '응답 중단' })).toBeVisible();
-  await page.getByRole('link', { name: '대화 B', exact: true }).click();
-  await expect(page.getByRole('heading', { name: '대화 B', exact: true })).toBeVisible();
-  await expect(page.locator('.messages')).not.toContainText('대화 A의 진행 중 질문');
-  release();
-  await page.unrouteAll({ behavior: 'wait' });
+  await intercepted;
+  const aborted = page.waitForEvent('requestfailed', {
+    predicate: (request) => request.url().endsWith('/sessions/' + ids.a + '/reply'),
+  });
+  try {
+    await page.getByRole('link', { name: '대화 B', exact: true }).click();
+    await test.step('navigation cancels the intercepted reply', async () => {
+      await aborted;
+    });
+    await expect(page.getByRole('heading', { name: '대화 B', exact: true })).toBeVisible();
+    await expect(page.locator('.messages')).not.toContainText('대화 A의 진행 중 질문');
+  } finally {
+    release();
+  }
+  await test.step('finish the intercepted, cancelled request', async () => {
+    await page.unrouteAll({ behavior: 'wait' });
+  });
   await expect(page.getByRole('textbox', { name: '메시지' })).toBeEnabled();
 });
 
