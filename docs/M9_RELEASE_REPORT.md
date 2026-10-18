@@ -1,7 +1,7 @@
 # M9 Windows 배포 후보 검증
 
 2026-10-17, AURA 0.1.0, Linux 빌드 환경, Node 24.19.0, NSIS 3.11.
-**판정: 구현 및 설치 후보 생성 완료. 실제 Windows 검수와 코드 서명 전이므로 정식 출시 완료가 아니다.**
+**초기 M9 판정: 구현 및 설치 후보 생성 완료.** 후속 GitHub Windows 런타임 자동 검수와 설치 후보 생성은 통과했다([검수 결과](M9_WINDOWS_VALIDATION_REPORT.md)). 설치 GUI/업데이트/제거/자동 시작의 실제 사용자 검수와 코드 서명이 남아 있어 정식 출시 완료는 아니다.
 
 ## 산출물
 - `dist/release/AURA-Setup.exe`: 현재 사용자 설치, Node 런타임 포함, 서명 없음.
@@ -10,7 +10,7 @@
 - 패키지 내 `manifest.json`: manifest 자체를 제외한 모든 파일 SHA256.
 - `사용 안내.md`, Node LICENSE, 라이브러리 고지를 패키지에 포함한다.
 
-생성 파일은 로컬 작업 공간에 있으며 Git에 커밋하거나 GitHub에 게시하지 않는다. 재생성은 [배포 안내](DEPLOYMENT_GUIDE.md)를 따른다. 해시는 파일 동일성 검사이며 서명된 게시자의 신원 보증이 아니다.
+아래 지문은 초기 Linux 생성 후보의 기록이다. 후속 Windows 생성 후보는 GitHub Actions artifact로 제공하며 [최신 검수 결과](M9_WINDOWS_VALIDATION_REPORT.md)에서 받는다. Release나 서비스 배포는 하지 않았다. 재생성은 [배포 안내](DEPLOYMENT_GUIDE.md)를 따른다. 해시는 파일 동일성 검사이며 서명된 게시자의 신원 보증이 아니다.
 
 ## 통과한 검사
 | 검사 | 결과 |

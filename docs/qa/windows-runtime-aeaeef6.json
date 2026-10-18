@@ -1,0 +1,45 @@
+{
+  "format": 1,
+  "platform": "win32",
+  "arch": "x64",
+  "startedAt": "2026-10-17T17:07:24.897Z",
+  "status": "passed",
+  "checks": [
+    {
+      "name": "manifest",
+      "status": "passed"
+    },
+    {
+      "name": "startup",
+      "status": "passed"
+    },
+    {
+      "name": "chat",
+      "status": "passed"
+    },
+    {
+      "name": "duplicate-and-backup-lock",
+      "status": "passed"
+    },
+    {
+      "name": "builtin-mcp",
+      "status": "not-supported",
+      "reason": "Windows file tools are not implemented"
+    },
+    {
+      "name": "restart-persistence",
+      "status": "passed"
+    },
+    {
+      "name": "backup-restore",
+      "status": "passed"
+    },
+    {
+      "name": "shutdown",
+      "status": "passed"
+    }
+  ],
+  "manifestSha256": "574c86ad829c267e0d454110c89ad25c005b3e0e8ccc41657541982829c1bf8f",
+  "runtime": "24.19.0",
+  "finishedAt": "2026-10-17T17:07:35.160Z"
+}

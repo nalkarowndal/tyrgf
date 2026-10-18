@@ -19,7 +19,7 @@ jobs:
       - run: npm run typecheck
       - run: npm run lint
       - run: npm test -- tests/backup.test.ts tests/api.test.ts
-      - run: npm audit --omit=dev --audit-level=high
+      - run: npm audit --audit-level=high
       - name: Bundle pinned Windows runtime
         shell: pwsh
         run: |

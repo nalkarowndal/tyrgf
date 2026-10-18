@@ -149,3 +149,7 @@ M5 독립 최종 검토: Important 2건, Critical/신규 Minor 없음. 스킬 �
 - 첫 원격 품질 검사에서 Linux web-reader 스냅샷1개가 8초 시작 제한으로 실패했다(117/118). 로그는 CI가 설치한 Playwright 브라우저 대신 /usr/bin/chromium을 선택했음을 보여준다. CI에서 설치 브라우저의 실제 실행 경로를 CHROMIUM_PATH로 명시하고 matrix fail-fast를 꺼 Windows 독립 검수를 보장했다. 제품 실행 제한이나 검사 자체를 완화하지 않았다.
 
 - Windows 일반 CI가 별도 Chromium 설치에 오래 머물렀다. 완료 전 로그 API는 아직 로그 없음(404)을 반환하여 다운로드 실패로 단정하지 않았다. 공식 runner-images Windows2025 목록에서 설치된 Microsoft Edge를 확인했고, 제품 Windows 기본값과 같은 Edge로 web-reader 테스트를 실행하도록 Windows의 추가 Chromium 설치를 제거했다. Linux는 Playwright가 설치한 브라우저를 명시한다. CI 전체 작업 제한은 15분으로 설정했다.
+
+- 후속 개발 지시 중 전체 npm audit를 확인하니 개발용 Vitest3/@vitest/mocker/tinypool에 moderate1·critical2가 있었다. 운영 의존성0건과 구분했다. 공식 패치 범위와 Node24/Vite7 호환성을 확인해 Vitest4.1.11을 고정하고 lockfile을 갱신했다. 취약 tinypool 의존성은 제거됐으며 기존 설정/테스트 수정 없이 118개·타입·lint·빌드가 통과했다. 전체 audit가0건이 됐고 CI도 개발 의존성을 포함해 검사하도록 변경했다.
+- GitHub 저장소가 같은 ID(1419996783)의 nalkarowndal/tyrgf로 변경된 것을 저장소 ID 조회로 확인했다. origin과 결과 링크를 현재 주소로 갱신했다. 저장소 이름/공개 범위 변경은 이 개발 작업이 수행하지 않았다.
+- Chromium 설치 지연 뒤 기존 Windows 품질 검사도 성공했다. 이후 Edge를 사용한 실제 Windows 품질 검사 역시78통과/40Linux전용제외이며 web-reader4개가 실제 Edge에서 통과했다. Linux118개/E2E16개와 Windows 후보 생성도 성공했다(02670a6). 개발 의존성 패치 후 원격 검증은 이어서 확인한다.

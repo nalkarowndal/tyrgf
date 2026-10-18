@@ -25,7 +25,7 @@ jobs:
         if: runner.os == 'Linux'
         run: node -e "require('node:fs').appendFileSync(process.env.GITHUB_ENV, 'CHROMIUM_PATH=' + require('playwright-core').chromium.executablePath() + '\n')"
       - run: npm run check
-      - run: npm audit --omit=dev --audit-level=high
+      - run: npm audit --audit-level=high
       - if: runner.os == 'Linux'
         run: npm run test:e2e
       - if: runner.os == 'Linux'
