@@ -1,6 +1,13 @@
 # 테스트 및 시각 QA
 
-## 실행 결과 (2026-10-17)
+## 최신 실행 결과 (2026-10-18, 소스 4932e2d)
+[GitHub Windows/Linux 품질 검사](https://github.com/nalkarowndal/tyrgf/actions/runs/39094902146)가 성공했다. Linux19파일118개, Windows14파일78개 통과(Windows에서 Linux 전용5파일40개 제외). 실제 Edge의 web-reader4개 통과. Linux E2E16개 및 배포 번들 검수 통과. 개발 의존성을 포함한 전체 npm audit0건. 로컬에서도 전체 E2E16개, 지연·취소 관련 두 시나리오 반복6개, 타입·lint가 통과했다.
+
+폴더 허용 중 입력 경합은 응답 지연 회귀 RED→GREEN으로 검증했다. 대화 취소 시나리오는 실제 요청 시작/취소를 동기화했다. 설치 후보·Windows 런타임 증거 및 남은 GUI 검수는 [Windows 검수 보고서](M9_WINDOWS_VALIDATION_REPORT.md)에 기록한다.
+
+## 이전 실행 결과 (2026-10-17, M9 초기 후보)
+아래 수치는 초기 후보의 기록이다. 최신 Windows/Linux 결과와 설치 후보는 [Windows 검수 보고서](M9_WINDOWS_VALIDATION_REPORT.md)를 기준으로 한다.
+
 검증 환경: Linux, Node 24.19.0, 시스템 Chromium. `npm run check` (타입 검사, ESLint, Vitest, Vite 빌드) 통과. Vitest 18개 파일 **116개 테스트 통과**. `npm run test:e2e` **16개 사용자 시나리오 통과**. 상세 결과는 M8_QA_REPORT.md 및 M9_RELEASE_REPORT.md 참조. 운영 의존성 `npm audit --omit=dev` 알려진 취약점 **0건**. Windows CI workflow는 작성했지만 원격 실행하지 않았다.
 
 ## 기능·보안 검사
@@ -31,7 +38,7 @@
 처음 캡처에서 설정 저장 후 온보딩 재등장과 짧은 높이에서 사이드바 overflow를 발견해 수정했다. 모바일 메뉴의 닫힘 전환 중 캡처를 막기 위해 screenshot animations=disabled로 안정된 상태를 다시 확보한다. 모바일 가로 overflow는 자동 검사도 포함한다. 시각 검수는 자동 기능 테스트 통과와 별도로 진행했다.
 
 ## 미검증·후속 조건
-Groq 키는 제공되었지만 개발 환경 네트워크 허용 목록에 api.groq.com이 없어 키를 전송하지 않았다. Gemini/Groq 인증 응답·계정 요금제·실 사용 한도는 미검증. Ollama 실 인스턴스 없음: 설치 모델 실제 추론 미검증. fetch fixture를 실 API 연결 증거로 취급하지 않는다. M3 수동 도구 승인·실행·복구는 검증했다. 공개 사이트 라이브 읽기는 환경 DNS EAI_AGAIN으로 실패하여 성공 미검증이다. M4 복합 파일 도구 실행은 명시적 모의 계획으로 검증했으며 실제 모델 계획 품질은 미검증이다. M5 기억 삭제와 파생 컨텍스트 제외, 스킬 재사용은 검증했다. M6 내장 MCP 실제 stdio 연결·호출과 프로토콜 fixture를 검증했다. GitHub/Serena/Repomix 외부 설치·인증 연결은 미검증이며 REA는 안내만 제공한다. Windows/macOS·다중 브라우저·실제 초보자 사용성 실험·OS credential vault는 후속 검증이다.
+Groq 키는 제공되었지만 개발 환경 네트워크 허용 목록에 api.groq.com이 없어 키를 전송하지 않았다. Gemini/Groq 인증 응답·계정 요금제·실 사용 한도는 미검증. Ollama 실 인스턴스 없음: 설치 모델 실제 추론 미검증. fetch fixture를 실 API 연결 증거로 취급하지 않는다. M3 수동 도구 승인·실행·복구는 검증했다. 공개 사이트 라이브 읽기는 환경 DNS EAI_AGAIN으로 실패하여 성공 미검증이다. M4 복합 파일 도구 실행은 명시적 모의 계획으로 검증했으며 실제 모델 계획 품질은 미검증이다. M5 기억 삭제와 파생 컨텍스트 제외, 스킬 재사용은 검증했다. M6 내장 MCP 실제 stdio 연결·호출과 프로토콜 fixture를 검증했다. GitHub/Serena/Repomix 외부 설치·인증 연결은 미검증이며 REA는 안내만 제공한다. Windows 런타임·Edge 자동 검수는 후속 단계에서 통과했다. Windows 설치 GUI·macOS·추가 브라우저·실제 초보자 사용성 실험·OS credential vault는 후속 검증이다.
 
 빌드 경고: 현재 단일 프론트엔드 bundle이 약 655KB(압축 약 200KB)로 Vite 권고 기준을 넘는다. Zod 내부 PURE annotation 경고도 발생하지만 빌드 실패는 아니다. 코드 분할은 후속 성능 개선 항목이다.
 
@@ -101,4 +108,4 @@ Groq 키는 제공되었지만 개발 환경 네트워크 허용 목록에 api.g
 - 실제 번들을 한글·공백 경로로 복사하여 소스/npm 없이 채팅·내장 MCP·앱 종료·CLI 백업/복원 실행.
 - 파일 manifest의 정확한 목록과 SHA256 검사. 재빌드 시 오래된 asset 제거와 manifest 자체 제외 회귀.
 - 설정의 백업 범위 안내와 앱 종료 취소/확인 브라우저 시나리오. 데스크톱 다크 및 모바일 화면 직접 검수.
-- Windows EXE 컴파일과 ZIP 생성은 실제 Windows 실행 검증과 구분한다. 설치/복원/자동 시작/업데이트/제거/Edge 검수는 대기 중이다.
+- Windows EXE 컴파일과 ZIP 생성은 실제 Windows 실행 검증과 구분한다. 이 초기 후보 시점에는 설치/복원/자동 시작/업데이트/제거/Edge 검수가 대기 상태였다. 후속 Windows 런타임 복원·Edge 자동 검수 결과는 최신 검수 보고서에 기록한다.

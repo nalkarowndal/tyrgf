@@ -24,7 +24,7 @@ Portable ZIP은 원하는 폴더에 전체 압축을 풀고 windows/Start.cmd를
 로그인 자동 시작은 설치 옵션이며 기본 꺼짐입니다. 끄려면 Windows 시작 앱에서 AURA를 해제하거나 시작프로그램 폴더의 AURA 바로가기를 삭제합니다. 자동 업데이트/다운로드는 하지 않습니다. 업데이트 전 백업 → 앱 종료 → 새 설치 파일 실행. 새 버전 출처와 SHA256을 확인하세요. 제거는 앱/바로가기만 삭제하며 data 폴더는 보존합니다.
 
 ## 현재 제한
-Windows 파일 도구는 미지원이며 안전 경로 검증을 우회하지 않습니다. 복합 파일 작업/내장 폴더 MCP도 사용할 수 없습니다. 공개 웹 스냅샷은 설치된 Microsoft Edge를 사용하며 없으면 오류로 안내합니다. 실 클라우드 인증/요금제, 외부 MCP, Windows 설치 GUI·암호 입력 화면·Edge 동작은 실제 Windows에서 별도 검증해야 합니다. 런타임/CLI 백업·복원은 GitHub Windows 러너에서 검증했습니다. 패키지 생성과 Linux 테스트를 Windows 성공으로 해석하지 마세요.
+Windows 파일 도구는 미지원이며 안전 경로 검증을 우회하지 않습니다. 복합 파일 작업/내장 폴더 MCP도 사용할 수 없습니다. 공개 웹 스냅샷은 설치된 Microsoft Edge를 사용하며 없으면 오류로 안내합니다. 실 클라우드 인증/요금제, 외부 MCP, Windows 설치 GUI·암호 입력 화면·공개 사이트 라이브 읽기는 별도 검증해야 합니다. 런타임/CLI 백업·복원 및 통제된 HTML의 실제 Edge 스냅샷은 GitHub Windows 러너에서 검증했습니다. 패키지 생성과 Linux 테스트를 Windows 성공으로 해석하지 마세요.
 
 ## 빌드 담당자
 
@@ -34,7 +34,7 @@ Windows용 공식 Node 24.19.0 x64 ZIP과 SHASUMS256.txt를 nodejs.org에서 내
 
 NSIS 3.11에서 `scripts/windows/installer.nsi`를 PACKAGE=dist/release/win-x64 전체 경로, OUTPUT=AURA-Setup.exe 전체 경로로 컴파일합니다. Windows에서는 `/D`, Linux에서는 `-D`로 define을 전달합니다. 해당 디렉터리 내용으로 portable ZIP을 만듭니다. 설치/portable SHA256을 함께 배포하고, 출시 전 Windows 표준 사용자 환경에서 설치→실행→복원→업데이트→제거 및 Edge 실행을 확인해야 합니다.
 
-`.github/workflows/windows-package.yml`은 수동 실행 시 설치 후보와 ZIP을 CI artifact로만 만듭니다. Release 게시·자동 설치는 하지 않습니다. 최신 Windows 실행 결과는 저장소 Actions와 M9_WINDOWS_VALIDATION_REPORT.md를 참고하세요. 코드서명 인증서/Windows 검증이 없으므로 공개 출시 완료로 표시하지 않습니다.
+`.github/workflows/windows-package.yml`은 `codex/windows-validation` 브랜치 push 또는 수동 실행 시 설치 후보와 ZIP을 CI artifact로 만듭니다. Release 게시·자동 설치는 하지 않습니다. 최신 Windows 실행 결과는 저장소 Actions와 M9_WINDOWS_VALIDATION_REPORT.md를 참고하세요. 코드서명 인증서/Windows 검증이 없으므로 공개 출시 완료로 표시하지 않습니다.
 
 
 ## 배포 후보 자동 검수

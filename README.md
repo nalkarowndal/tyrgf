@@ -6,7 +6,7 @@
 
 ## 실행
 
-Windows 후보 패키지의 설치·백업·복원은 [배포 안내](docs/DEPLOYMENT_GUIDE.md)를 참고하세요. 개발환경 없는 Windows에서의 최종 검수는 [M9 결과](docs/M9_RELEASE_REPORT.md)에 남아 있습니다.
+Windows 후보 패키지의 설치·백업·복원은 [배포 안내](docs/DEPLOYMENT_GUIDE.md)를 참고하세요. 최신 설치 후보와 자동 검수 결과는 [Windows 검수 보고서](docs/M9_WINDOWS_VALIDATION_REPORT.md), 남은 설치 GUI 검수는 [M9 결과](docs/M9_RELEASE_REPORT.md)를 참고하세요.
 
 Node.js **24 이상**에서:
 

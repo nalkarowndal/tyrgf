@@ -1,0 +1,44 @@
+{
+  "format": 1,
+  "platform": "linux",
+  "arch": "x64",
+  "startedAt": "2026-10-18T03:51:05.103Z",
+  "status": "passed",
+  "checks": [
+    {
+      "name": "manifest",
+      "status": "passed"
+    },
+    {
+      "name": "startup",
+      "status": "passed"
+    },
+    {
+      "name": "chat",
+      "status": "passed"
+    },
+    {
+      "name": "duplicate-and-backup-lock",
+      "status": "passed"
+    },
+    {
+      "name": "builtin-mcp",
+      "status": "passed"
+    },
+    {
+      "name": "restart-persistence",
+      "status": "passed"
+    },
+    {
+      "name": "backup-restore",
+      "status": "passed"
+    },
+    {
+      "name": "shutdown",
+      "status": "passed"
+    }
+  ],
+  "manifestSha256": "99eeb496bada4c7abdf8143c229bfea8238945b210fe50072fafff043b577059",
+  "runtime": "24.19.0",
+  "finishedAt": "2026-10-18T03:51:11.799Z"
+}

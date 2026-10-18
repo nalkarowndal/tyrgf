@@ -31,14 +31,14 @@ Interface: node scripts/smoke-package.mjs [package-directory] [report-json]; exi
 Files: scripts/windows/Verify.cmd, scripts/package.mjs, .github/workflows/windows-package.yml, docs/DEPLOYMENT_GUIDE.md.
 - [x] 번들에 검수 스크립트와 실행 바로가기를 포함하고 설명한다.
 - [x] Windows 후보 업로드 전에 번들 검수 실행, 실패/성공 결과 artifact 분리, ZIP은 검수 통과 뒤 생성.
-- [ ] npm run check, 번들 검수, Windows 패키지 생성/manifest/NSIS/ZIP 검증. 실제 Windows 미검증 명시.
+- [x] npm run check, 번들 검수, 실제 Windows 패키지 생성/manifest/NSIS/ZIP 검증. GUI 설치 검수와 구분.
 
 ## Task 3 — Review and handoff
-- [ ] 한 번의 독립 최종 검토와 필요한 회귀 수정, 결과/근거 문서 및 로컬 커밋.
-- [ ] 원격 Windows 실행이 가능하면 결과를 확인하고, 아니면 실행에 필요한 환경을 구체적으로 보고한다.
+- [x] 한 번의 독립 최종 검토와 필요한 회귀 수정, 결과/근거 문서 및 로컬 커밋.
+- [x] GitHub Actions Windows 러너에서 런타임·복원·무결성 선검사·결함 주입 검수 통과를 확인했다.
 
 
 ## Task 4 — Development dependency patch
 - [x] 전체 audit에서 개발 의존성3건 확인, Vitest4.1.11로 갱신하여 audit0.
 - [x] 타입·lint·118개 테스트·빌드 통과.
-- [ ] CI에서도 전체 audit와 Windows/Linux 검수를 확인하고 최신 후보 링크 기록.
+- [x] CI에서도 전체 audit0와 Windows/Linux 검수를 확인하고 최신 4932e2d 후보/증거 링크 기록.
