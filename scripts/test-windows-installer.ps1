@@ -96,6 +96,18 @@ function DataHashes {
   $backup = Join-Path $dataRoot 'installer-test.aura-backup'
   return ((Get-FileHash -LiteralPath $db,$backup -Algorithm SHA256).Hash -join ':')
 }
+function AssertDataPreserved([string]$expected) {
+  foreach ($file in @((Join-Path $dataRoot 'data\aura.sqlite'), (Join-Path $dataRoot 'installer-test.aura-backup'))) {
+    if (-not (Test-Path -LiteralPath $file -PathType Leaf)) {
+      $script:report.errorCode = 'INSTALLER_DATA_LOSS'
+      throw "Installer removed preserved data: $file"
+    }
+  }
+  if ((DataHashes) -ne $expected) {
+    $script:report.errorCode = 'INSTALLER_DATA_LOSS'
+    throw 'Installer changed database or backup bytes'
+  }
+}
 function RemoveInstalledApp([string]$phase) {
   # Copy explicitly, so the child stays owned and exit status is observable.
   $copy = Join-Path $work ($phase + '-uninstall.exe')
@@ -131,10 +143,8 @@ try {
     InstalledApp 'verify'
   }
   $before = DataHashes
-  Check 'uninstall-preserves-database-and-backup' {
-    RemoveInstalledApp 'uninstall'
-    Assert ((DataHashes) -eq $before) 'Uninstall changed database or backup'
-  }
+  Check 'uninstall-removes-app-and-registration' { RemoveInstalledApp 'uninstall' }
+  Check 'uninstall-preserves-database-and-backup' { AssertDataPreserved $before }
   Check 'reinstall-restores-existing-conversation' {
     RunWizard $Installer ('/D=' + $installRoot) 'reinstall'
     VerifyLinks

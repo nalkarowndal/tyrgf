@@ -18,7 +18,7 @@ jobs:
       - run: npm ci --ignore-scripts
       - run: npm run typecheck
       - run: npm run lint
-      - run: npm test -- tests/backup.test.ts tests/api.test.ts
+      - run: npm test -- tests/backup.test.ts tests/api.test.ts tests/installer-evidence.test.ts
       - run: npm audit --audit-level=high
       - name: Bundle pinned Windows runtime
         shell: pwsh
@@ -72,9 +72,8 @@ jobs:
           $result = 'test-results/windows-installer-data-loss.json'
           & pwsh -NoProfile -File scripts/test-windows-installer.ps1 -Installer $output -ReportPath $result
           if ($LASTEXITCODE -eq 0) { throw 'Data-loss installer incorrectly passed' }
-          $report = Get-Content $result -Raw | ConvertFrom-Json
-          if ($report.status -ne 'failed' -or -not ($report.checks | Where-Object { $_.name -eq 'uninstall-preserves-database-and-backup' -and $_.status -eq 'failed' })) { throw 'Fault failed for the wrong reason' }
-          Write-Output 'PASS: installer data-loss fault detected'
+          & node scripts/assert-installer-fault.mjs $result
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           exit 0
       - name: Upload installer lifecycle evidence
         if: always()
