@@ -1,5 +1,7 @@
 # Windows 런타임 검수 — 2026-10-18 KST
 
+이 문서는 런타임 검수 단계의 기록이다. 이후 설치 마법사·업데이트·제거·재설치 검수와 최신 후보는 [설치 수명주기 검수](M9_INSTALLER_VALIDATION_REPORT.md)를 참고한다.
+
 M9 설치 후보에 Windows/Linux 공통 검수 도구와 Windows PowerShell 무결성 선검사를 추가했다. 사용자 선택에 따라 전용 `codex/windows-validation` 브랜치에서 GitHub Actions Windows 러너 검수를 실행한다. 실제 Windows 런타임 검수와 설치 후보 생성이 통과했다. 최신 소스 `4932e2d`의 일반 품질 검사도 Linux/Windows에서 통과했다. 최신 후보는 아래 **최종 실행과 다운로드**를 기준으로 한다.
 
 ## 로컬 근거

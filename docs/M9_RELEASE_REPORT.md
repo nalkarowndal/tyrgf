@@ -1,7 +1,7 @@
 # M9 Windows 배포 후보 검증
 
 2026-10-17, AURA 0.1.0, Linux 빌드 환경, Node 24.19.0, NSIS 3.11.
-**초기 M9 판정: 구현 및 설치 후보 생성 완료.** 후속 GitHub Windows 런타임 자동 검수와 설치 후보 생성은 통과했다([검수 결과](M9_WINDOWS_VALIDATION_REPORT.md)). 설치 GUI/업데이트/제거/자동 시작의 실제 사용자 검수와 코드 서명이 남아 있어 정식 출시 완료는 아니다.
+**초기 M9 판정: 구현 및 설치 후보 생성 완료.** 후속 GitHub Windows 런타임 자동 검수와 설치 후보 생성은 통과했다([검수 결과](M9_WINDOWS_VALIDATION_REPORT.md)). 후속 [설치 수명주기 검수](M9_INSTALLER_VALIDATION_REPORT.md)에서 GitHub Windows 러너의 설치/같은 버전 업데이트/제거/재설치 자동 검수도 통과했다. 표준 사용자 실환경·로그인 자동 시작의 사용자 검수와 코드 서명이 남아 있어 정식 출시 완료는 아니다.
 
 ## 산출물
 - `dist/release/AURA-Setup.exe`: 현재 사용자 설치, Node 런타임 포함, 서명 없음.

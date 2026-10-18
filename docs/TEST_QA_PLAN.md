@@ -1,6 +1,9 @@
 # 테스트 및 시각 QA
 
-## 최신 실행 결과 (2026-10-18, 소스 4932e2d)
+## 설치 검수 후속 품질 결과 (2026-10-18, 소스 163eda3)
+[GitHub 품질 CI](https://github.com/nalkarowndal/tyrgf/actions/runs/39122345842) 성공. Linux20파일122개, Windows15파일82개 통과(5파일40개 Linux 전용 제외), E2E16개·Edge4개·번들 검수 및 전체 audit0. 설치 결함 판정 회귀는 관계없는 실패3개를 RED로 확인한 뒤4개 GREEN을 확인했다. 실제 설치 흐름 및 첫 Windows 백업 잠금 실패/재실행 근거는 [설치 검수 보고서](M9_INSTALLER_VALIDATION_REPORT.md)에 기록한다.
+
+## 이전 런타임 검수 결과 (2026-10-18, 소스 4932e2d)
 [GitHub Windows/Linux 품질 검사](https://github.com/nalkarowndal/tyrgf/actions/runs/39094902146)가 성공했다. Linux19파일118개, Windows14파일78개 통과(Windows에서 Linux 전용5파일40개 제외). 실제 Edge의 web-reader4개 통과. Linux E2E16개 및 배포 번들 검수 통과. 개발 의존성을 포함한 전체 npm audit0건. 로컬에서도 전체 E2E16개, 지연·취소 관련 두 시나리오 반복6개, 타입·lint가 통과했다.
 
 폴더 허용 중 입력 경합은 응답 지연 회귀 RED→GREEN으로 검증했다. 대화 취소 시나리오는 실제 요청 시작/취소를 동기화했다. 설치 후보·Windows 런타임 증거 및 남은 GUI 검수는 [Windows 검수 보고서](M9_WINDOWS_VALIDATION_REPORT.md)에 기록한다.

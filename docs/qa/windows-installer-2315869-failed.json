@@ -1,0 +1,42 @@
+{
+  "format": 1,
+  "platform": "win32",
+  "source": "2315869daf2b8d19264382083933e6df8d2b8747",
+  "status": "failed",
+  "checks": [
+    {
+      "status": "passed",
+      "name": "isolated-runner-preflight"
+    },
+    {
+      "status": "failed",
+      "name": "wizard-install-and-default-shortcuts"
+    }
+  ],
+  "clicks": [
+    {
+      "phase": "install",
+      "button": "다음 >",
+      "window": "AURA Agent 설치"
+    },
+    {
+      "phase": "install",
+      "button": "설치",
+      "window": "AURA Agent 설치 "
+    },
+    {
+      "phase": "install",
+      "button": "OK",
+      "window": "AURA Agent 설치"
+    },
+    {
+      "phase": "install",
+      "button": "마침",
+      "window": "AURA Agent 설치 "
+    }
+  ],
+  "startedAt": "2026-10-18T11:11:34.7853249Z",
+  "installerSha256": "58da45cc5b399a8a1abf22da3e4f1a69c3cf91707fb84276869db3dd7376735a",
+  "error": "Unexpected shortcut target: D:\\a\\_temp\\aura-install-e89935fef14d47fbb39591fa53042056\\?? ?? ??\\app-0.1.0\\windows\\Start.cmd",
+  "finishedAt": "2026-10-18T11:11:48.3218932Z"
+}

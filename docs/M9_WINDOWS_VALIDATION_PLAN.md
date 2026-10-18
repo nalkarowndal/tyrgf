@@ -42,3 +42,14 @@ Files: scripts/windows/Verify.cmd, scripts/package.mjs, .github/workflows/window
 - [x] 전체 audit에서 개발 의존성3건 확인, Vitest4.1.11로 갱신하여 audit0.
 - [x] 타입·lint·118개 테스트·빌드 통과.
 - [x] CI에서도 전체 audit0와 Windows/Linux 검수를 확인하고 최신 4932e2d 후보/증거 링크 기록.
+
+
+## 후속 — 설치 수명주기 검수
+- [x] GitHub-hosted Windows 전용 보호와 기존 상태 거절, 소유 PID 창 조작 및 제한 시간.
+- [x] 실제 설치/같은 버전 업데이트/제거/재설치와 기본 데이터 경로의 대화·백업 보존 검증.
+- [x] 독립 검토 Important1건 RED→GREEN 수정 및 전체122개 검사 통과.
+- [x] 한글 바로가기 조회/NSIS 입력 인코딩 수정 후 Windows 실제 검수8항목 통과.
+- [x] 정확한 데이터 손실 결함 검출, 최신 후보와 증거 링크 기록.
+- [ ] 표준 사용자 실환경·로그인 자동 시작·코드 서명·타 버전 DB 마이그레이션 검수.
+
+자동 검수 범위와 보류 Minor2건은 M9_INSTALLER_VALIDATION_REPORT.md를 따른다.

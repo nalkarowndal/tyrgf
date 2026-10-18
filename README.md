@@ -1,12 +1,12 @@
 # AURA Agent
 
-한국어로 편하게 대화하는 로컬 AI 도우미. **M9 Windows 배포 후보 버전**입니다. 실제 공급자 어댑터, 명시적 모의 공급자, 승인 기반 복합 작업을 제공합니다. 런타임 포함 Windows 설치 파일과 암호화 백업/복원을 제공합니다. GitHub Windows 러너에서 런타임·백업/복원 자동 검수를 통과했습니다. 설치 GUI 검수와 코드 서명은 남아 있습니다.
+한국어로 편하게 대화하는 로컬 AI 도우미. **M9 Windows 배포 후보 버전**입니다. 실제 공급자 어댑터, 명시적 모의 공급자, 승인 기반 복합 작업을 제공합니다. 런타임 포함 Windows 설치 파일과 암호화 백업/복원을 제공합니다. GitHub Windows 러너에서 런타임·백업/복원 자동 검수를 통과했습니다. GitHub Windows 러너의 설치·업데이트·제거·재설치 마법사 자동 검수도 통과했습니다. 표준 사용자 실환경 검수와 코드 서명은 남아 있습니다.
 
 ![AURA 대화 화면](docs/qa/desktop-home.png)
 
 ## 실행
 
-Windows 후보 패키지의 설치·백업·복원은 [배포 안내](docs/DEPLOYMENT_GUIDE.md)를 참고하세요. 최신 설치 후보와 자동 검수 결과는 [Windows 검수 보고서](docs/M9_WINDOWS_VALIDATION_REPORT.md), 남은 설치 GUI 검수는 [M9 결과](docs/M9_RELEASE_REPORT.md)를 참고하세요.
+Windows 후보 패키지의 설치·백업·복원은 [배포 안내](docs/DEPLOYMENT_GUIDE.md)를 참고하세요. 최신 설치 후보와 자동 검수 결과는 [설치 검수 보고서](docs/M9_INSTALLER_VALIDATION_REPORT.md), 남은 설치 GUI 검수는 [M9 결과](docs/M9_RELEASE_REPORT.md)를 참고하세요.
 
 Node.js **24 이상**에서:
 

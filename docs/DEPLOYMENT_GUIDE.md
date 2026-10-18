@@ -34,7 +34,7 @@ Windows용 공식 Node 24.19.0 x64 ZIP과 SHASUMS256.txt를 nodejs.org에서 내
 
 NSIS 3.11에서 `scripts/windows/installer.nsi`를 PACKAGE=dist/release/win-x64 전체 경로, OUTPUT=AURA-Setup.exe 전체 경로로 컴파일합니다. Windows에서는 `/D`, Linux에서는 `-D`로 define을 전달합니다. Windows makensis에는 `/INPUTCHARSET UTF8`을 지정하여 한글 바로가기 이름과 안내 문구를 보존합니다. 해당 디렉터리 내용으로 portable ZIP을 만듭니다. 설치/portable SHA256을 함께 배포하고, 출시 전 Windows 표준 사용자 환경에서 설치→실행→복원→업데이트→제거 및 Edge 실행을 확인해야 합니다.
 
-`.github/workflows/windows-package.yml`은 `codex/windows-validation` 브랜치 push 또는 수동 실행 시 설치 후보와 ZIP을 CI artifact로 만듭니다. Release 게시·자동 설치는 하지 않습니다. 최신 Windows 실행 결과는 저장소 Actions와 M9_WINDOWS_VALIDATION_REPORT.md를 참고하세요. 코드서명 인증서/Windows 검증이 없으므로 공개 출시 완료로 표시하지 않습니다.
+`.github/workflows/windows-package.yml`은 `codex/windows-validation` 브랜치 push 또는 수동 실행 시 설치 후보와 ZIP을 CI artifact로 만듭니다. Release 게시·자동 설치는 하지 않습니다. 최신 설치 후보와 Windows 설치/같은 버전 업데이트/제거/재설치 자동 검수 결과는 저장소 Actions와 M9_INSTALLER_VALIDATION_REPORT.md를 참고하세요. 코드서명 인증서/Windows 검증이 없으므로 공개 출시 완료로 표시하지 않습니다.
 
 
 ## 배포 후보 자동 검수
