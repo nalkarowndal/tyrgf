@@ -168,3 +168,5 @@ M5 독립 최종 검토: Important 2건, Critical/신규 Minor 없음. 스킬 �
 - 검수 도구는 GitHub-hosted Windows 환경에서만 동작하며 기존 AURA 데이터·바로가기·레지스트리가 있으면 변경 전에 거절한다. 기존 설치물이 없는지 확인한 뒤 생성한 테스트 상태만 정리한다. 배포 후보 업로드 전에 설치 수명주기 성공과 고의 데이터 삭제 결함의 실패 검출을 요구한다.
 - 독립 최종 검토 Important1건: 고의 데이터 손실 검사의 기존 판정은 제거 단계의 시간 초과·잔여 바로가기 같은 다른 실패도 인정했다. 기존 판정을 추출한 회귀에서 관계없는 실패3개가 잘못 통과함을 RED로 확인했다. 제거 완료와 데이터 보존 검사를 분리하고, 제거 완료 성공 + 정확한 INSTALLER_DATA_LOSS 코드 + 데이터 보존 실패를 모두 요구하여4/4 GREEN을 확인했다.
 - 독립 검토 Minor2건은 기록하고 보류한다: 바로가기는 앱 내부의 존재하는 대상까지 검사하며 Start/Backup/Restore의 정확한 매핑을 개별 비교하지 않는다. 제거는 app-0.1.0과 등록/바로가기를 검사하며 설치 루트 및 원본 Uninstall.exe의 잔여 여부는 별도로 단언하지 않는다. 이는 현재 생성된 바로가기 내용이나 제거 결함을 재현한 보고가 아니라 검수 범위 보완이다.
+
+- 첫 Windows GUI 실행2315869는 Next/Install/OK/Finish4회로 설치를 마쳤으나 WScript.Shell의 TargetPath가 한글을 ??로 반환하여 바로가기 검사에서 실패했다. 비유니코드 WSH 동작 자료와 Microsoft Unicode Shell API 문서를 확인하고 Shell.Application.GetLink().Path로 바꿨다. 또한 makensis 로그의 입력 ACP를 확인하여 실제/결함 주입 빌드 모두 /INPUTCHARSET UTF8을 명시했다. 실패한 후보는 업로드하지 않았다. 이후 실제 Windows 재실행으로 한글 경로/이름과 전체 설치 흐름을 검증한다.

@@ -50,7 +50,7 @@ jobs:
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           $package = (Resolve-Path dist/release/win-x64).Path
           $output = Join-Path (Resolve-Path dist/release).Path 'AURA-Setup.exe'
-          & "${env:ProgramFiles(x86)}\NSIS\makensis.exe" "/DPACKAGE=$package" "/DOUTPUT=$output" scripts/windows/installer.nsi
+          & "${env:ProgramFiles(x86)}\NSIS\makensis.exe" /INPUTCHARSET UTF8 "/DPACKAGE=$package" "/DOUTPUT=$output" scripts/windows/installer.nsi
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           Compress-Archive -Path dist/release/win-x64/* -DestinationPath dist/release/AURA-Windows-x64.zip
           Get-FileHash dist/release/AURA-Setup.exe,dist/release/AURA-Windows-x64.zip -Algorithm SHA256 | ForEach-Object { $_.Hash.ToLower() + '  ' + (Split-Path $_.Path -Leaf) } | Set-Content dist/release/SHA256.txt -Encoding utf8
@@ -67,7 +67,7 @@ jobs:
           $source.Replace($needle, '  RMDir /r "$LOCALAPPDATA\AURA Agent"' + "`n" + $needle) | Set-Content $fault -Encoding utf8
           $package = (Resolve-Path dist/release/win-x64).Path
           $output = Join-Path $env:RUNNER_TEMP 'AURA-Faulty-Setup.exe'
-          & "${env:ProgramFiles(x86)}\NSIS\makensis.exe" "/DPACKAGE=$package" "/DOUTPUT=$output" $fault
+          & "${env:ProgramFiles(x86)}\NSIS\makensis.exe" /INPUTCHARSET UTF8 "/DPACKAGE=$package" "/DOUTPUT=$output" $fault
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           $result = 'test-results/windows-installer-data-loss.json'
           & pwsh -NoProfile -File scripts/test-windows-installer.ps1 -Installer $output -ReportPath $result

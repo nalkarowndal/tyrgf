@@ -77,10 +77,10 @@ function RunWizard([string]$exe, [string]$arguments, [string]$phase) {
   Assert ($clicks -ge 2) "$phase did not exercise the visible wizard"
 }
 function VerifyLinks {
-  $shell = New-Object -ComObject WScript.Shell
+  $shell = New-Object -ComObject Shell.Application
   foreach ($link in @($desktopLink, (Join-Path $menu 'AURA Agent.lnk'), (Join-Path $menu '암호화 백업.lnk'), (Join-Path $menu '데이터 복원.lnk'))) {
     Assert (Test-Path -LiteralPath $link) "Missing shortcut: $link"
-    $target = $shell.CreateShortcut($link).TargetPath
+    $target = $shell.NameSpace((Split-Path $link -Parent)).ParseName((Split-Path $link -Leaf)).GetLink().Path
     Assert ($target.StartsWith($app + '\', [StringComparison]::OrdinalIgnoreCase)) "Unexpected shortcut target: $target"
     Assert (Test-Path -LiteralPath $target) "Shortcut target missing: $target"
   }

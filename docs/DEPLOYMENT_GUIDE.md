@@ -32,7 +32,7 @@ Windows 파일 도구는 미지원이며 안전 경로 검증을 우회하지 �
 
 Windows용 공식 Node 24.19.0 x64 ZIP과 SHASUMS256.txt를 nodejs.org에서 내려받아 ZIP SHA256 `57f71ab3652e797d84acddc79c81cc9ff1c6ddb2a1974cdb83f00fee9bff4c73`을 확인하고 압축을 풉니다. `AURA_WINDOWS_NODE`를 그 node.exe로 지정한 뒤 `npm run package:windows`를 실행합니다. 패키저가 exe 자체 SHA256도 고정값으로 검사합니다. `node scripts/verify-package.mjs dist/release/win-x64`로 모든 파일 해시를 검사합니다. 매번 새 임시 폴더에 패키지를 생성하며 이전 출력에 사용자 `.data`가 있으면 교체를 거절합니다. Node LICENSE, 번들 라이브러리 고지, 파일별 manifest.json이 포함됩니다.
 
-NSIS 3.11에서 `scripts/windows/installer.nsi`를 PACKAGE=dist/release/win-x64 전체 경로, OUTPUT=AURA-Setup.exe 전체 경로로 컴파일합니다. Windows에서는 `/D`, Linux에서는 `-D`로 define을 전달합니다. 해당 디렉터리 내용으로 portable ZIP을 만듭니다. 설치/portable SHA256을 함께 배포하고, 출시 전 Windows 표준 사용자 환경에서 설치→실행→복원→업데이트→제거 및 Edge 실행을 확인해야 합니다.
+NSIS 3.11에서 `scripts/windows/installer.nsi`를 PACKAGE=dist/release/win-x64 전체 경로, OUTPUT=AURA-Setup.exe 전체 경로로 컴파일합니다. Windows에서는 `/D`, Linux에서는 `-D`로 define을 전달합니다. Windows makensis에는 `/INPUTCHARSET UTF8`을 지정하여 한글 바로가기 이름과 안내 문구를 보존합니다. 해당 디렉터리 내용으로 portable ZIP을 만듭니다. 설치/portable SHA256을 함께 배포하고, 출시 전 Windows 표준 사용자 환경에서 설치→실행→복원→업데이트→제거 및 Edge 실행을 확인해야 합니다.
 
 `.github/workflows/windows-package.yml`은 `codex/windows-validation` 브랜치 push 또는 수동 실행 시 설치 후보와 ZIP을 CI artifact로 만듭니다. Release 게시·자동 설치는 하지 않습니다. 최신 Windows 실행 결과는 저장소 Actions와 M9_WINDOWS_VALIDATION_REPORT.md를 참고하세요. 코드서명 인증서/Windows 검증이 없으므로 공개 출시 완료로 표시하지 않습니다.
 
