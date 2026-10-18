@@ -54,6 +54,36 @@ jobs:
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           Compress-Archive -Path dist/release/win-x64/* -DestinationPath dist/release/AURA-Windows-x64.zip
           Get-FileHash dist/release/AURA-Setup.exe,dist/release/AURA-Windows-x64.zip -Algorithm SHA256 | ForEach-Object { $_.Hash.ToLower() + '  ' + (Split-Path $_.Path -Leaf) } | Set-Content dist/release/SHA256.txt -Encoding utf8
+      - name: Verify visible installer, update, uninstall and reinstall
+        shell: pwsh
+        run: ./scripts/test-windows-installer.ps1 -Installer dist/release/AURA-Setup.exe
+      - name: Prove installer validation rejects data loss
+        shell: pwsh
+        run: |
+          $source = Get-Content scripts/windows/installer.nsi -Raw -Encoding utf8
+          $needle = '  DeleteRegKey HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\AURA Agent"'
+          if (-not $source.Contains($needle)) { throw 'Uninstall fault injection point missing' }
+          $fault = Join-Path $env:RUNNER_TEMP 'aura-fault-installer.nsi'
+          $source.Replace($needle, '  RMDir /r "$LOCALAPPDATA\AURA Agent"' + "`n" + $needle) | Set-Content $fault -Encoding utf8
+          $package = (Resolve-Path dist/release/win-x64).Path
+          $output = Join-Path $env:RUNNER_TEMP 'AURA-Faulty-Setup.exe'
+          & "${env:ProgramFiles(x86)}\NSIS\makensis.exe" "/DPACKAGE=$package" "/DOUTPUT=$output" $fault
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          $result = 'test-results/windows-installer-data-loss.json'
+          & pwsh -NoProfile -File scripts/test-windows-installer.ps1 -Installer $output -ReportPath $result
+          if ($LASTEXITCODE -eq 0) { throw 'Data-loss installer incorrectly passed' }
+          $report = Get-Content $result -Raw | ConvertFrom-Json
+          if ($report.status -ne 'failed' -or -not ($report.checks | Where-Object { $_.name -eq 'uninstall-preserves-database-and-backup' -and $_.status -eq 'failed' })) { throw 'Fault failed for the wrong reason' }
+          Write-Output 'PASS: installer data-loss fault detected'
+          exit 0
+      - name: Upload installer lifecycle evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: AURA-Windows-installer-evidence
+          path: test-results/windows-installer*.json
+          if-no-files-found: warn
+          retention-days: 14
       - uses: actions/upload-artifact@v4
         with:
           name: AURA-Windows-unsigned-candidate
