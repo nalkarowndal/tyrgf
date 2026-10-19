@@ -20,6 +20,9 @@ jobs:
       - run: npm run lint
       - run: npm test -- tests/backup.test.ts tests/api.test.ts tests/installer-evidence.test.ts
       - run: npm audit --audit-level=high
+      - name: Prove shortcut and removal assertions reject defects
+        shell: pwsh
+        run: ./scripts/test-installer-layout.ps1
       - name: Bundle pinned Windows runtime
         shell: pwsh
         run: |

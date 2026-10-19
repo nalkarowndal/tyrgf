@@ -3,6 +3,7 @@ param(
   [string]$ReportPath = 'test-results/windows-installer.json'
 )
 $ErrorActionPreference = 'Stop'
+. (Join-Path $PSScriptRoot 'installer-layout.ps1')
 # This test changes per-user shell links and HKCU. Never run on a user's machine.
 if (-not $IsWindows -or $env:GITHUB_ACTIONS -ne 'true' -or $env:RUNNER_ENVIRONMENT -ne 'github-hosted') {
   throw 'Installer validation requires a disposable GitHub-hosted Windows runner'
@@ -77,12 +78,14 @@ function RunWizard([string]$exe, [string]$arguments, [string]$phase) {
   Assert ($clicks -ge 2) "$phase did not exercise the visible wizard"
 }
 function VerifyLinks {
-  $shell = New-Object -ComObject Shell.Application
-  foreach ($link in @($desktopLink, (Join-Path $menu 'AURA Agent.lnk'), (Join-Path $menu '암호화 백업.lnk'), (Join-Path $menu '데이터 복원.lnk'))) {
-    Assert (Test-Path -LiteralPath $link) "Missing shortcut: $link"
-    $target = $shell.NameSpace((Split-Path $link -Parent)).ParseName((Split-Path $link -Leaf)).GetLink().Path
-    Assert ($target.StartsWith($app + '\', [StringComparison]::OrdinalIgnoreCase)) "Unexpected shortcut target: $target"
-    Assert (Test-Path -LiteralPath $target) "Shortcut target missing: $target"
+  $links = @(
+    @{ path=$desktopLink; target='Start.cmd' },
+    @{ path=(Join-Path $menu 'AURA Agent.lnk'); target='Start.cmd' },
+    @{ path=(Join-Path $menu '암호화 백업.lnk'); target='Backup.cmd' },
+    @{ path=(Join-Path $menu '데이터 복원.lnk'); target='Restore.cmd' }
+  )
+  foreach ($link in $links) {
+    Assert-InstallerShortcut $link.path (Join-Path $app ('windows\' + $link.target)) $app | Out-Null
   }
   Assert (-not (Test-Path -LiteralPath $startupLink)) 'Startup must be disabled by default'
   Assert ((Get-ItemProperty $reg).DisplayVersion -eq '0.1.0') 'Missing uninstall registration'
@@ -113,7 +116,7 @@ function RemoveInstalledApp([string]$phase) {
   $copy = Join-Path $work ($phase + '-uninstall.exe')
   Copy-Item -LiteralPath (Join-Path $installRoot 'Uninstall.exe') -Destination $copy
   RunWizard $copy ('_?=' + $installRoot) $phase
-  Assert (-not (Test-Path -LiteralPath $app)) 'App files remain after uninstall'
+  Assert-InstallerRemoved $installRoot
   foreach ($path in @($desktopLink, $menu, $startupLink, $reg)) {
     Assert (-not (Test-Path -LiteralPath $path)) "Uninstall left registration or shortcut: $path"
   }
