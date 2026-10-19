@@ -1,0 +1,52 @@
+{
+  "format": 1,
+  "source": "c4e054712a32dcfec973e4e9034d8c6301e80374",
+  "platform": "win32",
+  "status": "failed",
+  "checks": [
+    {
+      "name": "correct-unicode-target",
+      "status": "passed"
+    },
+    {
+      "name": "case-insensitive-target",
+      "status": "passed"
+    },
+    {
+      "status": "failed",
+      "name": "wrong-existing-target-inside-app",
+      "error": "Validator accepted injected fault: SHORTCUT_TARGET_MISMATCH"
+    },
+    {
+      "status": "failed",
+      "name": "unexpected-shortcut-arguments",
+      "error": "Validator accepted injected fault: SHORTCUT_ARGUMENTS_MISMATCH"
+    },
+    {
+      "name": "outside-app-target",
+      "status": "passed"
+    },
+    {
+      "name": "missing-shortcut",
+      "status": "passed"
+    },
+    {
+      "name": "complete-removal",
+      "status": "passed"
+    },
+    {
+      "status": "failed",
+      "name": "empty-install-root-remains",
+      "error": "Validator accepted injected fault: INSTALL_ROOT_REMAINS"
+    },
+    {
+      "status": "failed",
+      "name": "uninstaller-remains",
+      "error": "Validator accepted injected fault: UNINSTALLER_REMAINS"
+    },
+    {
+      "name": "app-files-remain",
+      "status": "passed"
+    }
+  ]
+}
