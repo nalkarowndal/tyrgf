@@ -1,8 +1,8 @@
 # Windows 설치 수명주기 검수 — 2026-10-19 KST
 
-기존 M9 런타임 검수에 실제 NSIS 설치 마법사 검수를 추가했다. GitHub-hosted Windows 러너의 임시 한글/공백 경로에서 실행하며 기존 AURA 데이터·바로가기·레지스트리가 있으면 중단한다. **최신 소스b7328ca에서 바로가기·제거 잔여 회귀10개, 실제 설치 수명주기8항목 및 데이터 손실 결함 검출이 통과했다.**
+기존 M9 런타임 검수에 실제 NSIS 설치 마법사 검수를 추가했다. GitHub-hosted Windows 러너의 임시 한글/공백 경로에서 실행하며 기존 AURA 데이터·바로가기·레지스트리가 있으면 중단한다. **후속 최신 소스deb4d4b에서도 바로가기·제거 잔여 회귀10개, 실제 설치 수명주기8항목 및 데이터 손실 결함 검출이 첫 시도에 통과했다.** 최신 다운로드와 잠금 오류 조사 결과는 [잠금 진단 보고서](M9_LOCK_DIAGNOSTIC_REPORT.md)를 참고한다. 아래 b7328ca/163eda3는 이전 단계의 증거다.
 
-## 최신 결과와 다운로드 — b7328ca
+## 이전 결과와 다운로드 — b7328ca
 
 검증 소스: `b7328ca46097d8b053d41a322611fec00664d7be`. [Windows 후보 CI](https://github.com/nalkarowndal/tyrgf/actions/runs/39218008464)는 두 번째 시도에서 성공했다. [품질 CI](https://github.com/nalkarowndal/tyrgf/actions/runs/39218008330)는 첫 시도에 성공했다: Linux122개, Windows82개(40개 Linux 전용 제외), E2E16개, Edge4개, 타입·lint·빌드·번들 및 전체 audit0.
 
@@ -10,7 +10,7 @@
 - 실제 마법사 버튼18회·설치 수명주기8항목 통과: [설치 JSON](qa/windows-installer-b7328ca.json). 정확한 바로가기 대상과 제거 후 설치 루트 부재를 포함한다.
 - 고의 데이터 삭제는 제거 완료 이후 정확한 `INSTALLER_DATA_LOSS`로 거절: [결함 주입 JSON](qa/windows-installer-data-loss-b7328ca.json).
 - 런타임7항목, PowerShell5.1 선검사, 복원/잠금 결함 검출 및 API/백업/판정27개 통과: [런타임 JSON](qa/windows-runtime-b7328ca.json).
-- [최신 Windows 설치 후보 다운로드](https://github.com/nalkarowndal/tyrgf/actions/runs/39218008464/artifacts/12170653065): `AURA-Setup.exe`, `AURA-Windows-x64.zip`, `SHA256.txt`. GitHub 로그인 필요. 서명되지 않은 검수 후보이며 Release 게시 전이다.
+- [이전 Windows 설치 후보 다운로드](https://github.com/nalkarowndal/tyrgf/actions/runs/39218008464/artifacts/12170653065): `AURA-Setup.exe`, `AURA-Windows-x64.zip`, `SHA256.txt`. GitHub 로그인 필요. 서명되지 않은 검수 후보이며 Release 게시 전이다.
 - [설치 검수 증거](https://github.com/nalkarowndal/tyrgf/actions/runs/39218008464/artifacts/12170687917), [런타임 증거](https://github.com/nalkarowndal/tyrgf/actions/runs/39218008464/artifacts/12170652427), [artifact 메타데이터](qa/windows-artifacts-b7328ca.json).
 - 후보 보관 만료: **2026-11-02 16:53 KST**. 실제 설치 EXE SHA256: `5823197af522c7842e5dbe2bdbc3e93d52ca23ec96cae7957767bca86f575f96`.
 - GitHub 후보 artifact ZIP SHA256: `3e72bd42ea6fa4caae9efe7776ee8dca123213f709590e8798e468392e7917f9`. portable ZIP의 지문은 포함된 `SHA256.txt`를 확인한다.

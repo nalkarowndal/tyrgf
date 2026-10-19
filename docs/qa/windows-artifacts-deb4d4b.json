@@ -1,0 +1,84 @@
+{
+  "repository": "nalkarowndal/tyrgf",
+  "source": "deb4d4bfc2a6a4d4b358658e1758a06da7a280f0",
+  "runId": 39258655867,
+  "attempt": 1,
+  "artifacts": [
+    {
+      "id": 12190255331,
+      "name": "AURA-Windows-unsigned-candidate",
+      "size_in_bytes": 68426498,
+      "url": "https://api.github.com/repos/nalkarowndal/tyrgf/actions/artifacts/12190255331",
+      "archive_download_url": "https://api.github.com/repos/nalkarowndal/tyrgf/actions/artifacts/12190255331/zip",
+      "expired": false,
+      "created_at": "2026-10-19T13:21:31Z",
+      "expires_at": "2026-11-02T13:21:27Z",
+      "updated_at": "2026-10-19T13:21:31Z",
+      "digest": "sha256:698852fdb3c1df633a693c483747784e9bd5354dacbbb12bf5f998816e585467",
+      "workflow_run": {
+        "id": 39258655867,
+        "repository_id": 1419996783,
+        "head_repository_id": 1419996783,
+        "head_branch": "codex/windows-validation",
+        "head_sha": "deb4d4bfc2a6a4d4b358658e1758a06da7a280f0"
+      }
+    },
+    {
+      "id": 12190095415,
+      "name": "AURA-Windows-installer-evidence",
+      "size_in_bytes": 1975,
+      "url": "https://api.github.com/repos/nalkarowndal/tyrgf/actions/artifacts/12190095415",
+      "archive_download_url": "https://api.github.com/repos/nalkarowndal/tyrgf/actions/artifacts/12190095415/zip",
+      "expired": false,
+      "created_at": "2026-10-19T13:21:27Z",
+      "expires_at": "2026-11-02T13:21:26Z",
+      "updated_at": "2026-10-19T13:21:27Z",
+      "digest": "sha256:074b825588d5979c95239b08f568b7868ce32aa98c90d297a91f276cd4825e2c",
+      "workflow_run": {
+        "id": 39258655867,
+        "repository_id": 1419996783,
+        "head_repository_id": 1419996783,
+        "head_branch": "codex/windows-validation",
+        "head_sha": "deb4d4bfc2a6a4d4b358658e1758a06da7a280f0"
+      }
+    },
+    {
+      "id": 12189785249,
+      "name": "AURA-Windows-runtime-evidence",
+      "size_in_bytes": 495,
+      "url": "https://api.github.com/repos/nalkarowndal/tyrgf/actions/artifacts/12189785249",
+      "archive_download_url": "https://api.github.com/repos/nalkarowndal/tyrgf/actions/artifacts/12189785249/zip",
+      "expired": false,
+      "created_at": "2026-10-19T13:18:22Z",
+      "expires_at": "2026-11-02T13:18:21Z",
+      "updated_at": "2026-10-19T13:18:22Z",
+      "digest": "sha256:00010aa3fc7877a3fd736565acfa1adc3dd07f241a50c1d1ad7ddc8fd61b9982",
+      "workflow_run": {
+        "id": 39258655867,
+        "repository_id": 1419996783,
+        "head_repository_id": 1419996783,
+        "head_branch": "codex/windows-validation",
+        "head_sha": "deb4d4bfc2a6a4d4b358658e1758a06da7a280f0"
+      }
+    },
+    {
+      "id": 12188208215,
+      "name": "AURA-Windows-lock-diagnostics",
+      "size_in_bytes": 418,
+      "url": "https://api.github.com/repos/nalkarowndal/tyrgf/actions/artifacts/12188208215",
+      "archive_download_url": "https://api.github.com/repos/nalkarowndal/tyrgf/actions/artifacts/12188208215/zip",
+      "expired": false,
+      "created_at": "2026-10-19T13:17:08Z",
+      "expires_at": "2026-11-02T13:17:07Z",
+      "updated_at": "2026-10-19T13:17:08Z",
+      "digest": "sha256:acd5a83785e1e54001ac2c0d94ac75ee4dee5618be1515a7178d65d0ae70a1a9",
+      "workflow_run": {
+        "id": 39258655867,
+        "repository_id": 1419996783,
+        "head_repository_id": 1419996783,
+        "head_branch": "codex/windows-validation",
+        "head_sha": "deb4d4bfc2a6a4d4b358658e1758a06da7a280f0"
+      }
+    }
+  ]
+}
