@@ -11,10 +11,11 @@ export async function acquireDataLock(dir: string): Promise<() => Promise<void>>
   const port = 20000 + (createHash('sha256').update(path).digest().readUInt32BE() % 30000);
   const server = createServer((socket) => socket.destroy());
   await new Promise<void>((resolve, reject) => {
-    server.once('error', () =>
+    server.once('error', (cause) =>
       reject(
         new Error(
           'AURA 또는 백업 도구가 실행 중이거나 잠금 포트를 사용할 수 없습니다. 실행 중인 창을 닫고 다시 시도하세요.',
+          { cause },
         ),
       ),
     );

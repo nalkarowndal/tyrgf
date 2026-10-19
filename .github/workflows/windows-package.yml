@@ -18,6 +18,16 @@ jobs:
       - run: npm ci --ignore-scripts
       - run: npm run typecheck
       - run: npm run lint
+      - name: Diagnose Windows lock port availability
+        timeout-minutes: 2
+        run: node scripts/probe-data-lock.mjs
+      - name: Upload lock diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: AURA-Windows-lock-diagnostics
+          path: test-results/data-lock-probe.json
+          retention-days: 14
       - run: npm test -- tests/backup.test.ts tests/api.test.ts tests/installer-evidence.test.ts
       - run: npm audit --audit-level=high
       - name: Prove shortcut and removal assertions reject defects
