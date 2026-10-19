@@ -52,4 +52,6 @@ Files: scripts/windows/Verify.cmd, scripts/package.mjs, .github/workflows/window
 - [x] 정확한 데이터 손실 결함 검출, 최신 후보와 증거 링크 기록.
 - [ ] 표준 사용자 실환경·로그인 자동 시작·코드 서명·타 버전 DB 마이그레이션 검수.
 
-자동 검수 범위와 보류 Minor2건은 M9_INSTALLER_VALIDATION_REPORT.md를 따른다.
+- [x] 후속 Minor2건: 바로가기별 정확 대상/빈 인수 및 설치 루트/원본 제거기 부재 검사. 실제 Windows에서 결함4개 RED 후 전체10개 GREEN.
+
+자동 검수 범위와 최신 증거는 M9_INSTALLER_VALIDATION_REPORT.md를 따른다.

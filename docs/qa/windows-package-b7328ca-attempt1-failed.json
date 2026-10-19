@@ -1,0 +1,20 @@
+{
+  "source": "b7328ca46097d8b053d41a322611fec00664d7be",
+  "runId": 39218008464,
+  "attempt": 1,
+  "jobId": 117946344239,
+  "status": "failed",
+  "step": "Run npm test -- tests/backup.test.ts tests/api.test.ts tests/installer-evidence.test.ts",
+  "note": "Installation and layout checks were skipped. The underlying OS socket error is not retained by the current runtime-lock error handler; no root cause is established.",
+  "logExcerpts": [
+    "2026-10-19T07:46:18.5716966Z ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯",
+    "2026-10-19T07:46:18.5722218Z  FAIL  tests/backup.test.ts > keeps an encrypted safety copy before replacement and never overwrites a backup",
+    "2026-10-19T07:46:18.5730465Z Error: AURA 또는 백업 도구가 실행 중이거나 잠금 포트를 사용할 수 없습니다. 실행 중인 창을 닫고 다시 시도하세요.",
+    "2026-10-19T07:46:18.5732709Z  ❯ Server.<anonymous> apps/server/src/runtime-lock.ts:16:9",
+    "2026-10-19T07:46:18.5772758Z      16|         new Error(",
+    "2026-10-19T07:46:18.5779667Z  Test Files  1 failed | 2 passed (3)",
+    "2026-10-19T07:46:18.5780866Z       Tests  1 failed | 26 passed (27)",
+    "2026-10-19T07:46:18.5824345Z ##[error]Error: AURA 또는 백업 도구가 실행 중이거나 잠금 포트를 사용할 수 없습니다. 실행 중인 창을 닫고 다시 시도하세요.",
+    " ❯ Server.<anonymous> apps/server/src/runtime-lock.ts:16:9"
+  ]
+}

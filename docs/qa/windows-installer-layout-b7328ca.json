@@ -1,0 +1,48 @@
+{
+  "format": 1,
+  "source": "b7328ca46097d8b053d41a322611fec00664d7be",
+  "platform": "win32",
+  "status": "passed",
+  "checks": [
+    {
+      "status": "passed",
+      "name": "correct-unicode-target"
+    },
+    {
+      "status": "passed",
+      "name": "case-insensitive-target"
+    },
+    {
+      "status": "passed",
+      "name": "wrong-existing-target-inside-app"
+    },
+    {
+      "status": "passed",
+      "name": "unexpected-shortcut-arguments"
+    },
+    {
+      "status": "passed",
+      "name": "outside-app-target"
+    },
+    {
+      "status": "passed",
+      "name": "missing-shortcut"
+    },
+    {
+      "status": "passed",
+      "name": "complete-removal"
+    },
+    {
+      "status": "passed",
+      "name": "empty-install-root-remains"
+    },
+    {
+      "status": "passed",
+      "name": "uninstaller-remains"
+    },
+    {
+      "status": "passed",
+      "name": "app-files-remain"
+    }
+  ]
+}

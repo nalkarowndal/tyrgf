@@ -1,0 +1,65 @@
+{
+  "repository": "nalkarowndal/tyrgf",
+  "source": "b7328ca46097d8b053d41a322611fec00664d7be",
+  "runId": 39218008464,
+  "attempt": 2,
+  "artifacts": [
+    {
+      "id": 12170687917,
+      "name": "AURA-Windows-installer-evidence",
+      "size_in_bytes": 1963,
+      "url": "https://api.github.com/repos/nalkarowndal/tyrgf/actions/artifacts/12170687917",
+      "archive_download_url": "https://api.github.com/repos/nalkarowndal/tyrgf/actions/artifacts/12170687917/zip",
+      "expired": false,
+      "created_at": "2026-10-19T07:53:45Z",
+      "expires_at": "2026-11-02T07:53:44Z",
+      "updated_at": "2026-10-19T07:53:45Z",
+      "digest": "sha256:b376acf816d596a33b70df02b6a765d49da1aa5c53a47d77075a70fe6db9901a",
+      "workflow_run": {
+        "id": 39218008464,
+        "repository_id": 1419996783,
+        "head_repository_id": 1419996783,
+        "head_branch": "codex/windows-validation",
+        "head_sha": "b7328ca46097d8b053d41a322611fec00664d7be"
+      }
+    },
+    {
+      "id": 12170653065,
+      "name": "AURA-Windows-unsigned-candidate",
+      "size_in_bytes": 68448606,
+      "url": "https://api.github.com/repos/nalkarowndal/tyrgf/actions/artifacts/12170653065",
+      "archive_download_url": "https://api.github.com/repos/nalkarowndal/tyrgf/actions/artifacts/12170653065/zip",
+      "expired": false,
+      "created_at": "2026-10-19T07:53:48Z",
+      "expires_at": "2026-11-02T07:53:45Z",
+      "updated_at": "2026-10-19T07:53:48Z",
+      "digest": "sha256:3e72bd42ea6fa4caae9efe7776ee8dca123213f709590e8798e468392e7917f9",
+      "workflow_run": {
+        "id": 39218008464,
+        "repository_id": 1419996783,
+        "head_repository_id": 1419996783,
+        "head_branch": "codex/windows-validation",
+        "head_sha": "b7328ca46097d8b053d41a322611fec00664d7be"
+      }
+    },
+    {
+      "id": 12170652427,
+      "name": "AURA-Windows-runtime-evidence",
+      "size_in_bytes": 498,
+      "url": "https://api.github.com/repos/nalkarowndal/tyrgf/actions/artifacts/12170652427",
+      "archive_download_url": "https://api.github.com/repos/nalkarowndal/tyrgf/actions/artifacts/12170652427/zip",
+      "expired": false,
+      "created_at": "2026-10-19T07:50:43Z",
+      "expires_at": "2026-11-02T07:50:43Z",
+      "updated_at": "2026-10-19T07:50:43Z",
+      "digest": "sha256:b9cc1e1d5bf31d21d7839cbf8a25441a79400ebffc5a654403fecaf3e2490f04",
+      "workflow_run": {
+        "id": 39218008464,
+        "repository_id": 1419996783,
+        "head_repository_id": 1419996783,
+        "head_branch": "codex/windows-validation",
+        "head_sha": "b7328ca46097d8b053d41a322611fec00664d7be"
+      }
+    }
+  ]
+}

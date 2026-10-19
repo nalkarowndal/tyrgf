@@ -1,5 +1,8 @@
 # 테스트 및 시각 QA
 
+## 바로가기·제거 잔여 검사 후속 품질 결과 (2026-10-19, 소스 b7328ca)
+[GitHub 품질 CI](https://github.com/nalkarowndal/tyrgf/actions/runs/39218008330) 성공. Linux20파일122개, Windows15파일82개 통과(5파일40개 Linux 전용 제외), E2E16개·Edge4개·번들 검수 및 전체 audit0. 기존 바로가기·제거 판정은 실제 Windows 회귀10개 중4개에서 결함을 놓쳤다([RED JSON](qa/windows-installer-layout-c4e0547-failed.json)). 이를 강화한 설치 검수 결과와 패키지 job의 잠금 포트 실패/재실행은 [설치 검수 보고서](M9_INSTALLER_VALIDATION_REPORT.md)를 따른다.
+
 ## 설치 검수 후속 품질 결과 (2026-10-18, 소스 163eda3)
 [GitHub 품질 CI](https://github.com/nalkarowndal/tyrgf/actions/runs/39122345842) 성공. Linux20파일122개, Windows15파일82개 통과(5파일40개 Linux 전용 제외), E2E16개·Edge4개·번들 검수 및 전체 audit0. 설치 결함 판정 회귀는 관계없는 실패3개를 RED로 확인한 뒤4개 GREEN을 확인했다. 실제 설치 흐름 및 첫 Windows 백업 잠금 실패/재실행 근거는 [설치 검수 보고서](M9_INSTALLER_VALIDATION_REPORT.md)에 기록한다.
 
