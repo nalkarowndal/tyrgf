@@ -85,10 +85,19 @@ function RunWizard([string]$exe, [string]$arguments, [string]$phase, [int]$expec
       if (-not [InstallerWindow]::IsWindowEnabled($window)) { continue }
       # IDOK is Next/Install/Finish on MUI pages and OK on the explicit warning.
       $button = [InstallerWindow]::GetDlgItem($window, 1)
+      # Windows exposes the sole MB_OK button as control 2 on this runner.
+      # Do not mistake the wizard's Cancel button for that error acknowledgement.
+      if ($expectedExit -eq 2 -and $button -eq [IntPtr]::Zero) {
+        $candidate = [InstallerWindow]::GetDlgItem($window, 2)
+        $hasFailureText = @([InstallerWindow]::Children($window) | Where-Object {
+          [InstallerWindow]::Text($_).StartsWith('일부 파일을 삭제하지 못해 제거를 완료하지 못했습니다.')
+        }).Count -gt 0
+        if ($hasFailureText -and ([InstallerWindow]::Text($candidate) -in @('OK', '확인'))) { $button = $candidate }
+      }
       if ($button -ne [IntPtr]::Zero -and [InstallerWindow]::IsWindowVisible($button) -and [InstallerWindow]::IsWindowEnabled($button)) {
         $clicks++
         Assert ($clicks -le 12) "Unexpected repeated installer dialogs in $phase"
-        $script:report.clicks += @{ phase=$phase; window=[InstallerWindow]::Text($window); button=[InstallerWindow]::Text($button) }
+        $script:report.clicks += @{ phase=$phase; window=[InstallerWindow]::Text($window); button=[InstallerWindow]::Text($button); controlId=[InstallerWindow]::GetDlgCtrlID($button) }
         Assert ([InstallerWindow]::PostMessage($button, 0x00F5, [IntPtr]::Zero, [IntPtr]::Zero)) 'Could not click installer button'
         break
       }
