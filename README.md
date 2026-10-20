@@ -6,7 +6,7 @@
 
 ## 실행
 
-Windows 후보 패키지의 설치·백업·복원은 [배포 안내](docs/DEPLOYMENT_GUIDE.md)를 참고하세요. 최신 설치 후보와 자동 검수 결과는 [설치 검수 보고서](docs/M9_INSTALLER_VALIDATION_REPORT.md), 남은 설치 GUI 검수는 [M9 결과](docs/M9_RELEASE_REPORT.md)를 참고하세요.
+Windows 후보 패키지의 설치·백업·복원은 [배포 안내](docs/DEPLOYMENT_GUIDE.md)를 참고하세요. 최신 설치 후보와 자동 검수 결과는 [제거 실패 복구 검수 보고서](docs/M9_UNINSTALL_RECOVERY_REPORT.md), 남은 설치 GUI 검수는 [M9 결과](docs/M9_RELEASE_REPORT.md)를 참고하세요.
 
 Node.js **24 이상**에서:
 

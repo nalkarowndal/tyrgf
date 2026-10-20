@@ -1,0 +1,33 @@
+{
+  "format": 1,
+  "source": "7522c3f788de7ee91a6635fee0016a399b31ea2c",
+  "platform": "win32",
+  "runtime": "24.19.0",
+  "samples": 512,
+  "acquired": 509,
+  "unavailable": [
+    {
+      "sample": 35,
+      "code": "EACCES",
+      "syscall": "listen",
+      "address": "127.0.0.1",
+      "port": 49745
+    },
+    {
+      "sample": 224,
+      "code": "EACCES",
+      "syscall": "listen",
+      "address": "127.0.0.1",
+      "port": 49779
+    },
+    {
+      "sample": 378,
+      "code": "EACCES",
+      "syscall": "listen",
+      "address": "127.0.0.1",
+      "port": 49874
+    }
+  ],
+  "reacquireFailures": [],
+  "excludedPorts": "\r\nProtocol tcp Port Exclusion Ranges\r\n\r\nStart Port    End Port      \r\n----------    --------      \r\n        80          80      \r\n      5985        5985      \r\n      5986        5986      \r\n     47001       47001      \r\n     49696       49795      \r\n     49796       49895      \r\n\r\n* - Administered port exclusions.\r\n\r\n"
+}

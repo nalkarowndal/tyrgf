@@ -1,5 +1,7 @@
 # Windows 데이터 잠금 진단 — 2026-10-19 KST
 
+이 문서는deb4d4b 단계의 기록이다. 후속7522c3f의 CLI 진단 출력, 최신 후보 및 OS 제외 범위 안의 EACCES3건 관측은 [제거 실패 복구 보고서](M9_UNINSTALL_RECOVERY_REPORT.md)를 참고한다.
+
 이전 Windows 백업 검사에서 발생한 잠금 포트 실패를 조사했다. **원래 OS 오류를 보존하도록 수정하고 실제 중복 잠금 회귀를 추가했다. 이번 Windows/Linux 표본에서는 과거 간헐 실패가 재현되지 않았으며, 근본 원인이 해결됐다고 주장하지 않는다.**
 
 ## 변경과 보호 범위
@@ -20,7 +22,7 @@
 - 로컬 전체 첫 시도122/123: 기존 `mcp-shutdown.test.ts`의6초 앱 시작 대기 중 ECONNREFUSED. 단독 검사와 전체 재실행123/123은 통과했다. 이 테스트나 제한 시간은 변경하지 않았다.
 - [품질 CI](https://github.com/nalkarowndal/tyrgf/actions/runs/39258655890) 첫 시도 성공: Linux21파일123개, Windows16파일83개(5파일40개 Linux 전용 제외), E2E16개·Edge4개·번들 검수·전체 audit0.
 
-## 최신 설치 후보
+## 이전 설치 후보 — deb4d4b
 
 [Windows 후보 CI39258655867](https://github.com/nalkarowndal/tyrgf/actions/runs/39258655867)는 첫 시도에 성공했다. API/백업/판정27개, 바로가기·제거 잔여10개, 런타임7항목, PowerShell5.1 선검사 및 실제 설치 수명주기8항목/버튼18회가 통과했다. 고의 데이터 삭제는 제거 자체가 성공한 뒤 정확한 `INSTALLER_DATA_LOSS`로 거절됐다.
 

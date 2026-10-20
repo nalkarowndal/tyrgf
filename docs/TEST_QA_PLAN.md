@@ -1,5 +1,8 @@
 # 테스트 및 시각 QA
 
+## 제거 실패·CLI 진단 후속 품질 결과 (2026-10-20, 소스7522c3f)
+[품질 CI](https://github.com/nalkarowndal/tyrgf/actions/runs/39347271398) 첫 시도 성공: Linux22파일125개, Windows17파일85개(5파일40개 Linux 전용 제외), E2E16개·Edge4개·번들·전체 audit0. 로컬 npm run check도125개·타입·lint·빌드 통과. CLI 진단 누락 및 Windows 잠긴 파일 제거의 잘못된 성공 코드를 각각 RED로 재현했다. 실제 실패·재시도와 최신 설치 후보의 근거는 [제거 실패 복구 보고서](M9_UNINSTALL_RECOVERY_REPORT.md)를 따른다.
+
 ## 잠금 진단 후속 품질 결과 (2026-10-19, 소스 deb4d4b)
 [품질 CI](https://github.com/nalkarowndal/tyrgf/actions/runs/39258655890) 첫 시도 성공. Linux21파일123개, Windows16파일83개 통과(5파일40개 Linux 전용 제외), E2E16개·Edge4개·번들 검수 및 전체 audit0. 실제 잠금 오류 cause 누락을 RED→GREEN으로 수정했다. Windows/Linux 각각512개 잠금과1536회 재확보에서 실패는 없었고 이전 간헐 오류는 미재현이다. 로컬 첫 전체 검사에서 MCP 종료 테스트의 시작 대기 실패1건 후 단독/전체 재실행이 통과한 기록과 최신 증거는 [잠금 진단 보고서](M9_LOCK_DIAGNOSTIC_REPORT.md)를 따른다.
 

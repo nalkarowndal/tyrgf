@@ -1,0 +1,197 @@
+{
+  "format": 1,
+  "platform": "win32",
+  "source": "7522c3f788de7ee91a6635fee0016a399b31ea2c",
+  "status": "passed",
+  "checks": [
+    {
+      "name": "isolated-runner-preflight",
+      "status": "passed"
+    },
+    {
+      "name": "wizard-install-and-default-shortcuts",
+      "status": "passed"
+    },
+    {
+      "name": "installed-chat-and-encrypted-backup",
+      "status": "passed"
+    },
+    {
+      "name": "same-version-update-preserves-data",
+      "status": "passed"
+    },
+    {
+      "name": "locked-file-uninstall-preserves-retry-and-data",
+      "status": "passed"
+    },
+    {
+      "name": "uninstall-removes-app-and-registration",
+      "status": "passed"
+    },
+    {
+      "name": "uninstall-preserves-database-and-backup",
+      "status": "passed"
+    },
+    {
+      "name": "reinstall-restores-existing-conversation",
+      "status": "passed"
+    },
+    {
+      "name": "locked-uninstaller-preserves-registration-for-retry",
+      "status": "passed"
+    },
+    {
+      "name": "final-uninstall-preserves-data",
+      "status": "passed"
+    }
+  ],
+  "clicks": [
+    {
+      "window": "AURA Agent 설치",
+      "phase": "install",
+      "controlId": 1,
+      "button": "다음 >"
+    },
+    {
+      "window": "AURA Agent 설치 ",
+      "phase": "install",
+      "controlId": 1,
+      "button": "설치"
+    },
+    {
+      "window": "AURA Agent 설치",
+      "phase": "install",
+      "controlId": 1,
+      "button": "OK"
+    },
+    {
+      "window": "AURA Agent 설치 ",
+      "phase": "install",
+      "controlId": 1,
+      "button": "마침"
+    },
+    {
+      "window": "AURA Agent 설치",
+      "phase": "update",
+      "controlId": 1,
+      "button": "다음 >"
+    },
+    {
+      "window": "AURA Agent 설치 ",
+      "phase": "update",
+      "controlId": 1,
+      "button": "설치"
+    },
+    {
+      "window": "AURA Agent 설치",
+      "phase": "update",
+      "controlId": 1,
+      "button": "OK"
+    },
+    {
+      "window": "AURA Agent 설치 ",
+      "phase": "update",
+      "controlId": 1,
+      "button": "마침"
+    },
+    {
+      "window": "AURA Agent 제거 ",
+      "phase": "blocked-uninstall",
+      "controlId": 1,
+      "button": "제거"
+    },
+    {
+      "window": "AURA Agent 제거",
+      "phase": "blocked-uninstall",
+      "controlId": 1,
+      "button": "OK"
+    },
+    {
+      "window": "AURA Agent 제거",
+      "phase": "blocked-uninstall",
+      "controlId": 2,
+      "button": "OK"
+    },
+    {
+      "window": "AURA Agent 제거 ",
+      "phase": "uninstall",
+      "controlId": 1,
+      "button": "제거"
+    },
+    {
+      "window": "AURA Agent 제거",
+      "phase": "uninstall",
+      "controlId": 1,
+      "button": "OK"
+    },
+    {
+      "window": "AURA Agent 제거 ",
+      "phase": "uninstall",
+      "controlId": 1,
+      "button": "닫음"
+    },
+    {
+      "window": "AURA Agent 설치",
+      "phase": "reinstall",
+      "controlId": 1,
+      "button": "다음 >"
+    },
+    {
+      "window": "AURA Agent 설치 ",
+      "phase": "reinstall",
+      "controlId": 1,
+      "button": "설치"
+    },
+    {
+      "window": "AURA Agent 설치",
+      "phase": "reinstall",
+      "controlId": 1,
+      "button": "OK"
+    },
+    {
+      "window": "AURA Agent 설치 ",
+      "phase": "reinstall",
+      "controlId": 1,
+      "button": "마침"
+    },
+    {
+      "window": "AURA Agent 제거 ",
+      "phase": "blocked-self-delete",
+      "controlId": 1,
+      "button": "제거"
+    },
+    {
+      "window": "AURA Agent 제거",
+      "phase": "blocked-self-delete",
+      "controlId": 1,
+      "button": "OK"
+    },
+    {
+      "window": "AURA Agent 제거",
+      "phase": "blocked-self-delete",
+      "controlId": 2,
+      "button": "OK"
+    },
+    {
+      "window": "AURA Agent 제거 ",
+      "phase": "final-uninstall",
+      "controlId": 1,
+      "button": "제거"
+    },
+    {
+      "window": "AURA Agent 제거",
+      "phase": "final-uninstall",
+      "controlId": 1,
+      "button": "OK"
+    },
+    {
+      "window": "AURA Agent 제거 ",
+      "phase": "final-uninstall",
+      "controlId": 1,
+      "button": "닫음"
+    }
+  ],
+  "startedAt": "2026-10-20T00:26:00.6525104Z",
+  "installerSha256": "8b74041bf21806a02fa1c479cba0e2acf01c5f8865ff73d72a2ed278dc5d698e",
+  "finishedAt": "2026-10-20T00:26:41.3202748Z"
+}
