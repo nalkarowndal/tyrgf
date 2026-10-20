@@ -1,5 +1,5 @@
-// Runs on the disposable Windows CI runner with permission to reserve one TCP port.
-// The reservation is active-only and removed in finally; no user data is accessed.
+// Use an existing Windows exclusion whose TCP bind actually fails with EACCES.
+// No network settings or user data are changed.
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
@@ -12,14 +12,13 @@ import { acquireDataLock } from '../apps/server/src/runtime-lock.ts';
 if (process.platform !== 'win32') throw new Error('This check requires Windows.');
 const report = {
   format: 1, source: process.env.GITHUB_SHA ?? null, platform: process.platform,
-  status: 'running', legacyBindCode: null, checks: [], reservationRemoved: false,
+  status: 'running', legacyBindCode: null, legacyPort: null, checks: [],
+  excludedPorts: execFileSync('netsh.exe', [
+    'interface', 'ipv4', 'show', 'excludedportrange', 'protocol=tcp',
+  ], { encoding: 'utf8', timeout: 10000 }),
 };
 const root = mkdtempSync(join(tmpdir(), 'aura-reserved-lock-'));
-let reservedPort, release;
-const netsh = (operation, port) => execFileSync('netsh.exe', [
-  'interface', 'ipv4', operation, 'excludedportrange', 'protocol=tcp',
-  `startport=${port}`, 'numberofports=1', 'store=active',
-], { encoding: 'utf8', timeout: 10000 });
+let release;
 async function bindLegacy(port) {
   const server = createServer((socket) => socket.destroy());
   await new Promise((yes, no) => {
@@ -29,27 +28,29 @@ async function bindLegacy(port) {
   return () => new Promise((done) => server.close(done));
 }
 try {
-  // Choose an available port using the exact legacy path-to-port mapping.
+  const ranges = [...report.excludedPorts.matchAll(/^\s*(\d+)\s+(\d+)\s*\*?\s*$/gm)]
+    .map((match) => [Number(match[1]), Number(match[2])]);
+  // Verify the old bind itself, rather than assuming every listed exclusion denies it.
   let dir;
-  for (let sample = 0; sample < 100; sample++) {
-    const candidate = join(root, String(sample));
-    mkdirSync(candidate);
-    const hash = createHash('sha256').update(realpathSync(candidate).toLowerCase()).digest();
+  for (let sample = 0; sample < 100000; sample++) {
+    const candidate = join(realpathSync(root), String(sample));
+    const hash = createHash('sha256').update(candidate.toLowerCase()).digest();
     const port = 20000 + hash.readUInt32BE() % 30000;
-    try { const close = await bindLegacy(port); await close(); }
-    catch { continue; }
-    netsh('add', port);
-    reservedPort = port;
-    dir = candidate;
-    break;
+    if (!ranges.some(([start, end]) => start <= port && port <= end)) continue;
+    const error = await bindLegacy(port).then(async (close) => {
+      await close();
+      return undefined;
+    }, (failure) => failure);
+    if (error?.code === 'EACCES') {
+      mkdirSync(candidate);
+      assert.equal(realpathSync(candidate).toLowerCase(), candidate.toLowerCase());
+      report.legacyBindCode = error.code;
+      report.legacyPort = port;
+      dir = candidate;
+      break;
+    }
   }
-  assert.ok(dir, 'Could not reserve a port for the legacy regression.');
-  const legacyError = await bindLegacy(reservedPort).then(async (close) => {
-    await close();
-    return undefined;
-  }, (error) => error);
-  report.legacyBindCode = legacyError?.code ?? null;
-  assert.equal(report.legacyBindCode, 'EACCES', 'Reservation must actually deny the legacy bind.');
+  assert.ok(dir, 'Runner has no verified EACCES exclusion for the legacy regression.');
   report.checks.push('legacy-tcp-denied-by-reservation');
   release = await acquireDataLock(dir);
   report.checks.push('data-lock-acquired-despite-reservation');
@@ -66,14 +67,6 @@ try {
   process.exitCode = 1;
 } finally {
   await release?.();
-  try {
-    if (reservedPort !== undefined) netsh('delete', reservedPort);
-    report.reservationRemoved = true;
-  } catch (error) {
-    report.status = 'failed';
-    report.cleanupFailure = error.message;
-    process.exitCode = 1;
-  }
   rmSync(root, { recursive: true, force: true });
   const output = resolve(process.argv[2] ?? 'test-results/windows-data-lock.json');
   mkdirSync(dirname(output), { recursive: true });
