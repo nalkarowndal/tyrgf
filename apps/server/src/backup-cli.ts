@@ -21,5 +21,21 @@ try {
   }
 } catch (error) {
   console.error((error as Error).message);
+  // Only emit allowlisted socket metadata, never a raw cause/stack or file path.
+  const cause = (error as Error).cause as
+    (NodeJS.ErrnoException & { address?: string; port?: number }) | undefined;
+  if (
+    cause instanceof Error &&
+    cause.syscall === 'listen' &&
+    cause.address === '127.0.0.1' &&
+    ['EADDRINUSE', 'EACCES', 'EPERM', 'EADDRNOTAVAIL', 'EMFILE', 'ENFILE', 'ENOBUFS'].includes(
+      cause.code ?? '',
+    ) &&
+    Number.isInteger(cause.port) &&
+    cause.port! >= 20000 &&
+    cause.port! < 50000
+  ) {
+    console.error(`진단: ${cause.code} (127.0.0.1:${cause.port})`);
+  }
   process.exitCode = 1;
 }

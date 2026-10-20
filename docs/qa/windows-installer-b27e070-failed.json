@@ -1,0 +1,89 @@
+{
+  "format": 1,
+  "platform": "win32",
+  "source": "b27e07016e6c55f77ea2cbaf3d95a29ee087d718",
+  "status": "failed",
+  "checks": [
+    {
+      "status": "passed",
+      "name": "isolated-runner-preflight"
+    },
+    {
+      "status": "passed",
+      "name": "wizard-install-and-default-shortcuts"
+    },
+    {
+      "status": "passed",
+      "name": "installed-chat-and-encrypted-backup"
+    },
+    {
+      "status": "passed",
+      "name": "same-version-update-preserves-data"
+    },
+    {
+      "status": "failed",
+      "name": "locked-file-uninstall-preserves-retry-and-data"
+    }
+  ],
+  "clicks": [
+    {
+      "button": "다음 >",
+      "phase": "install",
+      "window": "AURA Agent 설치"
+    },
+    {
+      "button": "설치",
+      "phase": "install",
+      "window": "AURA Agent 설치 "
+    },
+    {
+      "button": "OK",
+      "phase": "install",
+      "window": "AURA Agent 설치"
+    },
+    {
+      "button": "마침",
+      "phase": "install",
+      "window": "AURA Agent 설치 "
+    },
+    {
+      "button": "다음 >",
+      "phase": "update",
+      "window": "AURA Agent 설치"
+    },
+    {
+      "button": "설치",
+      "phase": "update",
+      "window": "AURA Agent 설치 "
+    },
+    {
+      "button": "OK",
+      "phase": "update",
+      "window": "AURA Agent 설치"
+    },
+    {
+      "button": "마침",
+      "phase": "update",
+      "window": "AURA Agent 설치 "
+    },
+    {
+      "button": "제거",
+      "phase": "blocked-uninstall",
+      "window": "AURA Agent 제거 "
+    },
+    {
+      "button": "OK",
+      "phase": "blocked-uninstall",
+      "window": "AURA Agent 제거"
+    },
+    {
+      "button": "닫음",
+      "phase": "blocked-uninstall",
+      "window": "AURA Agent 제거 "
+    }
+  ],
+  "startedAt": "2026-10-20T00:07:02.4228354Z",
+  "installerSha256": "6de78fdd0bedfff8684d429df7e2033b1e51c083ed7fa0dc0dd61c5bd5cf4267",
+  "error": "blocked-uninstall returned exit code 0, expected 2",
+  "finishedAt": "2026-10-20T00:07:26.3600664Z"
+}

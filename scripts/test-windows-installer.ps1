@@ -122,6 +122,20 @@ function RemoveInstalledApp([string]$phase) {
     Assert (-not (Test-Path -LiteralPath $path)) "Uninstall left registration or shortcut: $path"
   }
 }
+function BlockedRemoval([string]$locked, [string]$phase, [bool]$keepShortcuts) {
+  $before = DataHashes
+  $handle = [IO.File]::Open($locked, [IO.FileMode]::Open, [IO.FileAccess]::Read, [IO.FileShare]::ReadWrite)
+  try {
+    $copy = Join-Path $work ($phase + '.exe')
+    Copy-Item -LiteralPath (Join-Path $installRoot 'Uninstall.exe') -Destination $copy
+    RunWizard $copy ('_?=' + $installRoot) $phase 2
+    Assert (Test-Path -LiteralPath $locked) 'Locked file disappeared'
+    Assert (Test-Path -LiteralPath (Join-Path $installRoot 'Uninstall.exe')) 'Failed uninstall removed retry executable'
+    Assert ((Get-ItemProperty $reg).DisplayVersion -eq '0.1.0') 'Failed uninstall removed registration'
+    if ($keepShortcuts) { Assert (Test-Path -LiteralPath $desktopLink) 'Failed uninstall removed shortcuts before app deletion completed' }
+    AssertDataPreserved $before
+  } finally { $handle.Dispose() }
+}
 try {
   Check 'isolated-runner-preflight' {
     foreach ($path in @($dataRoot, $desktopLink, $menu, $startupLink, $reg)) {
@@ -149,18 +163,7 @@ try {
   $before = DataHashes
   if ($CheckUninstallFailure) {
     Check 'locked-file-uninstall-preserves-retry-and-data' {
-      $locked = Join-Path $app 'server.mjs'
-      $handle = [IO.File]::Open($locked, [IO.FileMode]::Open, [IO.FileAccess]::Read, [IO.FileShare]::ReadWrite)
-      try {
-        $copy = Join-Path $work 'blocked-uninstall.exe'
-        Copy-Item -LiteralPath (Join-Path $installRoot 'Uninstall.exe') -Destination $copy
-        RunWizard $copy ('_?=' + $installRoot) 'blocked-uninstall' 2
-        Assert (Test-Path -LiteralPath $locked) 'Locked application file disappeared'
-        Assert (Test-Path -LiteralPath (Join-Path $installRoot 'Uninstall.exe')) 'Failed uninstall removed retry executable'
-        Assert ((Get-ItemProperty $reg).DisplayVersion -eq '0.1.0') 'Failed uninstall removed registration'
-        Assert (Test-Path -LiteralPath $desktopLink) 'Failed uninstall removed shortcuts before app deletion completed'
-        AssertDataPreserved $before
-      } finally { $handle.Dispose() }
+      BlockedRemoval (Join-Path $app 'server.mjs') 'blocked-uninstall' $true
     }
   }
   Check 'uninstall-removes-app-and-registration' { RemoveInstalledApp 'uninstall' }
@@ -172,6 +175,11 @@ try {
     InstalledApp 'verify'
   }
   $before = DataHashes
+  if ($CheckUninstallFailure) {
+    Check 'locked-uninstaller-preserves-registration-for-retry' {
+      BlockedRemoval (Join-Path $installRoot 'Uninstall.exe') 'blocked-self-delete' $false
+    }
+  }
   Check 'final-uninstall-preserves-data' {
     RemoveInstalledApp 'final-uninstall'
     Assert ((DataHashes) -eq $before) 'Final uninstall changed database or backup'
