@@ -18,6 +18,15 @@ jobs:
       - run: npm ci --ignore-scripts
       - run: npm run typecheck
       - run: npm run lint
+      - name: Verify data locking with a reserved legacy TCP port
+        run: node scripts/test-windows-data-lock.mjs
+      - name: Upload reserved-port regression evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: AURA-Windows-data-lock-evidence
+          path: test-results/windows-data-lock.json
+          retention-days: 14
       - name: Diagnose Windows lock port availability
         timeout-minutes: 2
         run: node scripts/probe-data-lock.mjs
