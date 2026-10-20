@@ -1,6 +1,7 @@
 param(
   [Parameter(Mandatory=$true)][string]$Installer,
-  [string]$ReportPath = 'test-results/windows-installer.json'
+  [string]$ReportPath = 'test-results/windows-installer.json',
+  [switch]$CheckUninstallFailure
 )
 $ErrorActionPreference = 'Stop'
 . (Join-Path $PSScriptRoot 'installer-layout.ps1')
@@ -50,7 +51,7 @@ public static class InstallerWindow {
   public static string Text(IntPtr h) { var b=new StringBuilder(512); GetWindowText(h,b,b.Capacity); return b.ToString(); }
 }
 '@
-function RunWizard([string]$exe, [string]$arguments, [string]$phase) {
+function RunWizard([string]$exe, [string]$arguments, [string]$phase, [int]$expectedExit = 0) {
   # /D and _?= must be the final, unquoted NSIS parameter, even with spaces.
   $info = [Diagnostics.ProcessStartInfo]::new($exe, $arguments)
   $info.UseShellExecute = $false
@@ -74,7 +75,7 @@ function RunWizard([string]$exe, [string]$arguments, [string]$phase) {
     }
     Start-Sleep -Milliseconds 500
   }
-  Assert ($process.ExitCode -eq 0) "$phase failed with exit code $($process.ExitCode)"
+  Assert ($process.ExitCode -eq $expectedExit) "$phase returned exit code $($process.ExitCode), expected $expectedExit"
   Assert ($clicks -ge 2) "$phase did not exercise the visible wizard"
 }
 function VerifyLinks {
@@ -146,6 +147,22 @@ try {
     InstalledApp 'verify'
   }
   $before = DataHashes
+  if ($CheckUninstallFailure) {
+    Check 'locked-file-uninstall-preserves-retry-and-data' {
+      $locked = Join-Path $app 'server.mjs'
+      $handle = [IO.File]::Open($locked, [IO.FileMode]::Open, [IO.FileAccess]::Read, [IO.FileShare]::ReadWrite)
+      try {
+        $copy = Join-Path $work 'blocked-uninstall.exe'
+        Copy-Item -LiteralPath (Join-Path $installRoot 'Uninstall.exe') -Destination $copy
+        RunWizard $copy ('_?=' + $installRoot) 'blocked-uninstall' 2
+        Assert (Test-Path -LiteralPath $locked) 'Locked application file disappeared'
+        Assert (Test-Path -LiteralPath (Join-Path $installRoot 'Uninstall.exe')) 'Failed uninstall removed retry executable'
+        Assert ((Get-ItemProperty $reg).DisplayVersion -eq '0.1.0') 'Failed uninstall removed registration'
+        Assert (Test-Path -LiteralPath $desktopLink) 'Failed uninstall removed shortcuts before app deletion completed'
+        AssertDataPreserved $before
+      } finally { $handle.Dispose() }
+    }
+  }
   Check 'uninstall-removes-app-and-registration' { RemoveInstalledApp 'uninstall' }
   Check 'uninstall-preserves-database-and-backup' { AssertDataPreserved $before }
   Check 'reinstall-restores-existing-conversation' {
