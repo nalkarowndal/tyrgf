@@ -36,6 +36,8 @@ using System.Text;
 public static class InstallerWindow {
   public delegate bool EnumProc(IntPtr h, IntPtr p);
   [DllImport("user32.dll")] static extern bool EnumWindows(EnumProc cb, IntPtr p);
+  [DllImport("user32.dll")] static extern bool EnumChildWindows(IntPtr h, EnumProc cb, IntPtr p);
+  [DllImport("user32.dll")] public static extern int GetDlgCtrlID(IntPtr h);
   [DllImport("user32.dll")] static extern uint GetWindowThreadProcessId(IntPtr h, out uint pid);
   [DllImport("user32.dll")] public static extern bool IsWindowVisible(IntPtr h);
   [DllImport("user32.dll")] public static extern bool IsWindowEnabled(IntPtr h);
@@ -49,6 +51,11 @@ public static class InstallerWindow {
     return found.ToArray();
   }
   public static string Text(IntPtr h) { var b=new StringBuilder(512); GetWindowText(h,b,b.Capacity); return b.ToString(); }
+  public static IntPtr[] Children(IntPtr h) {
+    var found = new List<IntPtr>();
+    EnumChildWindows(h, (child,p) => { found.Add(child); return true; }, IntPtr.Zero);
+    return found.ToArray();
+  }
 }
 '@
 function RunWizard([string]$exe, [string]$arguments, [string]$phase, [int]$expectedExit = 0) {
@@ -60,6 +67,19 @@ function RunWizard([string]$exe, [string]$arguments, [string]$phase, [int]$expec
   $deadline = [DateTime]::UtcNow.AddSeconds(120)
   $clicks = 0
   while (-not $process.HasExited) {
+    if ([DateTime]::UtcNow -ge $deadline) {
+      $script:report.timeoutWindows = @(
+        foreach ($window in [InstallerWindow]::ForProcess($process.Id)) {
+          @{ text=[InstallerWindow]::Text($window); enabled=[InstallerWindow]::IsWindowEnabled($window); controls=@(
+            foreach ($child in [InstallerWindow]::Children($window)) {
+              if ([InstallerWindow]::IsWindowVisible($child)) {
+                @{ id=[InstallerWindow]::GetDlgCtrlID($child); text=[InstallerWindow]::Text($child); enabled=[InstallerWindow]::IsWindowEnabled($child) }
+              }
+            }
+          ) }
+        }
+      )
+    }
     Assert ([DateTime]::UtcNow -lt $deadline) "Installer timed out in $phase"
     foreach ($window in [InstallerWindow]::ForProcess($process.Id)) {
       if (-not [InstallerWindow]::IsWindowEnabled($window)) { continue }
