@@ -1,0 +1,12 @@
+{
+  "format": 2,
+  "source": "c03638307f52ba0c17b10d73473ead495603a8cc",
+  "mechanism": "windows-named-pipe-v2",
+  "platform": "win32",
+  "runtime": "24.19.0",
+  "samples": 512,
+  "acquired": 512,
+  "unavailable": [],
+  "reacquireFailures": [],
+  "excludedPorts": "\r\nProtocol tcp Port Exclusion Ranges\r\n\r\nStart Port    End Port      \r\n----------    --------      \r\n        80          80      \r\n      5985        5985      \r\n      5986        5986      \r\n     47001       47001      \r\n     49695       49794      \r\n     49795       49894      \r\n\r\n* - Administered port exclusions.\r\n\r\n"
+}

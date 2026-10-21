@@ -1,5 +1,8 @@
 # 테스트 및 시각 QA
 
+## Windows 파이프 잠금 후속 품질 결과 (2026-10-21, 소스c036383)
+[품질 CI](https://github.com/nalkarowndal/tyrgf/actions/runs/39520254192) 첫 시도 성공: Linux23파일129개, Windows18파일89개(5파일40개 Linux 전용 제외), E2E16개·번들·전체 audit0. 실제 Windows 제외 포트 EACCES에서 기존 잠금 실패를 RED로 확인한 뒤 파이프 잠금의 획득·중복 거절·재획득을 검증했다. 독립 프로세스 경쟁/정상·강제 종료/별칭 회귀를 추가했다. 최신 후보·구버전 혼합 실행 제한은 [Windows 잠금 보고서](M9_WINDOWS_PIPE_LOCK_REPORT.md)를 따른다.
+
 ## 제거 실패·CLI 진단 후속 품질 결과 (2026-10-20, 소스7522c3f)
 [품질 CI](https://github.com/nalkarowndal/tyrgf/actions/runs/39347271398) 첫 시도 성공: Linux22파일125개, Windows17파일85개(5파일40개 Linux 전용 제외), E2E16개·Edge4개·번들·전체 audit0. 로컬 npm run check도125개·타입·lint·빌드 통과. CLI 진단 누락 및 Windows 잠긴 파일 제거의 잘못된 성공 코드를 각각 RED로 재현했다. 실제 실패·재시도와 최신 설치 후보의 근거는 [제거 실패 복구 보고서](M9_UNINSTALL_RECOVERY_REPORT.md)를 따른다.
 

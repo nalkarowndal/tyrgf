@@ -1,0 +1,13 @@
+{
+  "format": 1,
+  "source": "855c852263791385809350377b44f669b457f83a",
+  "platform": "win32",
+  "status": "failed",
+  "legacyBindCode": null,
+  "checks": [],
+  "reservationRemoved": true,
+  "failure": {
+    "message": "Reservation must actually deny the legacy bind.\n\nnull !== 'EACCES'\n",
+    "code": "ERR_ASSERTION"
+  }
+}

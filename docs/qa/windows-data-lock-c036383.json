@@ -1,0 +1,15 @@
+{
+  "format": 1,
+  "source": "c03638307f52ba0c17b10d73473ead495603a8cc",
+  "platform": "win32",
+  "status": "passed",
+  "legacyBindCode": "EACCES",
+  "legacyPort": 49866,
+  "checks": [
+    "legacy-tcp-denied-by-reservation",
+    "data-lock-acquired-despite-reservation",
+    "duplicate-denied",
+    "reacquired-after-release"
+  ],
+  "excludedPorts": "\r\nProtocol tcp Port Exclusion Ranges\r\n\r\nStart Port    End Port      \r\n----------    --------      \r\n        80          80      \r\n      5985        5985      \r\n      5986        5986      \r\n     47001       47001      \r\n     49695       49794      \r\n     49795       49894      \r\n\r\n* - Administered port exclusions.\r\n\r\n"
+}

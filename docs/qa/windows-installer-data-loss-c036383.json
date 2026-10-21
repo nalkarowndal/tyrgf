@@ -1,0 +1,105 @@
+{
+  "format": 1,
+  "platform": "win32",
+  "source": "c03638307f52ba0c17b10d73473ead495603a8cc",
+  "status": "failed",
+  "checks": [
+    {
+      "name": "isolated-runner-preflight",
+      "status": "passed"
+    },
+    {
+      "name": "wizard-install-and-default-shortcuts",
+      "status": "passed"
+    },
+    {
+      "name": "installed-chat-and-encrypted-backup",
+      "status": "passed"
+    },
+    {
+      "name": "same-version-update-preserves-data",
+      "status": "passed"
+    },
+    {
+      "name": "uninstall-removes-app-and-registration",
+      "status": "passed"
+    },
+    {
+      "name": "uninstall-preserves-database-and-backup",
+      "status": "failed"
+    }
+  ],
+  "clicks": [
+    {
+      "button": "다음 >",
+      "controlId": 1,
+      "phase": "install",
+      "window": "AURA Agent 설치"
+    },
+    {
+      "button": "설치",
+      "controlId": 1,
+      "phase": "install",
+      "window": "AURA Agent 설치 "
+    },
+    {
+      "button": "OK",
+      "controlId": 1,
+      "phase": "install",
+      "window": "AURA Agent 설치"
+    },
+    {
+      "button": "마침",
+      "controlId": 1,
+      "phase": "install",
+      "window": "AURA Agent 설치 "
+    },
+    {
+      "button": "다음 >",
+      "controlId": 1,
+      "phase": "update",
+      "window": "AURA Agent 설치"
+    },
+    {
+      "button": "설치",
+      "controlId": 1,
+      "phase": "update",
+      "window": "AURA Agent 설치 "
+    },
+    {
+      "button": "OK",
+      "controlId": 1,
+      "phase": "update",
+      "window": "AURA Agent 설치"
+    },
+    {
+      "button": "마침",
+      "controlId": 1,
+      "phase": "update",
+      "window": "AURA Agent 설치 "
+    },
+    {
+      "button": "제거",
+      "controlId": 1,
+      "phase": "uninstall",
+      "window": "AURA Agent 제거 "
+    },
+    {
+      "button": "OK",
+      "controlId": 1,
+      "phase": "uninstall",
+      "window": "AURA Agent 제거"
+    },
+    {
+      "button": "닫음",
+      "controlId": 1,
+      "phase": "uninstall",
+      "window": "AURA Agent 제거 "
+    }
+  ],
+  "startedAt": "2026-10-21T00:21:09.9755546Z",
+  "installerSha256": "bfe47bc70b1d5a13b9aed117a355df54a3112353123c01e61ed868d07dafdc7c",
+  "errorCode": "INSTALLER_DATA_LOSS",
+  "error": "Installer removed preserved data: C:\\Users\\runneradmin\\AppData\\Local\\AURA Agent\\data\\aura.sqlite",
+  "finishedAt": "2026-10-21T00:21:32.7704583Z"
+}

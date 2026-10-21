@@ -1,0 +1,99 @@
+{
+  "artifacts": [
+    {
+      "id": 12310812707,
+      "name": "AURA-Windows-data-lock-evidence",
+      "size_in_bytes": 501,
+      "url": "https://api.github.com/repos/nalkarowndal/tyrgf/actions/artifacts/12310812707",
+      "archive_download_url": "https://api.github.com/repos/nalkarowndal/tyrgf/actions/artifacts/12310812707/zip",
+      "expired": false,
+      "created_at": "2026-10-21T00:16:50Z",
+      "expires_at": "2026-11-04T00:16:49Z",
+      "updated_at": "2026-10-21T00:16:50Z",
+      "digest": "sha256:4b999e5af289a8fae47c80c8d472d0d578badbcdff0f4175815352136e81b80d",
+      "workflow_run": {
+        "id": 39520254205,
+        "repository_id": 1419996783,
+        "head_repository_id": 1419996783,
+        "head_branch": "codex/windows-validation",
+        "head_sha": "c03638307f52ba0c17b10d73473ead495603a8cc"
+      }
+    },
+    {
+      "id": 12310757617,
+      "name": "AURA-Windows-lock-diagnostics",
+      "size_in_bytes": 458,
+      "url": "https://api.github.com/repos/nalkarowndal/tyrgf/actions/artifacts/12310757617",
+      "archive_download_url": "https://api.github.com/repos/nalkarowndal/tyrgf/actions/artifacts/12310757617/zip",
+      "expired": false,
+      "created_at": "2026-10-21T00:16:52Z",
+      "expires_at": "2026-11-04T00:16:52Z",
+      "updated_at": "2026-10-21T00:16:52Z",
+      "digest": "sha256:4f0d4f3d5c04a0597d1093ed5e154c6784ff13c61e9b529a79c0e2f2a6e6a5cc",
+      "workflow_run": {
+        "id": 39520254205,
+        "repository_id": 1419996783,
+        "head_repository_id": 1419996783,
+        "head_branch": "codex/windows-validation",
+        "head_sha": "c03638307f52ba0c17b10d73473ead495603a8cc"
+      }
+    },
+    {
+      "id": 12310224065,
+      "name": "AURA-Windows-installer-evidence",
+      "size_in_bytes": 2083,
+      "url": "https://api.github.com/repos/nalkarowndal/tyrgf/actions/artifacts/12310224065",
+      "archive_download_url": "https://api.github.com/repos/nalkarowndal/tyrgf/actions/artifacts/12310224065/zip",
+      "expired": false,
+      "created_at": "2026-10-21T00:21:33Z",
+      "expires_at": "2026-11-04T00:21:33Z",
+      "updated_at": "2026-10-21T00:21:33Z",
+      "digest": "sha256:e0e7f5aedbaba22344b1e25f97c4e1afe20e9e36c224db354227e27bf7ceee71",
+      "workflow_run": {
+        "id": 39520254205,
+        "repository_id": 1419996783,
+        "head_repository_id": 1419996783,
+        "head_branch": "codex/windows-validation",
+        "head_sha": "c03638307f52ba0c17b10d73473ead495603a8cc"
+      }
+    },
+    {
+      "id": 12310004197,
+      "name": "AURA-Windows-unsigned-candidate",
+      "size_in_bytes": 68435483,
+      "url": "https://api.github.com/repos/nalkarowndal/tyrgf/actions/artifacts/12310004197",
+      "archive_download_url": "https://api.github.com/repos/nalkarowndal/tyrgf/actions/artifacts/12310004197/zip",
+      "expired": false,
+      "created_at": "2026-10-21T00:21:37Z",
+      "expires_at": "2026-11-04T00:21:34Z",
+      "updated_at": "2026-10-21T00:21:37Z",
+      "digest": "sha256:c954aa313be999a2462cab8a9e190e7bb965c184b99841089b564cef9332fae1",
+      "workflow_run": {
+        "id": 39520254205,
+        "repository_id": 1419996783,
+        "head_repository_id": 1419996783,
+        "head_branch": "codex/windows-validation",
+        "head_sha": "c03638307f52ba0c17b10d73473ead495603a8cc"
+      }
+    },
+    {
+      "id": 12309843934,
+      "name": "AURA-Windows-runtime-evidence",
+      "size_in_bytes": 497,
+      "url": "https://api.github.com/repos/nalkarowndal/tyrgf/actions/artifacts/12309843934",
+      "archive_download_url": "https://api.github.com/repos/nalkarowndal/tyrgf/actions/artifacts/12309843934/zip",
+      "expired": false,
+      "created_at": "2026-10-21T00:18:07Z",
+      "expires_at": "2026-11-04T00:18:06Z",
+      "updated_at": "2026-10-21T00:18:07Z",
+      "digest": "sha256:e15e52628985a7242dd43a046197ff25e2b17a9b3ed0dc81ec702a44d54eb833",
+      "workflow_run": {
+        "id": 39520254205,
+        "repository_id": 1419996783,
+        "head_repository_id": 1419996783,
+        "head_branch": "codex/windows-validation",
+        "head_sha": "c03638307f52ba0c17b10d73473ead495603a8cc"
+      }
+    }
+  ]
+}

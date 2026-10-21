@@ -6,7 +6,7 @@
 
 ## 실행
 
-Windows 후보 패키지의 설치·백업·복원은 [배포 안내](docs/DEPLOYMENT_GUIDE.md)를 참고하세요. 최신 설치 후보와 자동 검수 결과는 [제거 실패 복구 검수 보고서](docs/M9_UNINSTALL_RECOVERY_REPORT.md), 남은 설치 GUI 검수는 [M9 결과](docs/M9_RELEASE_REPORT.md)를 참고하세요.
+Windows 후보 패키지의 설치·백업·복원은 [배포 안내](docs/DEPLOYMENT_GUIDE.md)를 참고하세요. 최신 설치 후보와 자동 검수 결과는 [Windows 데이터 잠금 검수 보고서](docs/M9_WINDOWS_PIPE_LOCK_REPORT.md)를 참고하세요. 이전 제거 실패·재시도 수정은 [제거 실패 복구 검수 보고서](docs/M9_UNINSTALL_RECOVERY_REPORT.md)에 기록되어 있습니다.
 
 Windows 데이터 잠금을 TCP에서 이름 있는 파이프로 전환합니다. **업데이트 전 기존 앱과 백업/복원 도구를 모두 종료하고, 이후 새 후보의 도구만 사용하세요.** 구버전과 혼합 실행 시 서로를 차단하지 못합니다. [전환 설계와 검증 범위](docs/WINDOWS_DATA_LOCK_PLAN.md)를 참고하세요.
 
