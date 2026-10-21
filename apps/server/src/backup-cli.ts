@@ -1,4 +1,5 @@
 import { exportBackup, restoreBackup } from './backup';
+import { windowsDataLockPrefix } from './runtime-lock';
 const [mode, dir, file] = process.argv.slice(2);
 try {
   if (!['backup', 'restore'].includes(mode) || !dir || !file)
@@ -27,15 +28,22 @@ try {
   if (
     cause instanceof Error &&
     cause.syscall === 'listen' &&
-    cause.address === '127.0.0.1' &&
     ['EADDRINUSE', 'EACCES', 'EPERM', 'EADDRNOTAVAIL', 'EMFILE', 'ENFILE', 'ENOBUFS'].includes(
       cause.code ?? '',
-    ) &&
-    Number.isInteger(cause.port) &&
-    cause.port! >= 20000 &&
-    cause.port! < 50000
+    )
   ) {
-    console.error(`진단: ${cause.code} (127.0.0.1:${cause.port})`);
+    if (
+      cause.address === '127.0.0.1' &&
+      Number.isInteger(cause.port) && cause.port! >= 20000 && cause.port! < 50000
+    ) {
+      console.error(`진단: ${cause.code} (127.0.0.1:${cause.port})`);
+    } else if (
+      process.platform === 'win32' &&
+      cause.address?.startsWith(windowsDataLockPrefix) &&
+      /^[a-f0-9]{64}$/.test(cause.address.slice(windowsDataLockPrefix.length))
+    ) {
+      console.error(`진단: ${cause.code} (Windows 데이터 잠금)`);
+    }
   }
   process.exitCode = 1;
 }

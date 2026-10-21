@@ -15,13 +15,18 @@ it('retains the OS bind error and keeps the original lock held after a rejected 
         (failure: Error) => failure,
       );
       expect(error).toBeInstanceOf(Error);
-      expect(error!.message).toContain('잠금 포트');
+      expect(error!.message).toContain('데이터 잠금');
       const cause = error!.cause as NodeJS.ErrnoException & { address: string; port: number };
       expect(cause).toBeInstanceOf(Error);
       expect(['EADDRINUSE', 'EACCES']).toContain(cause.code);
       expect(cause.syscall).toBe('listen');
-      expect(cause.address).toBe('127.0.0.1');
-      expect(cause.port).toBeGreaterThanOrEqual(20000);
+      if (process.platform === 'win32') {
+        expect(cause.address).toMatch(/^\\\\\.\\pipe\\aura-data-v2-[a-f0-9]{64}$/);
+      } else {
+        expect(cause.address).toBe('127.0.0.1');
+        expect(cause.port).toBeGreaterThanOrEqual(20000);
+        expect(cause.port).toBeLessThan(50000);
+      }
     }
     await release();
     release = undefined;

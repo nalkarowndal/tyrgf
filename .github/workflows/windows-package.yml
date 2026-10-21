@@ -27,7 +27,7 @@ jobs:
           name: AURA-Windows-data-lock-evidence
           path: test-results/windows-data-lock.json
           retention-days: 14
-      - name: Diagnose Windows lock port availability
+      - name: Sample Windows data lock availability
         timeout-minutes: 2
         run: node scripts/probe-data-lock.mjs
       - name: Upload lock diagnostics
@@ -37,7 +37,7 @@ jobs:
           name: AURA-Windows-lock-diagnostics
           path: test-results/data-lock-probe.json
           retention-days: 14
-      - run: npm test -- tests/backup.test.ts tests/api.test.ts tests/installer-evidence.test.ts
+      - run: npm test -- tests/backup.test.ts tests/backup-cli.test.ts tests/runtime-lock.test.ts tests/runtime-lock-process.test.ts tests/api.test.ts tests/installer-evidence.test.ts
       - run: npm audit --audit-level=high
       - name: Prove shortcut and removal assertions reject defects
         shell: pwsh

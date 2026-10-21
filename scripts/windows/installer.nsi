@@ -23,7 +23,7 @@ SetCompressor /SOLID lzma
 Section "AURA Agent (필수)" Main
   SectionIn RO
   SetShellVarContext current
-  MessageBox MB_OKCANCEL "설치/업데이트 전에 AURA 설정에서 앱을 종료하세요. 중요한 데이터는 먼저 백업하세요. 데이터 폴더는 유지됩니다." IDOK +2
+  MessageBox MB_OKCANCEL "설치/업데이트 전에 중요한 데이터를 백업하고, 기존 AURA 앱과 백업/복원 도구를 모두 종료하세요. 업데이트 후에는 새 버전의 도구만 사용하세요. 이전 후보와 새 후보를 함께 실행하면 데이터가 손상될 수 있습니다. 데이터 폴더는 유지됩니다." IDOK +2
   Abort
   SetOutPath "$INSTDIR\app-0.1.0"
   File /r "${PACKAGE}\*"

@@ -1,0 +1,16 @@
+{
+  "format": 1,
+  "source": "797432dbf09a1ffcbe34d09f2d451ba3d6fbbc1f",
+  "platform": "win32",
+  "status": "failed",
+  "legacyBindCode": "EACCES",
+  "legacyPort": 49766,
+  "checks": [
+    "legacy-tcp-denied-by-reservation"
+  ],
+  "excludedPorts": "\r\nProtocol tcp Port Exclusion Ranges\r\n\r\nStart Port    End Port      \r\n----------    --------      \r\n        80          80      \r\n      5985        5985      \r\n      5986        5986      \r\n     47001       47001      \r\n     49696       49795      \r\n     49796       49895      \r\n\r\n* - Administered port exclusions.\r\n\r\n",
+  "failure": {
+    "message": "AURA 또는 백업 도구가 실행 중이거나 잠금 포트를 사용할 수 없습니다. 실행 중인 창을 닫고 다시 시도하세요.",
+    "code": "EACCES"
+  }
+}

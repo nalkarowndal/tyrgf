@@ -165,11 +165,11 @@ try {
       duplicate.spawnError = error;
     });
     assert.equal(await waitExit(duplicate), 1, duplicateOutput);
-    assert.match(duplicateOutput, /잠금 포트/);
+    assert.match(duplicateOutput, /데이터 잠금/);
     children.delete(duplicate);
     const busy = cli('backup', data);
     assert.equal(busy.status, 1, busy.stderr);
-    assert.match(busy.stderr, /잠금 포트/);
+    assert.match(busy.stderr, /데이터 잠금/);
   });
   if (process.platform === 'linux') {
     await check('builtin-mcp', async () => {

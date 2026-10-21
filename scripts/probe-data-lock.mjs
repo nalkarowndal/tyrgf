@@ -1,11 +1,12 @@
-// Diagnostic sampling only: failures remain failures; no alternate lock is acquired.
+// Availability sampling: any observed failure rejects this run; no alternate lock.
 import { mkdtempSync, mkdirSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve, dirname } from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { acquireDataLock } from '../apps/server/src/runtime-lock.ts';
 
-const report = { format: 1, source: process.env.GITHUB_SHA ?? null,
+const report = { format: 2, source: process.env.GITHUB_SHA ?? null,
+  mechanism: process.platform === 'win32' ? 'windows-named-pipe-v2' : 'loopback-tcp-v1',
   platform: process.platform, runtime: process.versions.node, samples: 512,
   acquired: 0, unavailable: [], reacquireFailures: [], excludedPorts: null };
 if (process.platform === 'win32') {
@@ -37,4 +38,5 @@ try {
   mkdirSync(dirname(file), { recursive: true });
   writeFileSync(file, JSON.stringify(report, null, 2) + '\n');
   console.log(JSON.stringify(report, null, 2));
+  if (report.unavailable.length || report.reacquireFailures.length) process.exitCode = 1;
 }

@@ -30,7 +30,7 @@ async function cli(args: string[], input: string) {
   return { code: await exited, stdout, stderr };
 }
 
-it('reports the real lock code and port without revealing paths or the backup password', async () => {
+it('reports the real lock code and type without revealing paths or the backup password', async () => {
   const dir = mkdtempSync(join(tmpdir(), 'aura-cli-private-'));
   const password = 'fixture-only-password-12345';
   let release: (() => Promise<void>) | undefined;
@@ -43,16 +43,21 @@ it('reports the real lock code and port without revealing paths or the backup pa
       },
       (error: Error) => error,
     );
-    const cause = failure!.cause as NodeJS.ErrnoException & { port: number };
+    const cause = failure!.cause as NodeJS.ErrnoException & { port: number; address: string };
     const file = join(dir, 'private-backup.aura-backup');
     const result = await cli(['backup', dir, file], password + '\n');
     expect(result.code).toBe(1);
-    expect(result.stderr).toContain(`진단: ${cause.code} (127.0.0.1:${cause.port})`);
+    if (process.platform === 'win32') {
+      expect(result.stderr).toContain(`진단: ${cause.code} (Windows 데이터 잠금)`);
+      expect(result.stderr).not.toContain(cause.address);
+    } else {
+      expect(result.stderr).toContain(`진단: ${cause.code} (127.0.0.1:${cause.port})`);
+    }
     expect(result.stderr).not.toContain(dir);
     expect(result.stderr).not.toContain(password);
     expect(result.stdout).toBe('');
     expect(existsSync(file)).toBe(false);
-    await expect(acquireDataLock(dir)).rejects.toThrow('잠금 포트');
+    await expect(acquireDataLock(dir)).rejects.toThrow('데이터 잠금');
   } finally {
     await release?.();
     rmSync(dir, { recursive: true, force: true });
